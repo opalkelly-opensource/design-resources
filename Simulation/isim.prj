@@ -1,0 +1,8 @@
+verilog work ../src/i2cController.v
+verilog work ../src/i2cTokenizer.v
+verilog work ../src/mux8to1.v
+verilog work ../src/okDRAM64X8D.v
+verilog work ../Models/24LC64.v
+verilog work ../Models/24LC02B.v
+verilog work ./i2c_tf.v
+verilog work ./glbl.v

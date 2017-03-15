@@ -1,0 +1,89 @@
+############################################################################
+# XEM6002 - Xilinx constraints file
+#
+# Pin mappings for the XEM6002.  Use this as a template and comment out 
+# the pins that are not used in your design.  (By default, map will fail
+# if this file contains constraints for signals not in your design).
+#
+############################################################################
+#
+# Copyright (c) 2004-2017 Opal Kelly Incorporated
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+############################################################################
+CONFIG VCCAUX = "3.3"; //Required for Spartan-6
+NET "hi_muxsel"     LOC="T11"   | IOSTANDARD="LVCMOS33";
+
+############################################################################
+## FrontPanel Host Interface
+############################################################################
+NET "hi_in<0>"      LOC="N8"    | IOSTANDARD="LVCMOS33";
+NET "hi_in<1>"      LOC="T10"   | IOSTANDARD="LVCMOS33";
+NET "hi_in<2>"      LOC="T5"    | IOSTANDARD="LVCMOS33";
+NET "hi_in<3>"      LOC="T4"    | IOSTANDARD="LVCMOS33";
+NET "hi_in<4>"      LOC="T7"    | IOSTANDARD="LVCMOS33";
+NET "hi_in<5>"      LOC="R7"    | IOSTANDARD="LVCMOS33";
+NET "hi_in<6>"      LOC="T6"    | IOSTANDARD="LVCMOS33";
+NET "hi_in<7>"      LOC="P6"    | IOSTANDARD="LVCMOS33";
+NET "hi_out<0>"     LOC="M11"   | IOSTANDARD="LVCMOS33";
+NET "hi_out<1>"     LOC="P4"    | IOSTANDARD="LVCMOS33";
+NET "hi_inout<0>"   LOC="M7"    | IOSTANDARD="LVCMOS33";
+NET "hi_inout<1>"   LOC="P7"    | IOSTANDARD="LVCMOS33";
+NET "hi_inout<2>"   LOC="P8"    | IOSTANDARD="LVCMOS33";
+NET "hi_inout<3>"   LOC="P9"    | IOSTANDARD="LVCMOS33";
+NET "hi_inout<4>"   LOC="N9"    | IOSTANDARD="LVCMOS33";
+NET "hi_inout<5>"   LOC="P11"   | IOSTANDARD="LVCMOS33";
+NET "hi_inout<6>"   LOC="N6"    | IOSTANDARD="LVCMOS33";
+NET "hi_inout<7>"   LOC="M6"    | IOSTANDARD="LVCMOS33";
+NET "hi_inout<8>"   LOC="R5"    | IOSTANDARD="LVCMOS33";
+NET "hi_inout<9>"   LOC="L7"    | IOSTANDARD="LVCMOS33";
+NET "hi_inout<10>"  LOC="L8"    | IOSTANDARD="LVCMOS33";
+NET "hi_inout<11>"  LOC="P5"    | IOSTANDARD="LVCMOS33";
+NET "hi_inout<12>"  LOC="N5"    | IOSTANDARD="LVCMOS33";
+NET "hi_inout<13>"  LOC="P12"   | IOSTANDARD="LVCMOS33";
+NET "hi_inout<14>"  LOC="N12"   | IOSTANDARD="LVCMOS33";
+NET "hi_inout<15>"  LOC="P10"   | IOSTANDARD="LVCMOS33";
+NET "hi_aa"         LOC="M12"   | IOSTANDARD="LVCMOS33";
+
+NET "hi_in<0>" TNM_NET = "okHostClk";
+TIMESPEC "TS_okHostClk" = PERIOD "okHostClk" 20.83 ns HIGH 50%;  # 48 MHz
+NET "hi_inout[*]" TNM = "okHostINOUT_grp";
+TIMEGRP "okHostINOUT_grp" OFFSET = IN 9.83 ns VALID 9.83 ns BEFORE "hi_in<0>" RISING;
+TIMEGRP "okHostINOUT_grp" OFFSET = OUT 11.63 ns AFTER "hi_in<0>" RISING;
+NET "hi_out<0>" OFFSET = OUT 11.93 ns AFTER "hi_in<0>" RISING;
+#NET "hi_out<1>" OFFSET = OUT 11.93 ns AFTER "hi_in<0>" RISING; #Placeholder
+NET "hi_in<1>" OFFSET = IN 14.13 ns VALID 20.83 ns BEFORE "hi_in<0>" RISING;
+NET "hi_in<2>" OFFSET = IN 14.13 ns VALID 20.83 ns BEFORE "hi_in<0>" RISING;
+NET "hi_in<3>" OFFSET = IN 14.13 ns VALID 20.83 ns BEFORE "hi_in<0>" RISING;
+NET "hi_in<4>" OFFSET = IN 13.33 ns VALID 20.83 ns BEFORE "hi_in<0>" RISING;
+NET "hi_in<5>" OFFSET = IN 13.33 ns VALID 20.83 ns BEFORE "hi_in<0>" RISING;
+NET "hi_in<6>" OFFSET = IN 13.33 ns VALID 20.83 ns BEFORE "hi_in<0>" RISING;
+NET "hi_in<7>" OFFSET = IN 13.33 ns VALID 20.83 ns BEFORE "hi_in<0>" RISING;
+
+NET "gyro_cs" LOC="M1" | IOSTANDARD="LVCMOS33"; # POD1-1 
+
+NET "gyro_sda" LOC="L1" | IOSTANDARD="LVCMOS33" | PULLUP; # POD1-2 
+
+NET "gyro_sa0" LOC="K1" | IOSTANDARD="LVCMOS33"; # POD1-3 
+
+NET "gyro_scl" LOC="J1" | IOSTANDARD="LVCMOS33" | PULLUP; # POD1-4 
+
+#NET "gyro_int1" LOC="E1" | IOSTANDARD="LVCMOS33"; # POD1-7 
+
+#NET "gyro_int2" LOC="E2" | IOSTANDARD="LVCMOS33"; # POD1-8 
