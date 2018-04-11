@@ -69,6 +69,8 @@ reg         tok_stop_go;
 reg         tok_write_go;
 reg         tok_read_go;
 
+reg         tok_rack_r;
+
 // I2C direction:
 //   i2c_sdat_oen = 1 - READ mode (i2c_sdat is an input).
 //   i2c_sdat_oen = 0 - WRITE mode (i2c_sdat is an output).
@@ -121,6 +123,7 @@ always @(posedge clk) begin
 		tok_stop_go      <= 1'b0;
 		tok_write_go     <= 1'b0;
 		tok_read_go      <= 1'b0;
+		tok_rack_r       <= 1'b0;
 	end else begin
 		
 		// Support for slave clock stretching
@@ -172,6 +175,7 @@ always @(posedge clk) begin
 		tok_read_go <= 1'b1;
 		i2c_shift_count <= 8;
 		i2c_shift_reg <= 8'h00;
+		tok_rack_r <= tok_rack;
 	end
 
 	// I2C bit control
@@ -271,7 +275,7 @@ always @(posedge clk) begin
 				if (0 == i2c_shift_count) begin
 					//Drive sdat to send ACK to slave device
 					i2c_sdat_oen <= 1'b0;
-					i2c_dout <= tok_rack;
+					i2c_dout <= tok_rack_r;
 				end else begin
 					i2c_sdat_oen <= 1'b1;
 				end
