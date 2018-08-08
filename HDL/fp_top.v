@@ -91,7 +91,6 @@ reg  [10:0] ap_ready_cnt, hls_reset_cnt;
 wire [31:0] a_tdata;
 wire        a_tvalid, a_tready;
 wire        fifo_in_wr_rst_busy, fifo_in_rd_rst_busy;
-wire [10:0] fifo_in_dc;
 
 // HLS Block //
 wire       ap_done, ap_idle, ap_ready;
@@ -185,9 +184,7 @@ axififo_32b1024 fifo_in(
 	.m_axis_tready   (a_tready),
 
 	.wr_rst_busy     (fifo_in_wr_rst_busy),
-	.rd_rst_busy     (fifo_in_rd_rst_busy),
-
-	.axis_data_count (fifo_in_dc)
+	.rd_rst_busy     (fifo_in_rd_rst_busy)
 );
 
 fir_0 fir_inst(
