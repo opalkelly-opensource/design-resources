@@ -25,13 +25,17 @@
 #define DATA_DIR "../../../../../octave/"
 
 int main() {
-	inp_data_t signal[SAMPLES];
-	out_data_t output[SAMPLES], reference[SAMPLES];
+	inp_data_t *signal;
+	out_data_t *output, *reference;
 
 	FILE *input_f, *out_ref_f, *sim_out_f;
 	int i, ret_value;
 	float input, ref;
 	float diff, tot_diff;
+
+	signal = new inp_data_t[SAMPLES];
+	output = new out_data_t[SAMPLES];
+	reference = new out_data_t[SAMPLES];
 
 	tot_diff = 0;
 
