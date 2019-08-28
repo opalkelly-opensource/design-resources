@@ -60,7 +60,7 @@ module i2c_example (
 	output wire        hi_muxsel,
 	output wire        gyro_cs,
 	output wire        gyro_sa0,
-	output wire        gyro_scl,
+	inout  wire        gyro_scl,
 	inout  wire        gyro_sda
 	);
 
