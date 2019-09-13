@@ -181,7 +181,7 @@ I2C::Transmit(const unsigned char *data, unsigned int length)
 	// Wait for transaction to finish
 	for (i=0; i<(I2C_MAX_TIMEOUT_MS/10); i++) {
 		m_dev->UpdateTriggerOuts();
-		if (0 == m_dev->IsTriggered(I2C_TRIGOUT, (1<<I2C_TRIGOUT_DONE))) {
+		if (m_dev->IsTriggered(I2C_TRIGOUT, (1<<I2C_TRIGOUT_DONE))) {
 			return;
 		}
 		Sleep(10);
@@ -224,7 +224,7 @@ I2C::Receive(unsigned char *data, unsigned int length)
 	// Wait for transaction to finish
 	for (i=0; i<(I2C_MAX_TIMEOUT_MS/10); i++) {
 		m_dev->UpdateTriggerOuts();
-		if (0 == m_dev->IsTriggered(I2C_TRIGOUT, (1<<I2C_TRIGOUT_DONE))) {
+		if (m_dev->IsTriggered(I2C_TRIGOUT, (1<<I2C_TRIGOUT_DONE))) {
 			// Reset the memory pointer
 			m_dev->ActivateTriggerIn(I2C_TRIGIN, I2C_TRIGIN_MEM_RESET);
 			for (i=0; i<length; i++) {
