@@ -139,3 +139,5 @@ okTriggerOut to70  (.ok1(ok1), .ok2(ok2x[ 0*17 +: 17 ]), .ep_addr(8'h70), .ep_cl
 okWireOut    wo30  (.ok1(ok1), .ok2(ok2x[ 1*17 +: 17 ]), .ep_addr(8'h30),                    .ep_datain({8'b0, memdout}));
 
 endmodule
+
+`default_nettype wire

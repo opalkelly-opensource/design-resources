@@ -272,3 +272,5 @@ endtask
 
 
 endmodule
+
+`default_nettype wire
