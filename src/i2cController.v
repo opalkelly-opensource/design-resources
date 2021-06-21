@@ -357,3 +357,5 @@ end
 
 
 endmodule
+
+`default_nettype wire

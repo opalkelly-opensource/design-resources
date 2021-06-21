@@ -41,3 +41,5 @@ always @(sel or datain) begin
 end
 
 endmodule
+
+`default_nettype wire
