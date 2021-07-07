@@ -28,13 +28,14 @@ module okDRAM64X8D(
 	output wire [7:0] doutB
 	);
 
-genvar i;
-generate
-for (i=0; i<8; i=i+1) begin : gen_ram
-	RAM64X1D ram(.WCLK(wclk), .WE(we), .D(din[i]), .SPO(doutA[i]), .DPO(doutB[i]),
-					 .A0(addrA[0]), .A1(addrA[1]), .A2(addrA[2]), .A3(addrA[3]), .A4(addrA[4]), .A5(addrA[5]),
-					 .DPRA0(addrB[0]), .DPRA1(addrB[1]), .DPRA2(addrB[2]), .DPRA3(addrB[3]), .DPRA4(addrB[4]), .DPRA5(addrB[5]) );
+reg [7:0] mem [63:0];
+always @(posedge wclk) begin
+    if(we) begin
+        mem[addrA] <= din;
+    end
 end
-endgenerate
+
+assign doutA = mem[addrA];
+assign doutB = mem[addrB];
 
 endmodule
