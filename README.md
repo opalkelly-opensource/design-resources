@@ -7,10 +7,10 @@ FPGA modules and the Opal Kelly FrontPanel SDK. Opal Kelly’s FrontPanel SDK al
 stimulation of wires from within an FPGA HDL design, communicated over USB from either the 
 FrontPanel GUI, or by use of the FrontPanel API. 
 
-This I2C Controller makes up two components, the hardware(HDL) component and the 
-software(API) component. The HDL component essentially makes up a state machine that 
-executes the I2C protocol. The software(API) component utilizes the FrontPanel 
-SDK to stimulate/sense the hardware(HDL) state machine, for example the start/done signals. 
+This I2C Controller comprises two components: a hardware (HDL) component and a
+software (API) component. The HDL component is a state machine that 
+executes the I2C protocol. The software component utilizes the FrontPanel 
+SDK to stimulate/sense the hardware state machine, for example the `start`/`done` signals. 
 The FrontPanel SDK also sends/receives data to/from the hardware(HDL) state machine. 
 
 This project provides more useful I2C API calls that consist of sequences of 
@@ -36,7 +36,7 @@ port.
 
 Software
 --------
-A C++ API wrapper is provided to interact with the I2C device through the 
+A C++ API is provided to interact with the I2C device through the 
 FrontPanel software interface.
 
 An example program written in C++ is also provided and can be used to

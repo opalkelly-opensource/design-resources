@@ -30,7 +30,7 @@ module okDRAM64X8D(
 
 reg [7:0] mem [63:0];
 always @(posedge wclk) begin
-    if(we) begin
+    if (we) begin
         mem[addrA] <= din;
     end
 end
