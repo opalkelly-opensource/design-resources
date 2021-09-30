@@ -1,9 +1,3 @@
-Models/
-work/
-m25p64/
-VIVADO
-VIVADO_HLS
-HDL/frontpanel
-*ok.py*
-*__pycache__*
-*swp
+# Only put main directory targeted ignores here
+# Use the gitignores in each main folder for project type ignores
+.vscode
