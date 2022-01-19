@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+Ethernet MAC example design XFP for XEM8320
+Copyright (c) 2021, Opal Kelly Incorporated
+-->
+
+<resource version="2.3.0.1">
+
+<object class="okPanel" name="panel1">
+	<title>XEM8320 Ethernet Example Design</title>
+	<size>920,500</size>
+	<!--Start of Port A Controls-->
+	<object class="okStaticText"><label>MAC EX Port A</label><position>100,0</position></object>
+	<object class="okToggleCheck"><label>Gen TX Data</label><position>120,15</position><size>120,25</size><endpoint>0x01</endpoint><bit>4</bit></object>
+	<object class="okToggleCheck"><label>Check RX Data</label><position>120,35</position><size>122,25</size><endpoint>0x01</endpoint><bit>5</bit></object>
+	<object class="okToggleCheck"><label>PHY Loopback</label><position>120,55</position><size>125,25</size><endpoint>0x01</endpoint><bit>10</bit></object>
+	<object class="okToggleCheck"><label>Enable HDL Loopback</label><position>120,75</position><size>175,25</size><endpoint>0x01</endpoint><bit>7</bit></object>
+	<object class="okToggleCheck"><label>HDL Loopback Address Swap</label><position>120,95</position><size>225,25</size><endpoint>0x01</endpoint><bit>9</bit></object>
+	<object class="okPushbutton"><label>Reset Error</label><position>250,10</position><size>90,25</size><endpoint>0x01</endpoint><bit>6</bit></object>
+	<object class="okPushbutton"><label>Inject Error</label><position>250,35</position><size>90,25</size><endpoint>0x01</endpoint><bit>8</bit></object>
+	<object class="okLED"><position>250,60</position><size>120,15</size><label align="right">Error Occurred</label><style>SQUARE</style><color>#ff0000</color><endpoint>0x20</endpoint><bit>4</bit></object>
+	<object class="okLED"><position>1,105</position><size>100,15</size><label align="right">Link On</label><style>SQUARE</style><color>#00ff00</color><endpoint>0x20</endpoint><bit>0</bit></object>
+	<object class="okLED"><position>1,130</position><size>100,15</size><label align="right">Duplex On</label><style>SQUARE</style><color>#00ff00</color><endpoint>0x20</endpoint><bit>3</bit></object>
+	<object class="okLED"><position>1,155</position><size>90,15</size><label align="right">RX Activity</label><style>SQUARE</style><color>#00ff00</color><endpoint>0x20</endpoint><bit>5</bit></object>
+	
+	<object class="okStaticText"><label>PHY Neg Speed</label><position>100,120</position></object>
+	<object class="okDigitDisplay"><radix>2</radix><position>110,137</position><size>60,20</size><minvalue>0</minvalue><maxvalue>2</maxvalue><endpoint>0x20</endpoint><bit>1</bit></object>
+
+	<object class="okStaticText"><label>Speed Advertised:</label><position>0,20</position></object>
+	<object class="okPushbutton"><label>Update Speed</label><position>1,70</position><size>115,25</size><endpoint>0x01</endpoint><bit>2</bit></object>
+	<object class="okCombobox"><position>1,37</position><size>100,25</size><options>
+			<item value="0">10 Mb/s</item>
+			<item value="1">100 Mb/s</item>
+			<item value="2">1000 Mb/s</item>
+	</options><endpoint>0x01</endpoint><bit>0</bit></object>
+	
+	<object class="okPushbutton"><label>Rst Counters</label><position>90,160</position><size>110,30</size><endpoint>0x00</endpoint><bit>2</bit></object>
+	<object class="okStaticText"><label>Number of packets sent:</label><position>210,120</position></object>
+	<object class="okDigitDisplay">
+		<position>210,137</position>
+		<size>133,20</size>
+		<maxvalue>4294967295</maxvalue>
+		<radix>10</radix>
+		<endpoint>0x22</endpoint>
+		<bit>0</bit>
+	</object>
+	
+	<object class="okStaticText"><label>Number of packets received:</label><position>210,157</position></object>
+	<object class="okDigitDisplay">
+		<position>210,173</position>
+		<size>133,20</size>
+		<maxvalue>4294967295</maxvalue>
+		<radix>10</radix>
+		<endpoint>0x23</endpoint>
+		<bit>0</bit>
+	</object>
+
+	<object class="okStaticText"><label>Port A's Unique MAC address from EEPROM:</label><position>10,200</position></object>
+	<object class="okDigitDisplay"><position>10,220</position><size>65,25</size><radix>16</radix><minvalue>0</minvalue><maxvalue>65535</maxvalue><endpoint>0x35</endpoint><bit>0</bit></object>
+	<object class="okDigitDisplay"><position>80,220</position><size>120,25</size><radix>16</radix><minvalue>0</minvalue><maxvalue>4294967295</maxvalue><endpoint>0x34</endpoint><bit>0</bit></object>
+
+	<object class="okStaticText"><label>Current destination MAC address used for generation/check:</label><position>10,250</position></object>
+	<object class="okDigitDisplay"><position>10,270</position><size>65,25</size><radix>16</radix><minvalue>0</minvalue><maxvalue>65535</maxvalue><endpoint>0x27</endpoint><bit>0</bit></object>
+	<object class="okDigitDisplay"><position>80,270</position><size>120,25</size><radix>16</radix><minvalue>0</minvalue><maxvalue>4294967295</maxvalue><endpoint>0x26</endpoint><bit>0</bit></object>
+
+	<object class="okStaticText"><label>Current source MAC address used for generation/check:</label><position>10,300</position></object>
+	<object class="okDigitDisplay"><position>10,320</position><size>65,25</size><radix>16</radix><minvalue>0</minvalue><maxvalue>65535</maxvalue><endpoint>0x29</endpoint><bit>0</bit></object>
+	<object class="okDigitDisplay"><position>80,320</position><size>120,25</size><radix>16</radix><minvalue>0</minvalue><maxvalue>4294967295</maxvalue><endpoint>0x28</endpoint><bit>0</bit></object>
+
+	<object class="okStaticText"><label>Enter destination MAC address to set:</label><position>10,370</position></object>
+	<object class="okDigitEntry"><position>10,390</position><size>65,25</size><radix>16</radix><minvalue>0</minvalue><maxvalue>65535</maxvalue><value>49837</value><endpoint>0x04</endpoint><bit>0</bit></object>
+	<object class="okDigitEntry"><position>80,390</position><size>120,25</size><radix>16</radix><minvalue>0</minvalue><maxvalue>4294967295</maxvalue><value>49837</value><endpoint>0x03</endpoint><bit>0</bit></object>
+
+	<object class="okStaticText"><label>Enter source MAC address to set:</label><position>10,420</position></object>
+	<object class="okDigitEntry"><position>10,440</position><size>65,25</size><radix>16</radix><minvalue>0</minvalue><maxvalue>65535</maxvalue><value>49837</value><endpoint>0x06</endpoint><bit>0</bit></object>
+	<object class="okDigitEntry"><position>80,440</position><size>120,25</size><radix>16</radix><minvalue>0</minvalue><maxvalue>4294967295</maxvalue><value>49837</value><endpoint>0x05</endpoint><bit>0</bit></object>
+
+	<object class="okPushbutton"><label>Set Port A</label><position>50,470</position><size>100,30</size><endpoint>0x01</endpoint><bit>11</bit></object>
+
+	<object class="okPushbutton"><label>Reset Port A</label><position>385,50</position><size>100,30</size><endpoint>0x00</endpoint><bit>0</bit></object>
+
+
+	<!--Start of Port C Controls-->
+	<object class="okStaticText"><label>MAC EX Port C</label><position>600,0</position></object>
+	<object class="okToggleCheck"><label>Gen TX Data</label><position>620,15</position><size>120,25</size><endpoint>0x02</endpoint><bit>4</bit></object>
+	<object class="okToggleCheck"><label>Check RX Data</label><position>620,35</position><size>122,25</size><endpoint>0x02</endpoint><bit>5</bit></object>
+	<object class="okToggleCheck"><label>PHY Loopback</label><position>620,55</position><size>125,25</size><endpoint>0x02</endpoint><bit>10</bit></object>
+	<object class="okToggleCheck"><label>Enable HDL Loopback</label><position>620,75</position><size>175,25</size><endpoint>0x02</endpoint><bit>7</bit></object>
+	<object class="okToggleCheck"><label>HDL Loopback Address Swap</label><position>620,95</position><size>225,25</size><endpoint>0x02</endpoint><bit>9</bit></object>
+	<object class="okPushbutton"><label>Reset Error</label><position>750,10</position><size>90,25</size><endpoint>0x02</endpoint><bit>6</bit></object>
+	<object class="okPushbutton"><label>Inject Error</label><position>750,35</position><size>90,25</size><endpoint>0x02</endpoint><bit>8</bit></object>
+	<object class="okLED"><position>750,60</position><size>120,15</size><label align="right">Error Occurred</label><style>SQUARE</style><color>#ff0000</color><endpoint>0x21</endpoint><bit>4</bit></object>
+	<object class="okLED"><position>500,105</position><size>100,15</size><label align="right">Link On</label><style>SQUARE</style><color>#00ff00</color><endpoint>0x21</endpoint><bit>0</bit></object>
+	<object class="okLED"><position>500,130</position><size>100,15</size><label align="right">Duplex On</label><style>SQUARE</style><color>#00ff00</color><endpoint>0x21</endpoint><bit>3</bit></object>
+	<object class="okLED"><position>500,155</position><size>90,15</size><label align="right">RX Activity</label><style>SQUARE</style><color>#00ff00</color><endpoint>0x21</endpoint><bit>5</bit></object>
+	
+	<object class="okStaticText"><label>PHY Neg Speed</label><position>600,120</position></object>
+	<object class="okDigitDisplay"><radix>2</radix><position>610,137</position><size>60,20</size><minvalue>0</minvalue><maxvalue>2</maxvalue><endpoint>0x21</endpoint><bit>1</bit></object>
+
+	<object class="okStaticText"><label>Speed Advertised:</label><position>500,20</position></object>
+	<object class="okPushbutton"><label>Update Speed</label><position>500,70</position><size>115,25</size><endpoint>0x02</endpoint><bit>2</bit></object>
+	<object class="okCombobox"><position>500,37</position><size>100,25</size><options>
+			<item value="0">10 Mb/s</item>
+			<item value="1">100 Mb/s</item>
+			<item value="2">1000 Mb/s</item>
+	</options><endpoint>0x02</endpoint><bit>0</bit></object>
+	
+	<object class="okPushbutton"><label>Rst Counters</label><position>590,160</position><size>110,30</size><endpoint>0x00</endpoint><bit>3</bit></object>
+	<object class="okStaticText"><label>Number of packets sent:</label><position>710,120</position></object>
+	<object class="okDigitDisplay">
+		<position>710,137</position>
+		<size>133,20</size>
+		<maxvalue>4294967295</maxvalue>
+		<radix>10</radix>
+		<endpoint>0x24</endpoint>
+		<bit>0</bit>
+	</object>
+	
+	<object class="okStaticText"><label>Number of packets received:</label><position>710,157</position></object>
+	<object class="okDigitDisplay">
+		<position>710,173</position>
+		<size>133,20</size>
+		<maxvalue>4294967295</maxvalue>
+		<radix>10</radix>
+		<endpoint>0x25</endpoint>
+		<bit>0</bit>
+	</object>
+
+	<object class="okStaticText"><label>Port C's Unique MAC address from EEPROM:</label><position>510,200</position></object>
+	<object class="okDigitDisplay"><position>510,220</position><size>65,25</size><radix>16</radix><minvalue>0</minvalue><maxvalue>65535</maxvalue><endpoint>0x37</endpoint><bit>0</bit></object>
+	<object class="okDigitDisplay"><position>580,220</position><size>120,25</size><radix>16</radix><minvalue>0</minvalue><maxvalue>4294967295</maxvalue><endpoint>0x36</endpoint><bit>0</bit></object>
+
+	<object class="okStaticText"><label>Current destination MAC address used for generation/check:</label><position>510,250</position></object>
+	<object class="okDigitDisplay"><position>510,270</position><size>65,25</size><radix>16</radix><minvalue>0</minvalue><maxvalue>65535</maxvalue><endpoint>0x31</endpoint><bit>0</bit></object>
+	<object class="okDigitDisplay"><position>580,270</position><size>120,25</size><radix>16</radix><minvalue>0</minvalue><maxvalue>4294967295</maxvalue><endpoint>0x30</endpoint><bit>0</bit></object>
+
+	<object class="okStaticText"><label>Current source MAC address used for generation/check:</label><position>510,300</position></object>
+	<object class="okDigitDisplay"><position>510,320</position><size>65,25</size><radix>16</radix><minvalue>0</minvalue><maxvalue>65535</maxvalue><endpoint>0x33</endpoint><bit>0</bit></object>
+	<object class="okDigitDisplay"><position>580,320</position><size>120,25</size><radix>16</radix><minvalue>0</minvalue><maxvalue>4294967295</maxvalue><endpoint>0x32</endpoint><bit>0</bit></object>
+
+	<object class="okStaticText"><label>Enter destination MAC address to set:</label><position>510,370</position></object>
+	<object class="okDigitEntry"><position>510,390</position><size>65,25</size><radix>16</radix><minvalue>0</minvalue><maxvalue>65535</maxvalue><value>49837</value><endpoint>0x08</endpoint><bit>0</bit></object>
+	<object class="okDigitEntry"><position>580,390</position><size>120,25</size><radix>16</radix><minvalue>0</minvalue><maxvalue>4294967295</maxvalue><value>49837</value><endpoint>0x07</endpoint><bit>0</bit></object>
+
+	<object class="okStaticText"><label>Enter source MAC address to set:</label><position>510,420</position></object>
+	<object class="okDigitEntry"><position>510,440</position><size>65,25</size><radix>16</radix><minvalue>0</minvalue><maxvalue>65535</maxvalue><value>49837</value><endpoint>0x10</endpoint><bit>0</bit></object>
+	<object class="okDigitEntry"><position>580,440</position><size>120,25</size><radix>16</radix><minvalue>0</minvalue><maxvalue>4294967295</maxvalue><value>49837</value><endpoint>0x09</endpoint><bit>0</bit></object>
+
+	<object class="okPushbutton"><label>Set Port C</label><position>550,470</position><size>100,30</size><endpoint>0x02</endpoint><bit>11</bit></object>
+
+	<object class="okPushbutton"><label>Reset Port C</label><position>385,85</position><size>100,30</size><endpoint>0x00</endpoint><bit>1</bit></object>
+	
+	
+	
+	<object class="okPushbutton"><label>Set Addresses to Each Other</label><position>307,200</position><size>202,30</size><endpoint>0x00</endpoint><bit>4</bit></object>
+</object>
+
+</resource>
