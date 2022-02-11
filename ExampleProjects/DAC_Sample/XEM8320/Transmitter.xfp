@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+XEM7320 POD-DAC XML
+Copyright (c) 2018, Opal Kelly Incorporated
+-->
+
+<resource version="2.3.0.1">
+	<object class="okPanel" name="panel1">
+		<title>Radio Transmitter</title>
+		<size>160,305</size>
+
+		<!-- Frequency Input -->
+		<object class="okStaticBox">
+			<position>5,5</position>
+			<size>150,45</size>
+			<label>Frequency (Hz)</label>
+		</object>
+		<object class="okDigitEntry">
+			<position>10,20</position>
+			<size>140,25</size>
+			<tooltip>Frequency</tooltip>
+			<minvalue>0</minvalue>
+			<maxvalue>40000000</maxvalue>
+			<endpoint>0x01</endpoint>
+			<prescale>1.33152507936</prescale>
+			<bit>0</bit>
+			<value>1</value>
+		</object>
+
+		<!-- AM -->
+		<object class="okStaticBox">
+			<position>5,55</position>
+			<size>70,65</size>
+			<label>AM</label>
+		</object>
+
+		<!-- Depth Input -->
+		<object class="okStaticBox">
+			<position>10,70</position>
+			<size>60,45</size>
+			<label>Depth</label>
+		</object>
+		<object class="okDigitEntry">
+			<position>15,85</position>
+			<size>50,25</size>
+			<tooltip>Depth</tooltip>
+			<minvalue>0</minvalue>
+			<maxvalue>255</maxvalue>
+			<endpoint>0x02</endpoint>
+			<bit>0</bit>
+			<value>1</value>
+		</object>
+
+		<!-- FM -->
+		<object class="okStaticBox">
+			<position>5,125</position>
+			<size>100,65</size>
+			<label>FM</label>
+		</object>
+
+		<!-- Frequency Deviation Input -->
+		<object class="okStaticBox">
+			<position>10,140</position>
+			<size>90,45</size>
+			<label>Freq. Deviation</label>
+		</object>
+		<object class="okDigitEntry">
+			<position>15,155</position>
+			<size>80,25</size>
+			<tooltip>Freq. Deviation</tooltip>
+			<minvalue>0</minvalue>
+			<maxvalue>65535</maxvalue>
+			<endpoint>0x04</endpoint>
+			<prescale>0.9765625</prescale>
+			<bit>0</bit>
+			<value>1</value>
+		</object>
+
+		<!-- Dropdown Modulation Menu -->
+		<object class="okStaticBox">
+			<position>5,195</position>
+			<size>110,45</size>
+			<label>Modulation</label>
+		</object>
+		<object class="okCombobox">
+			<position>10,210</position>
+			<size>100,-1</size>
+			<options>
+				<item value="1">FM</item>
+				<item value="2">AM</item>
+				<item value="0">AM+FM</item>
+				<item value="3">Disabled</item>
+			</options>
+			<endpoint>0x03</endpoint>
+			<bit>0</bit>
+		</object>
+
+		<!-- Reset Button -->
+		<object class="okPushbutton">
+			<label>Reset</label>
+			<position>5,245</position>
+			<size>150,30</size>
+			<endpoint>0x00</endpoint>
+			<bit>0</bit>
+		</object>
+
+		<!-- Disable Output Checkbox -->
+		<object class="okToggleCheck">
+			<label>Disable Output</label>
+			<position>5,280</position>
+			<tooltip>Disable Output</tooltip>
+			<endpoint>0x00</endpoint>
+			<bit>1</bit>
+		</object>
+
+	</object>
+</resource>
