@@ -1,0 +1,9 @@
+#Note: Mention Each package in individual line
+#These packages will get added into rootfs menu entry
+
+CONFIG_gpio-demo
+CONFIG_peekpoke
+CONFIG_set-clock-brk1900
+CONFIG_setclk-reboot-init
+CONFIG_set-clock-ecm1900
+CONFIG_syzygy-ecm1900

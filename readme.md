@@ -8,5 +8,5 @@ Full featured example projects
 ## [HDLComponents](/HDLComponents)
 Component usage examples
 
-## [Petalinux](/Petalinux)
-Petalinux project source and device example applications
+## [BoardTools](/BoardTools)
+Tools for various Opal Kelly products

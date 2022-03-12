@@ -1,0 +1,14 @@
+*/PetaLinux/*/*/config.old
+*/PetaLinux/*/*/rootfs_config.old
+*/PetaLinux/build/
+*/PetaLinux/project-spec/meta-user/COPYING.MIT
+*/PetaLinux/project-spec/meta-user/README
+*/PetaLinux/images/linux/
+*/PetaLinux/pre-built/linux/
+*/PetaLinux/.petalinux/*
+!*/PetaLinux/.petalinux/metadata
+*/PetaLinux/*.o
+*/PetaLinux/*.jou
+*/PetaLinux/*.log
+*/PetaLinux/components/plnx_workspace
+*/PetaLinux/components/yocto

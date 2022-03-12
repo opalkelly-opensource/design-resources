@@ -1,0 +1,47 @@
+/include/ "system-conf.dtsi"
+/ {
+chosen {
+xlnx,eeprom = &eeprom;
+};
+};
+
+&i2c1 {
+	clock-frequency = <400000>;
+	status = "okay";
+	eeprom: eeprom@57 {
+		compatible = "atmel,24c08";
+		reg = <0x57>;
+	};
+};
+&sdhci1 {
+	clock-frequency = <200000000>;
+	disable-wp;
+	status = "okay";
+	xlnx,mio_bank = <0x1>;
+	no-1-8-v;
+	broken-mmc-highspeed;
+};
+&gpio {
+	emio-gpio-width = <32>;
+	gpio-mask-high = <0x0>;
+	gpio-mask-low = <0x5600>;
+	status = "okay";
+};
+&gem0 {
+	status = "okay";
+	phy-mode = "rgmii-id";
+	xlnx,ptp-enet-clock = <0x0>;
+	phy-handle = <&ethernet_phy>;
+
+	ethernet_phy: ethernet-phy@0 {
+		reg = <0>;
+		device_type = "ethernet-phy";
+		reset-gpios = <&gpio 18 1>;
+		reset-assert-us = <200000>;
+		reset-deassert-us = <150>;
+	};
+};
+
+
+
+

@@ -1,0 +1,26 @@
+#!/bin/sh
+
+set-clock-brk1900 -c /dev/i2c-0
+CONFIG_CHECK=$? #Get the return value from above function
+if [ "$CONFIG_CHECK" != 0 ]; then
+	echo "SATA controller PLL has NOT locked. Configuring si5338 clock generator on BRK1900";
+	set-clock-brk1900 -w /dev/i2c-0
+	echo "Configuring si5341 clock generator on ECM1900 and rebooting";
+	set-clock-ecm1900 /dev/i2c-0
+
+	echo "Rebooting...";
+	reboot
+else
+	echo "SATA controller pll has locked. Continuing boot";
+	echo "Reversing RX polarity on SATA lane";
+	devmem 0xFD409898 32 0x0080 #L2_TM_MISC1 - bit[7] Swap polarity for hsrx
+	echo "- - -" > /sys/class/scsi_host/host0/scan
+	echo "Enabling si5341 clock generator on ECM1900";
+	# MIO-44 = SI5341_OE_B. GPIO base is 334. 334 + 44 = 378. Export GPIO 378, output 0.
+	echo 378 > /sys/class/gpio/export
+	echo out > /sys/class/gpio/gpio378/direction
+	echo 0 > /sys/class/gpio/gpio378/value
+
+	echo "Running SYZYGY. Setting VIO using solver";
+	syzygy-ecm1900 -r /dev/i2c-0
+fi
