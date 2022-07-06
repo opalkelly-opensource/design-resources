@@ -6,9 +6,9 @@ import time
 
 FIFO_SIZE = 2044
 
-X_AXIS_LIMIT = 2044 # Lower this value to zoom in on the waveform
+X_AXIS_LIMIT = 2044 # lower this value to zoom in on the waveform
 
-XEM_SN = ""
+XEM_SN = "" # edit to your device's serial number, if desired
 
 if (len(sys.argv) != 2):
     print(f"Usage: {sys.argv[0]} bitfile")
@@ -39,15 +39,16 @@ time.sleep(.1)
 
 def animate(i):
             
-    dev.ActivateTriggerIn(0x40, 0) #fill fifo
+    dev.ActivateTriggerIn(0x40, 0) # fill fifo
     time.sleep(.01)
     
     for x in range(0, FIFO_SIZE, 4):
-        error_check = dev.ReadFromPipeOut(0xA0, sample)
+        error_check = dev.ReadFromPipeOut(0xA0, sample) # read pipe into buffer
         
         if (error_check != 16):
             print("Error reading pipe.")
             sys.exit(error_check)
+        # convert data from ADC
         for y in range(4):
             data_channel1[x+y] = (int.from_bytes(sample[y*4:y*4+2], "big") >> 2) - 0x2000 # remove the 2 zero bits,
             data_channel2[x+y] = (int.from_bytes(sample[y*4+2:y*4+4], "big") >> 2) - 0x2000 # subtract offset
