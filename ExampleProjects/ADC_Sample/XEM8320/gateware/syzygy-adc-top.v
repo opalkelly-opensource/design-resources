@@ -46,7 +46,7 @@ module syzygy_adc_top (
     input  wire                adc_fr_p,       // Frame input
     input  wire                adc_fr_n,
     output wire                adc_encode_p,   // ADC Encode Clock
-    output wire                adc_encode_n,
+    //output wire                adc_encode_n,
     input  wire                adc_sdo,
     output wire                adc_sdi,
     output wire                adc_cs_n,
@@ -154,8 +154,8 @@ syzygy_adc_frame adc_frame_impl (
 
 syzygy_adc_enc adc_enc_impl (
     .clk          (clk),
-    .adc_encode_p (adc_encode_p),
-    .adc_encode_n (adc_encode_n)
+    .adc_encode_p (adc_encode_p)
+    //.adc_encode_n (adc_encode_n)
 );
 
 IDELAYCTRL #(

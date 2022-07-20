@@ -48,7 +48,7 @@ module xem8320_adc(
     input  wire                adc_fr_p,       // Frame input
     input  wire                adc_fr_n,
     output wire                adc_encode_p,   // ADC Encode Clock
-    output wire                adc_encode_n,
+    //output wire                adc_encode_n,
     input  wire                adc_sdo,
     output wire                adc_sdi,
     output wire                adc_cs_n,
@@ -103,7 +103,7 @@ syzygy_adc_top adc_impl(
     .adc_fr_p      (adc_fr_p),
     .adc_fr_n      (adc_fr_n),
     .adc_encode_p  (adc_encode_p),
-    .adc_encode_n  (adc_encode_n),
+    //.adc_encode_n  (adc_encode_n),
     .adc_sdo       (adc_sdo),
     .adc_sdi       (adc_sdi),
     .adc_cs_n      (adc_cs_n),
