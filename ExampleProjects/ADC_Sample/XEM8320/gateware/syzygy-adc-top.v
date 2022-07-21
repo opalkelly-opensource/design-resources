@@ -55,11 +55,12 @@ module syzygy_adc_top (
     output wire [15:0]         adc_data_1,
     output wire [15:0]         adc_data_2,
     output wire                data_valid,
-    output wire                rdy
+    output wire                rdy,
+    output wire [3:0] bitslip_count
     );
 wire        bufio_clk;
 wire        idelay_rdy;
-wire [3:0]  bitslip_count;
+//wire [3:0]  bitslip_count;
 
 reg         reset_sync;
 reg         delay_rdy = 1'b0;

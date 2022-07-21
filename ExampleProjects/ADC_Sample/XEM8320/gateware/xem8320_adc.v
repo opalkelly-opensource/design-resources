@@ -70,7 +70,7 @@ wire         locked;
 wire         idelay_ref; 
 wire         sys_clk_ibuf;
 wire         sys_clk_bufg;
-
+wire [3:0] bitslip_count;
 wire [15:0]  adc_data_out1, adc_data_out2;
 reg          wr_en = 1'b0;
 
@@ -112,7 +112,8 @@ syzygy_adc_top adc_impl(
     .adc_data_1    (adc_data_out1),
     .adc_data_2    (adc_data_out2),
     .data_valid    (adc_data_valid),
-    .rdy           (idelay_rdy)
+    .rdy           (idelay_rdy),
+    .bitslip_count (bitslip_count)
 );
 IBUFDS sysclk_ibufds_inst (
     .O  (sys_clk_ibuf),     // 1-bit output: Buffer diff_p output
@@ -162,7 +163,24 @@ okHost okHI(
     .okHE(okHE), 
     .okEH(okEH)
 );
-
+ila_0 ILA(
+.clk(idelay_ref),
+.probe0({pipea0_data[7:0], pipea0_data[15:8], pipea0_data[23:16], pipea0_data[31:24]}), //[31 : 0]
+.probe1({adc_data_out1,adc_data_out2}), //[31 : 0]
+.probe2(adc_clk),
+.probe3(adc_encode_p),
+.probe4(okClk),
+.probe5(wr_en),
+.probe6(ep_read),
+.probe7(prog_full),
+.probe8(bitslip_count), //[7 : 0]
+.probe9(adc_fr_p),
+.probe10(adc_data_valid),
+.probe11(idelay_rdy),
+.probe12(locked),
+.probe13(fill_fifo),
+.probe14(adc_cs_n),
+);
 okWireOR # (.N(1)) wireOR (okEH, okEHx);
 
 okTriggerIn trigIn53    (.okHE(okHE), .ep_addr(8'h40), .ep_clk(adc_data_clk), .ep_trigger(ep40trig));
