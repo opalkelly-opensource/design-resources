@@ -71,6 +71,8 @@ wire         idelay_ref;
 wire         sys_clk_ibuf;
 wire         sys_clk_bufg;
 wire [3:0] bitslip_count;
+wire ila_clk;
+wire       frame_input;
 wire [15:0]  adc_data_out1, adc_data_out2;
 reg          wr_en = 1'b0;
 
@@ -113,7 +115,8 @@ syzygy_adc_top adc_impl(
     .adc_data_2    (adc_data_out2),
     .data_valid    (adc_data_valid),
     .rdy           (idelay_rdy),
-    .bitslip_count (bitslip_count)
+    .bitslip_count (bitslip_count),
+    .frame_input (frame_input)
 );
 IBUFDS sysclk_ibufds_inst (
     .O  (sys_clk_ibuf),     // 1-bit output: Buffer diff_p output
@@ -130,6 +133,7 @@ clk_wiz_0 idelay_adc_enc_clk(
     // Clock out ports  
     .clk_out1     (idelay_ref), // 300 MHz
     .clk_out2     (adc_clk),    // 40 MHz (default, SZG-ADC-12) or 125 MHz (SZG-ADC-14)
+    .clk_out3     (ila_clk),    //350 MHz for ILA
     .locked       (locked),
     // Clock in ports
     .reset        (reset),
@@ -164,22 +168,22 @@ okHost okHI(
     .okEH(okEH)
 );
 ila_0 ILA(
-.clk(idelay_ref),
+.clk(ila_clk),
 .probe0({pipea0_data[7:0], pipea0_data[15:8], pipea0_data[23:16], pipea0_data[31:24]}), //[31 : 0]
 .probe1({adc_data_out1,adc_data_out2}), //[31 : 0]
-.probe2(adc_clk),
-.probe3(adc_encode_p),
+.probe2(adc_data_clk),
+.probe3(adc_clk),
 .probe4(okClk),
 .probe5(wr_en),
 .probe6(ep_read),
 .probe7(prog_full),
 .probe8(bitslip_count), //[7 : 0]
-.probe9(adc_fr_p),
+.probe9(0),
 .probe10(adc_data_valid),
 .probe11(idelay_rdy),
 .probe12(locked),
 .probe13(fill_fifo),
-.probe14(adc_cs_n),
+.probe14(adc_cs_n)
 );
 okWireOR # (.N(1)) wireOR (okEH, okEHx);
 

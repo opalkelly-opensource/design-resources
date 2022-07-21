@@ -56,7 +56,8 @@ module syzygy_adc_top (
     output wire [15:0]         adc_data_2,
     output wire                data_valid,
     output wire                rdy,
-    output wire [3:0] bitslip_count
+    output wire [3:0] bitslip_count,
+    output wire frame_input
     );
 wire        bufio_clk;
 wire        idelay_rdy;
@@ -150,7 +151,8 @@ syzygy_adc_frame adc_frame_impl (
     .adc_fr_n      (adc_fr_n),
     .bitslip_count (bitslip_count),
     .ena           (delay_rdy),
-    .data_valid    (data_valid)
+    .data_valid    (data_valid),
+    .frame_input    (frame_input)
 );
 
 syzygy_adc_enc adc_enc_impl (

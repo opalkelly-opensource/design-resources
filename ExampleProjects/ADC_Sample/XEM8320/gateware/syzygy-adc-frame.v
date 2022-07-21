@@ -36,10 +36,11 @@ module syzygy_adc_frame (
     input  wire        adc_fr_p,
     input  wire        adc_fr_n,
     output reg         data_valid,
-    output wire [3:0]  bitslip_count
+    output wire [3:0]  bitslip_count,
+    output wire frame_input
     );
 
-wire frame_input, frame_delay;
+wire frame_delay;
 wire [7:0] frame_serdes;
 // We must wait at least 4 clock cycles between each bitslip
 reg  [2:0] wait_count = 3'd0;
