@@ -99,14 +99,16 @@ localparam idle = 0,
            reset_state = 1,
            delay_wait = 2;
 
-// okClk is 2.52x faster than adc_clk
+// Worst case is using ADC-12 project, in which
+// okClk (100.8 MHz) is 2.52x faster than adc_clk (40 MHz)
 // first wait for MMCM to lock, then the
 // reset should be asserted for 21 cycles,
-// and then should wait for 152 cycles
+// and then should wait for 152 cycles, for a
+// total of 173 cycles the FIFO is resetting.
+// See PG057 Figure 3-29 for more information.
 always @ (posedge okClk) begin
     case (state)
         idle: begin
-            delay_counter = 8'd173;
             if (reset) begin
                 fifo_reset <= 1'b1;
                 state <= wait_for_lock;
@@ -120,15 +122,17 @@ always @ (posedge okClk) begin
         
         wait_for_lock: begin // wait for MMCM to lock
             if (locked) begin
+                delay_counter = 8'd21;
                 state <= reset_state;
             end
         end
         
-        reset_state: begin // assert reset for 21 cycles
+        reset_state: begin // assert reset for 21 cycles after MMCM is locked
             delay_counter <= delay_counter - 1'b1;
-            if (delay_counter < 8'd152) begin
+            if (delay_counter == 8'd0) begin
                 fifo_reset <= 1'b0;
                 fifo_busy <= 1'b0;
+                delay_counter = 8'd152;
                 state <= delay_wait;
             end 
         end
