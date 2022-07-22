@@ -95,9 +95,9 @@ reg [15:0] delay_counter = 16'd0;
 reg [1:0] state;
 reg fifo_busy;
 localparam idle = 0,
-           wait_for_lock = 3,
-           reset_state = 1,
-           delay_wait = 2;
+           wait_for_lock = 1,
+           reset_state = 2,
+           delay_wait = 3;
  
 always @ (posedge okClk) begin
     case (state)
@@ -132,7 +132,6 @@ always @ (posedge okClk) begin
                 state <= idle;
             end
         end
-    
     endcase
 end
 
