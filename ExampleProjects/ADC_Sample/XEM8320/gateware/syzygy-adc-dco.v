@@ -41,7 +41,7 @@ module syzygy_adc_dco (
 wire clk_out_int; // internal clock net
 
 IBUFDS #(
-    .IOSTANDARD ("LVDS_25"),
+    .IOSTANDARD ("LVDS"),
     .DIFF_TERM  ("TRUE")
 ) adc_dco_ibufds (
     .I  (adc_dco_p),
