@@ -70,26 +70,25 @@ wire         locked;
 wire         idelay_ref; 
 wire         sys_clk_ibuf;
 wire         sys_clk_bufg;
-wire         prog_empty;
-wire        rd_rst_busy;
-wire        wr_rst_busy;
+wire         rd_rst_busy;
+wire         wr_rst_busy;
 wire [15:0]  adc_data_out1, adc_data_out2;
 reg          wr_en = 1'b0;
-reg         fifo_reset;
+reg          fifo_reset;
 
 assign reset = ep00data[0];
 assign fill_fifo = ep40trig[0];
-assign led = {1'd0, prog_empty, wr_rst_busy, rd_rst_busy, idelay_rdy, prog_full};
+assign led = {3'd0, fifo_busy, idelay_rdy, prog_full};
 
 always @ (posedge adc_data_clk) begin
-        if (locked && idelay_rdy && !prog_full && adc_data_valid) begin 
-            if (fill_fifo) begin                // fifo wr_en logic to ensure the fifo:                       
-                wr_en <= 1'b1;                  // operates after all SERDES modules are ready,              
-            end                                 // isn't full, the adc data is valid (bitslip), and     
-        end                                     // isn't resetting. 
-        else begin                                                                                          
-            wr_en <= 1'b0;                      
-        end
+    if (locked && idelay_rdy && !prog_full && adc_data_valid) begin 
+        if (fill_fifo) begin                // fifo wr_en logic to ensure the fifo:                       
+            wr_en <= 1'b1;                  // operates after all SERDES modules are ready,              
+        end                                 // isn't full, the adc data is valid (bitslip), and     
+    end                                     // isn't resetting. 
+    else begin                                                                                          
+        wr_en <= 1'b0;                      
+    end
 end
 reg [15:0] delay_counter = 16'd0;
 reg [1:0] state;
@@ -98,8 +97,7 @@ localparam idle = 0,
            wait_for_lock = 3,
            reset_state = 1,
            delay_wait = 2;
-           
-    
+ 
 always @ (posedge okClk) begin
     case (state)
         idle: begin
