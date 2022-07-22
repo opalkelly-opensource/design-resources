@@ -5,7 +5,7 @@
 # the pins that are not used in your design.  (By default, map will fail
 # if this file contains constraints for signals not in your design).
 #
-# Copyright (c) 2004-2021 Opal Kelly Incorporated
+# Copyright (c) 2004-2022 Opal Kelly Incorporated
 ############################################################################
 
 set_property CFGBVS GND [current_design]
