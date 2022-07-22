@@ -90,6 +90,7 @@ always @ (posedge adc_data_clk) begin
         wr_en <= 1'b0;                      
     end
 end
+
 reg [15:0] delay_counter = 16'd0;
 reg [1:0] state;
 reg fifo_busy;
