@@ -117,11 +117,13 @@ always @ (posedge okClk) begin
                 fifo_reset <= 1'b0;
             end
         end
+        
         wait_for_lock: begin
             if (locked) begin
                 state <= reset_state;
             end
         end
+        
         reset_state: begin
             delay_counter <= delay_counter - 1'b1;
             if (delay_counter < 8'd152) begin
@@ -130,6 +132,7 @@ always @ (posedge okClk) begin
                 state <= delay_wait;
             end 
         end
+        
         delay_wait: begin
             delay_counter <= delay_counter - 1'b1;
             if (delay_counter == 8'd0) begin
