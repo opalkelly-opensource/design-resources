@@ -91,18 +91,22 @@ always @ (posedge adc_data_clk) begin
     end
 end
 
-reg [15:0] delay_counter = 16'd0;
+reg [7:0] delay_counter = 8'd0;
 reg [1:0] state;
 reg fifo_busy;
 localparam idle = 0,
-           wait_for_lock = 1,
-           reset_state = 2,
-           delay_wait = 3;
- 
+           wait_for_lock = 3,
+           reset_state = 1,
+           delay_wait = 2;
+
+// okClk is 2.52x faster than adc_clk
+// first wait for MMCM to lock, then the
+// reset should be asserted for 21 cycles,
+// and then should wait for 152 cycles
 always @ (posedge okClk) begin
     case (state)
         idle: begin
-            delay_counter = 16'd400;
+            delay_counter = 8'd173;
             if (reset) begin
                 fifo_reset <= 1'b1;
                 state <= wait_for_lock;
@@ -120,7 +124,7 @@ always @ (posedge okClk) begin
         end
         reset_state: begin
             delay_counter <= delay_counter - 1'b1;
-            if (delay_counter < 16'd380) begin
+            if (delay_counter < 8'd152) begin
                 fifo_reset <= 1'b0;
                 fifo_busy <= 1'b0;
                 state <= delay_wait;
@@ -128,7 +132,7 @@ always @ (posedge okClk) begin
         end
         delay_wait: begin
             delay_counter <= delay_counter - 1'b1;
-            if (delay_counter == 16'd0) begin
+            if (delay_counter == 8'd0) begin
                 state <= idle;
             end
         end
