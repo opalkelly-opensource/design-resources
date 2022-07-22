@@ -169,17 +169,16 @@ set_property PACKAGE_PIN J23 [get_ports adc_dco_p]
 set_property IOSTANDARD LVDS [get_ports adc_dco_p]
 
 # PORTA-34
-#set_property PACKAGE_PIN H26 [get_ports adc_encode_p]
-set_property PACKAGE_PIN F10 [get_ports adc_encode_p]
-set_property IOSTANDARD LVCMOS18 [get_ports adc_encode_p]
+set_property PACKAGE_PIN H26 [get_ports adc_encode_p]
+set_property IOSTANDARD LVDS [get_ports adc_encode_p]
 
 # PORTA-35
 set_property PACKAGE_PIN J24 [get_ports adc_dco_n]
 set_property IOSTANDARD LVDS [get_ports adc_dco_n]
 
 # PORTA-36
-#set_property PACKAGE_PIN G26 [get_ports adc_encode_n]
-#set_property IOSTANDARD LVDS [get_ports adc_encode_n]
+set_property PACKAGE_PIN G26 [get_ports adc_encode_n]
+set_property IOSTANDARD LVDS [get_ports adc_encode_n]
 
 # ADC timing constraints
 create_clock -period 6.250 -name adc_dco_p -waveform {0.000 3.125} [get_ports adc_dco_p]
