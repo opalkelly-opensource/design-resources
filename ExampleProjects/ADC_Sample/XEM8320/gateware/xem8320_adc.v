@@ -118,13 +118,13 @@ always @ (posedge okClk) begin
             end
         end
         
-        wait_for_lock: begin
+        wait_for_lock: begin // wait for MMCM to lock
             if (locked) begin
                 state <= reset_state;
             end
         end
         
-        reset_state: begin
+        reset_state: begin // assert reset for 21 cycles
             delay_counter <= delay_counter - 1'b1;
             if (delay_counter < 8'd152) begin
                 fifo_reset <= 1'b0;
@@ -133,7 +133,7 @@ always @ (posedge okClk) begin
             end 
         end
         
-        delay_wait: begin
+        delay_wait: begin // deassert reset after 152 cycles
             delay_counter <= delay_counter - 1'b1;
             if (delay_counter == 8'd0) begin
                 state <= idle;
