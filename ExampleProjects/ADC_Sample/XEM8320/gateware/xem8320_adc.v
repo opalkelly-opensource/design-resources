@@ -131,15 +131,15 @@ always @ (posedge okClk) begin
             delay_counter <= delay_counter - 1'b1;
             if (delay_counter == 8'd0) begin
                 fifo_reset <= 1'b0;
-                fifo_busy <= 1'b0;
                 delay_counter = 8'd152;
                 state <= delay_wait;
             end 
         end
         
-        delay_wait: begin // deassert reset after 152 cycles
+        delay_wait: begin // deassert fifo_busy after 152 cycles
             delay_counter <= delay_counter - 1'b1;
             if (delay_counter == 8'd0) begin
+                fifo_busy <= 1'b0;
                 state <= idle;
             end
         end
