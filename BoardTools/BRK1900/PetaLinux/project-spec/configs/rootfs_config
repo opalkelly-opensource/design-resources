@@ -4167,6 +4167,7 @@ CONFIG_auto-login=y
 #
 # apps 
 #
+CONFIG_device-sensors=y
 # CONFIG_gpio-demo is not set
 # CONFIG_peekpoke is not set
 CONFIG_set-clock-brk1900=y
