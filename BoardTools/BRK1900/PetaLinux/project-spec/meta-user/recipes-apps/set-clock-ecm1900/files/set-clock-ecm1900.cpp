@@ -8,6 +8,9 @@
 #include <linux/i2c-dev.h>
 #include "ECM1900-Si5341-Regs.h"
 
+#define SI5341_REVD_REG_CONFIG_PREAMBLE_SIZE 6
+#define SI5341_REVD_CALIBRATION_TIME_US 300000
+
 /*
 int i2c_read (uint16_t reg_addr, uint8_t* reg_data)
 {
@@ -70,7 +73,14 @@ int main (int argc, char *argv[])
 		exit(1);
 	}
 
-	for (i = 0; i < SI5341_REVD_REG_CONFIG_NUM_REGS; i++) {
+	for (i = 0; i < SI5341_REVD_REG_CONFIG_PREAMBLE_SIZE; i++) {
+		i2c_write(i2c_fd, si5341_revd_registers[i].address, si5341_revd_registers[i].value);
+	}
+
+	// Delay 300 msec as directed in ECM1900-Si5341-Regs.h
+	usleep(SI5341_REVD_CALIBRATION_TIME_US);
+
+	for (i = SI5341_REVD_REG_CONFIG_PREAMBLE_SIZE; i < SI5341_REVD_REG_CONFIG_NUM_REGS; i++) {
 		i2c_write(i2c_fd, si5341_revd_registers[i].address, si5341_revd_registers[i].value);
 	}
 
