@@ -29,16 +29,18 @@
 
 module syzygy_adc_enc (
     input  wire clk,
-
     output wire adc_encode_p,
     output wire adc_encode_n
     );
 
-OBUFDS adc_enc_obuf (
-    .I  (clk),
-    .O  (adc_encode_p),
-    .OB (adc_encode_n)
-);
+OBUFDS #(
+      .IOSTANDARD("LVDS"), // Specify the output I/O standard
+      .SLEW("FAST") 
+    ) adc_enc_obuf (
+     .I  (clk), 
+     .O  (adc_encode_p),
+     .OB (adc_encode_n)
+    );
 
 endmodule
 `default_nettype wire

@@ -8,7 +8,7 @@
 // where it can be read out through a pipe at endpoint 0xA0. 
 // 
 //------------------------------------------------------------------------
-// Copyright (c) 2021 Opal Kelly Incorporated
+// Copyright (c) 2022 Opal Kelly Incorporated
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -70,23 +70,80 @@ wire         locked;
 wire         idelay_ref; 
 wire         sys_clk_ibuf;
 wire         sys_clk_bufg;
-
+wire         rd_rst_busy;
+wire         wr_rst_busy;
 wire [15:0]  adc_data_out1, adc_data_out2;
 reg          wr_en = 1'b0;
+reg          fifo_reset;
 
 assign reset = ep00data[0];
 assign fill_fifo = ep40trig[0];
-assign led = {4'd0, idelay_rdy, prog_full};
+assign led = {3'd0, fifo_busy, idelay_rdy, prog_full};
 
 always @ (posedge adc_data_clk) begin
-        if (locked && idelay_rdy && !prog_full && adc_data_valid) begin 
-            if (fill_fifo) begin                // fifo wr_en logic to ensure the fifo:                       
-                wr_en <= 1'b1;                  // operates after all SERDES modules are ready,              
-            end                                 // isn't full, the adc data is valid (bitslip), and     
-        end                                     // isn't resetting. 
-        else begin                                                                                          
-            wr_en <= 1'b0;                      
+    if (locked && idelay_rdy && !prog_full && adc_data_valid) begin 
+        if (fill_fifo) begin                // fifo wr_en logic to ensure the fifo:                       
+            wr_en <= 1'b1;                  // operates after all SERDES modules are ready,              
+        end                                 // isn't full, the adc data is valid (bitslip), and     
+    end                                     // isn't resetting. 
+    else begin                                                                                          
+        wr_en <= 1'b0;                      
+    end
+end
+
+reg [7:0] delay_counter = 8'd0;
+reg [1:0] state;
+reg fifo_busy;
+localparam idle = 0,
+           wait_for_lock = 3,
+           reset_state = 1,
+           delay_wait = 2;
+
+// Worst case is using ADC-12 project, in which
+// okClk (100.8 MHz) is 2.52x faster than adc_clk (40 MHz)
+// first wait for MMCM to lock, then the
+// reset should be asserted for 21 cycles,
+// and then should wait for 152 cycles, for a
+// total of 173 cycles the FIFO is resetting.
+// See PG057 Figure 3-29 for more information.
+always @ (posedge okClk) begin
+    case (state)
+        idle: begin
+            if (reset) begin
+                fifo_reset <= 1'b1;
+                state <= wait_for_lock;
+                fifo_busy <= 1'b1;
+            end
+            else begin
+                fifo_busy <= 1'b0;
+                fifo_reset <= 1'b0;
+            end
         end
+        
+        wait_for_lock: begin // wait for MMCM to lock
+            if (locked) begin
+                delay_counter = 8'd21;
+                state <= reset_state;
+            end
+        end
+        
+        reset_state: begin // assert reset for 21 cycles after MMCM is locked
+            delay_counter <= delay_counter - 1'b1;
+            if (delay_counter == 8'd0) begin
+                fifo_reset <= 1'b0;
+                delay_counter = 8'd152;
+                state <= delay_wait;
+            end 
+        end
+        
+        delay_wait: begin // deassert fifo_busy after 152 cycles
+            delay_counter <= delay_counter - 1'b1;
+            if (delay_counter == 8'd0) begin
+                fifo_busy <= 1'b0;
+                state <= idle;
+            end
+        end
+    endcase
 end
 
 syzygy_adc_top adc_impl(
@@ -138,14 +195,14 @@ clk_wiz_0 idelay_adc_enc_clk(
  fifo_generator_0 fifo(
     .wr_clk         (adc_data_clk),
     .rd_clk         (okClk),
-    .rst            (1'b0),
+    .rst            (fifo_reset),
     .din            ({adc_data_out1,adc_data_out2}),
-    .wr_en          (wr_en),
-    .rd_en          (ep_read),
+    .wr_en          ({wr_en & ~fifo_busy}),
+    .rd_en          ({ep_read & ~fifo_busy}),
     .dout           ({pipea0_data[7:0], pipea0_data[15:8], pipea0_data[23:16], pipea0_data[31:24]}), 
     .full           (),
-    .wr_rst_busy    (),
-    .rd_rst_busy    (),
+    .wr_rst_busy    (wr_rst_busy),
+    .rd_rst_busy    (rd_rst_busy),
     .empty          (),
     .prog_full      (prog_full)
 );

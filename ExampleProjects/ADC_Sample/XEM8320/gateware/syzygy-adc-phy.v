@@ -7,7 +7,7 @@
 // the ADC data. Bitslip operations are performed on the data to align    
 // the DDR data.
 //------------------------------------------------------------------------
-// Copyright (c) 2021 Opal Kelly Incorporated
+// Copyright (c) 2022 Opal Kelly Incorporated
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -46,7 +46,7 @@ wire [7:0] adc_data_1, adc_data_2;
 
 IBUFDS #(
     .DIFF_TERM ("TRUE"),
-    .IOSTANDARD ("LVDS_25")
+    .IOSTANDARD ("LVDS")
 ) adc_ibufds0 (
     .I  (adc_out_p[0]),
     .IB (adc_out_n[0]),
@@ -55,7 +55,7 @@ IBUFDS #(
 
 IBUFDS #(
     .DIFF_TERM ("TRUE"),
-    .IOSTANDARD ("LVDS_25")
+    .IOSTANDARD ("LVDS")
 ) adc_ibufds1 (
     .I  (adc_out_p[1]),
     .IB (adc_out_n[1]),
