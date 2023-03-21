@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+FFT Signal Generator sample
+
+Copyright (c) 2023, Opal Kelly Incorporated
+-->
+
+<resource version="2.3.0.1">
+
+<object class="okProfile">
+	<object class="okScriptFile">
+		<file>FFTSignalGenerator.lua</file>
+	</object>
+
+	<object class="okInitScript">
+		<functionname>OnInit</functionname>
+	</object>
+</object>
+
+
+<object class="okPanel" name="panel1">
+	<title>256-point FFT Signal Generator Sample</title>
+	<size>425,350</size>
+
+	<!-- Bin Selection -->
+	<object class="okStaticText">
+		<label>Bin Number</label>
+		<position>10,10</position>
+		<size>90,20</size>
+	</object>
+
+	<object class="okDigitEntry" name="bin1">
+		<position>10,30</position>
+		<size>60,30</size>
+		<minvalue>0</minvalue>
+		<maxvalue>127</maxvalue>
+		<radix>10</radix>
+		<value>0</value>
+		<functionname>IfftSend</functionname>
+        <tooltip>Range: 0-127 for a 256 point IFFT.</tooltip>
+	</object>
+    
+    <object class="okDigitEntry" name="bin2">
+		<position>10,70</position>
+		<size>60,30</size>
+		<minvalue>0</minvalue>
+		<maxvalue>127</maxvalue>
+		<radix>10</radix>
+		<value>0</value>
+		<functionname>IfftSend</functionname>
+        <tooltip>Range: 0-127 for a 256 point IFFT.</tooltip>
+	</object>
+    
+    <object class="okDigitEntry" name="bin3">
+		<position>10,110</position>
+		<size>60,30</size>
+		<minvalue>0</minvalue>
+		<maxvalue>127</maxvalue>
+		<radix>10</radix>
+		<value>0</value>
+		<functionname>IfftSend</functionname>
+        <tooltip>Range: 0-127 for a 256 point IFFT.</tooltip>
+	</object>
+    
+    <object class="okDigitEntry" name="bin4">
+		<position>10,150</position>
+		<size>60,30</size>
+		<minvalue>0</minvalue>
+		<maxvalue>127</maxvalue>
+		<radix>10</radix>
+		<value>0</value>
+		<functionname>IfftSend</functionname>
+        <tooltip>Range: 0-127 for a 256 point IFFT.</tooltip>
+	</object>
+    
+	<!-- Bin Enable -->
+    <object class="okStaticText">
+		<label>Enable</label>
+		<position>180,10</position>
+		<size>40,20</size>
+	</object>
+    
+	<object class="okToggleCheck" name="enaBin1">
+		<position>190,30</position>
+		<size>30,30</size>
+		<functionname>IfftSend</functionname>
+	</object>
+    
+    <object class="okToggleCheck" name="enaBin2">
+		<position>190,70</position>
+		<size>30,30</size>
+		<functionname>IfftSend</functionname>
+	</object>
+    
+    <object class="okToggleCheck" name="enaBin3">
+		<position>190,110</position>
+		<size>30,30</size>
+		<functionname>IfftSend</functionname>
+	</object>
+    
+    <object class="okToggleCheck" name="enaBin4">
+		<position>190,150</position>
+		<size>30,30</size>
+		<functionname>IfftSend</functionname>
+	</object>
+	
+    <!-- dB FS -->
+	<object class="okStaticText">
+		<label>dBFS</label>
+		<position>90,10</position>
+		<size>50,20</size>
+	</object>
+
+	<object class="okDigitEntry" name="db1">
+		<position>90,30</position>
+		<size>70,30</size>
+		<minvalue>-115</minvalue>
+		<maxvalue>0</maxvalue>
+		<radix>10</radix>
+		<value>0</value>
+		<functionname>IfftSend</functionname>
+        <tooltip>Range: (-115)-0. Full power = 0, off = -115</tooltip>
+	</object>
+    
+    <object class="okDigitEntry" name="db2">
+		<position>90,70</position>
+		<size>70,30</size>
+		<minvalue>-115</minvalue>
+		<maxvalue>0</maxvalue>
+		<radix>10</radix>
+		<value>0</value>
+		<functionname>IfftSend</functionname>
+        <tooltip>Range: (-115)-0. Full power = 0, off = -115</tooltip>
+	</object>
+    
+    <object class="okDigitEntry" name="db3">
+		<position>90,110</position>
+		<size>70,30</size>
+		<minvalue>-115</minvalue>
+		<maxvalue>0</maxvalue>
+		<radix>10</radix>
+		<value>0</value>
+		<functionname>IfftSend</functionname>
+        <tooltip>Range: (-115)-0. Full power = 0, off = -115</tooltip>
+	</object>
+    
+    <object class="okDigitEntry" name="db4">
+		<position>90,150</position>
+		<size>70,30</size>
+		<minvalue>-115</minvalue>
+		<maxvalue>0</maxvalue>
+		<radix>10</radix>
+		<value>0</value>
+		<functionname>IfftSend</functionname>
+        <tooltip>Range: (-115)-0. Full power = 0, off = -115</tooltip>
+	</object>
+    
+	<!-- Frequency Display -->
+	<object class="okStaticText">
+		<label>Frequency (kHz)</label>
+		<position>240,10</position>
+		<size>90,20</size>
+	</object>
+
+	<object class="okDigitDisplay" name="freq1">
+		<position>240,30</position>
+		<size>175,30</size>
+		<minvalue>0</minvalue>
+		<maxvalue>976563</maxvalue>
+		<decimalpointlocation>3</decimalpointlocation>
+		<value>0</value>
+	</object>
+    
+    <object class="okDigitDisplay" name="freq2">
+		<position>240,70</position>
+		<size>175,30</size>
+		<minvalue>0</minvalue>
+		<maxvalue>976563</maxvalue>
+		<decimalpointlocation>3</decimalpointlocation>
+		<value>0</value>
+	</object>
+    
+    <object class="okDigitDisplay" name="freq3">
+		<position>240,110</position>
+		<size>175,30</size>
+		<minvalue>0</minvalue>
+		<maxvalue>976563</maxvalue>
+		<decimalpointlocation>3</decimalpointlocation>
+		<value>0</value>
+	</object>
+    
+    <object class="okDigitDisplay" name="freq4">
+		<position>240,150</position>
+		<size>175,30</size>
+		<minvalue>0</minvalue>
+		<maxvalue>976563</maxvalue>
+		<decimalpointlocation>3</decimalpointlocation>
+		<value>0</value>
+	</object>
+	
+	<!-- Enable Auto Scaling -->
+	<object class="okToggleCheck" name="autoscale">
+        <position>10,195</position>
+		<size>140,30</size>
+		<label>Enable Auto Scaling</label>
+		<tooltip>Prevents clipping by automatically scaling the dB of the bins.</tooltip>
+		<functionname>IfftSend</functionname>
+	</object>
+    
+    <!-- IFFT Reset -->
+	<object class="okPushbutton">
+        <position>10,230</position>
+		<size>140,30</size>
+		<label>Reset IFFT</label>
+		<tooltip>Resets IFFT logic and frequency bins</tooltip>
+		<functionname>IfftResetButton</functionname>
+	</object>
+
+	<!-- Status -->
+	<object class="okStaticText" name="status">
+		<position>10,275</position>
+		<size>300,30</size>
+	</object>
+
+</object>
+
+</resource>

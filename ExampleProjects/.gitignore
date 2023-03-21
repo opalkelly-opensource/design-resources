@@ -4,3 +4,5 @@ VIVADO_HLS
 *ok.py*
 *__pycache__*
 *swp
+vitis
+vitis_hls.log
