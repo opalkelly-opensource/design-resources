@@ -14,19 +14,20 @@ function OnInit(event)
     
     dev = event:GetDevice()
     dev:UpdateWireOuts()
-    local locked = dev:GetWireOutValue(0x20) & 0x00000001
+    local locked = 0
     local MAX_TRIES = 100
-    local tries
+    local tries = 0
+
     SetStatus("Waiting for clocks to lock...")
-    while not locked or tries == MAX_TRIES do
+    while (locked == 0) and (tries < MAX_TRIES) do
         dev:UpdateWireOuts()
-        locked = dev:GetWireOutValue(0x20) & 0x00000001
+        locked = dev:GetWireOutValue(0x20) & 0x1
         tries = tries + 1
     end
-    if tries == MAX_TRIES then
-        SetError("Clocks did not lock.")
+    if locked == 1 then
+        SetStatus("Clocks locked")
     else
-        SetStatus("Clocks locked.")
+        SetError("Clocks did not lock.")
     end
     
     for i=0,511,1 do -- resets all bins to zero
