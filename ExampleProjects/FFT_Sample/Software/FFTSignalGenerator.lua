@@ -4,30 +4,30 @@
 -- Initialization script
 function OnInit(event)
 
-	m_statusString = ""
-	m_errorString = ""
-	UpdateStatus()
+    m_statusString = ""
+    m_errorString = ""
+    UpdateStatus()
 
-	m_devInfo = OpalKelly.okTDeviceInfo()
-	assert(event:GetDevice():GetDeviceInfo(m_devInfo) ==
-		OpalKelly.FrontPanel_NoError, "GetDeviceInfo() failed")
-	
-	dev = event:GetDevice()
-	dev:UpdateWireOuts()
-	local locked = dev:GetWireOutValue(0x20) & 0x00000001
-	local MAX_TRIES = 100
-	local tries
-	SetStatus("Waiting for clocks to lock...")
-	while not locked or tries == MAX_TRIES do
-		dev:UpdateWireOuts()
-		locked = dev:GetWireOutValue(0x20) & 0x00000001
-		tries = tries + 1
-	end
-	if tries == MAX_TRIES then
-		SetError("Clocks did not lock.")
+    m_devInfo = OpalKelly.okTDeviceInfo()
+    assert(event:GetDevice():GetDeviceInfo(m_devInfo) ==
+        OpalKelly.FrontPanel_NoError, "GetDeviceInfo() failed")
+    
+    dev = event:GetDevice()
+    dev:UpdateWireOuts()
+    local locked = dev:GetWireOutValue(0x20) & 0x00000001
+    local MAX_TRIES = 100
+    local tries
+    SetStatus("Waiting for clocks to lock...")
+    while not locked or tries == MAX_TRIES do
+        dev:UpdateWireOuts()
+        locked = dev:GetWireOutValue(0x20) & 0x00000001
+        tries = tries + 1
+    end
+    if tries == MAX_TRIES then
+        SetError("Clocks did not lock.")
     else
         SetStatus("Clocks locked.")
-	end
+    end
     
     for i=0,511,1 do -- resets all bins to zero
         dev:WriteRegister(i, 0)
@@ -37,7 +37,7 @@ end
 
 -- `Reset IFFT` button event
 function IfftResetButton(button, event)
-	if button:IsPressed() then
+    if button:IsPressed() then
         SetError("")
         local panel = okUI:FindPanel("panel1")
         
@@ -99,8 +99,8 @@ end
 -- `Send to IFFT` button event
 function IfftSend(button, event)
 
-	SetError("")
-	local panel = okUI:FindPanel("panel1")
+    SetError("")
+    local panel = okUI:FindPanel("panel1")
     
     m_bin1Ena = panel:FindToggleCheck("enaBin1"):GetValue()
     m_bin2Ena = panel:FindToggleCheck("enaBin2"):GetValue()
@@ -113,7 +113,7 @@ function IfftSend(button, event)
     m_bin4dbfs = 0
     dbfs_sum = 0
     
-	m_bin1 = panel:FindDigitEntry("bin1"):GetValue()
+    m_bin1 = panel:FindDigitEntry("bin1"):GetValue()
     m_bin2 = panel:FindDigitEntry("bin2"):GetValue()
     m_bin3 = panel:FindDigitEntry("bin3"):GetValue()
     m_bin4 = panel:FindDigitEntry("bin4"):GetValue()
@@ -187,29 +187,29 @@ function IfftSend(button, event)
     -- Important: the IFFT bins are implemented as:
     -- bin n real component = n * 2
     -- bin n imaginary component = n * 2 + 1
-	if m_bin1Ena then
-		dev:WriteRegister(m_bin1 * 2, ConvertToIFFTTwosComp(m_bin1dbfs))
-	end
-	
-	if m_bin2Ena then
-		dev:WriteRegister(m_bin2 * 2, ConvertToIFFTTwosComp(m_bin2dbfs))
-	end
-	
-	if m_bin3Ena then
-		dev:WriteRegister(m_bin3 * 2, ConvertToIFFTTwosComp(m_bin3dbfs))
-	end
-	
-	if m_bin4Ena then
-		dev:WriteRegister(m_bin4 * 2, ConvertToIFFTTwosComp(m_bin4dbfs))
-	end
-	
+    if m_bin1Ena then
+        dev:WriteRegister(m_bin1 * 2, ConvertToIFFTTwosComp(m_bin1dbfs))
+    end
+    
+    if m_bin2Ena then
+        dev:WriteRegister(m_bin2 * 2, ConvertToIFFTTwosComp(m_bin2dbfs))
+    end
+    
+    if m_bin3Ena then
+        dev:WriteRegister(m_bin3 * 2, ConvertToIFFTTwosComp(m_bin3dbfs))
+    end
+    
+    if m_bin4Ena then
+        dev:WriteRegister(m_bin4 * 2, ConvertToIFFTTwosComp(m_bin4dbfs))
+    end
+    
     DebugLogValue("Bin 1 magnitude: ", ConvertToIFFTTwosComp(m_bin1dbfs))
     DebugLogValue("Bin 2 magnitude: ", ConvertToIFFTTwosComp(m_bin2dbfs))
     DebugLogValue("Bin 3 magnitude: ", ConvertToIFFTTwosComp(m_bin3dbfs))
     DebugLogValue("Bin 4 magnitude: ", ConvertToIFFTTwosComp(m_bin4dbfs))
-	
+    
     SetStatus("Wrote to bins!")
-	dev:ActivateTriggerIn(0x40, 1) -- Submits the Bin data to the IFFT
+    dev:ActivateTriggerIn(0x40, 1) -- Submits the Bin data to the IFFT
 end
 
 -- Converts a dbfs value to an integer the IFFT can use.
@@ -235,16 +235,16 @@ end
 -- Takes a number and returns a signed magnitude 20 bit version of it,
 -- as the IFFT core expects a two's complement number.
 function ConvertToIFFTTwosComp(val)
-	if val < 0 then
-		return (math.abs(val) | 0x80000) & 0xFFFFF
-	else
-		return val & 0x7FFFF
-	end
+    if val < 0 then
+        return (math.abs(val) | 0x80000) & 0xFFFFF
+    else
+        return val & 0x7FFFF
+    end
 end
 
 -- Diplays frequency for bin 1
 function SetFrequencyBox1(de, event)
-	local panel = okUI:FindPanel("panel1")
+    local panel = okUI:FindPanel("panel1")
     bin = de:GetValue()
     DebugLogValue("Bin retrieved for bin 1: ", bin)
     panel:FindDigitDisplay("freq1"):SetValue(CalculateFrequency(bin))
@@ -252,7 +252,7 @@ end
 
 -- Diplays frequency for bin 2
 function SetFrequencyBox2(de, event)
-	local panel = okUI:FindPanel("panel1")
+    local panel = okUI:FindPanel("panel1")
     bin = de:GetValue()
     DebugLogValue("Bin retrieved for bin 2: ", bin)
     panel:FindDigitDisplay("freq2"):SetValue(CalculateFrequency(bin))
@@ -260,7 +260,7 @@ end
 
 -- Diplays frequency for bin 3
 function SetFrequencyBox3(de, event)
-	local panel = okUI:FindPanel("panel1")
+    local panel = okUI:FindPanel("panel1")
     bin = de:GetValue()
     DebugLogValue("Bin retrieved for bin 3: ", bin)
     panel:FindDigitDisplay("freq3"):SetValue(CalculateFrequency(bin))
@@ -268,29 +268,29 @@ end
 
 -- Diplays frequency for bin 4
 function SetFrequencyBox4(de, event)
-	local panel = okUI:FindPanel("panel1")
+    local panel = okUI:FindPanel("panel1")
     bin = de:GetValue()
     DebugLogValue("Bin retrieved for bin 4: ", bin)
     panel:FindDigitDisplay("freq4"):SetValue(CalculateFrequency(bin))
 end
 
 function SetError(str)
-	m_errorString = str
-	UpdateStatus()
+    m_errorString = str
+    UpdateStatus()
 end
 
 function SetStatus(str)
-	m_statusString = str
-	UpdateStatus()
+    m_statusString = str
+    UpdateStatus()
 end
 
 function UpdateStatus()
-	local logControl = okUI:FindPanel("panel1"):FindControl("status")
+    local logControl = okUI:FindPanel("panel1"):FindControl("status")
 
-	local status = "Status: " .. m_statusString
-	if m_errorString ~= nil and m_errorString ~= "" then
-		status = status .. "\nError: " .. m_errorString
-	end
+    local status = "Status: " .. m_statusString
+    if m_errorString ~= nil and m_errorString ~= "" then
+        status = status .. "\nError: " .. m_errorString
+    end
 
-	logControl:SetLabel(status)
+    logControl:SetLabel(status)
 end
