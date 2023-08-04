@@ -8,16 +8,16 @@
 # To run:
 # 1. Open Vivado GUI and "cd" to this directory containing project.tcl
 #    using the TCL console.
-# 2. Run "source project-adc12.tcl"
+# 2. Run "source project-ltc2264-12.tcl"
 # 3. Import FrontPanel HDL for your product into the project. These
 #    sources are located within the FrontPanel SDK installation.
 # 4. Generate Bitstream.
 #--------------------------------------------------------------------
 start_gui
-create_project SZG-ADC Vivado -part xcau25p-ffvb676-2-e
+create_project SZG-ADC-LTC2264-12 Vivado-LTC2264-12 -part xcau25p-ffvb676-2-e
 add_files -norecurse {\
 gateware/syzygy-adc-frame.v \
-gateware/syzygy-adc-dco.v \
+gateware/syzygy-adc-dco-ltc2264-12.v \
 gateware/xem8320_adc.v \
 gateware/bitslip_detect.v \
 gateware/bitslip_shift.v \
@@ -25,7 +25,7 @@ gateware/syzygy-adc-enc.v \
 gateware/syzygy-adc-phy.v \
 gateware/syzygy-adc-top.v}
 update_compile_order -fileset sources_1
-add_files -fileset constrs_1 -norecurse gateware/xem8320.xdc
+add_files -fileset constrs_1 -norecurse gateware/xem8320-ltc2264-12.xdc
 create_ip -name clk_wiz -vendor xilinx.com -library ip -version 6.0 -module_name clk_wiz_0
 set_property -dict [\
 list CONFIG.PRIM_SOURCE {Global_buffer}\

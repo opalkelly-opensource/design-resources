@@ -5,7 +5,7 @@
 # the pins that are not used in your design.  (By default, map will fail
 # if this file contains constraints for signals not in your design).
 #
-# Copyright (c) 2004-2022 Opal Kelly Incorporated
+# Copyright (c) 2004-2023 Opal Kelly Incorporated
 ############################################################################
 
 set_property CFGBVS GND [current_design]
@@ -182,23 +182,32 @@ set_property IOSTANDARD LVDS [get_ports adc_encode_n]
 
 # ADC timing constraints
 create_clock -period 6.250 -name adc_dco_p -waveform {0.000 3.125} [get_ports adc_dco_p]
-set_input_delay -clock [get_clocks adc_dco_p] -clock_fall -min -add_delay 1.090 [get_ports {adc_out_1n[*]}]
-set_input_delay -clock [get_clocks adc_dco_p] -clock_fall -max -add_delay 2.035 [get_ports {adc_out_1n[*]}]
-set_input_delay -clock [get_clocks adc_dco_p] -min -add_delay 1.090 [get_ports {adc_out_1n[*]}]
-set_input_delay -clock [get_clocks adc_dco_p] -max -add_delay 2.035 [get_ports {adc_out_1n[*]}]
+
 set_input_delay -clock [get_clocks adc_dco_p] -clock_fall -min -add_delay 1.090 [get_ports {adc_out_1p[*]}]
 set_input_delay -clock [get_clocks adc_dco_p] -clock_fall -max -add_delay 2.035 [get_ports {adc_out_1p[*]}]
 set_input_delay -clock [get_clocks adc_dco_p] -min -add_delay 1.090 [get_ports {adc_out_1p[*]}]
 set_input_delay -clock [get_clocks adc_dco_p] -max -add_delay 2.035 [get_ports {adc_out_1p[*]}]
-set_input_delay -clock [get_clocks adc_dco_p] -clock_fall -min -add_delay 1.090 [get_ports adc_fr_n]
-set_input_delay -clock [get_clocks adc_dco_p] -clock_fall -max -add_delay 2.035 [get_ports adc_fr_n]
-set_input_delay -clock [get_clocks adc_dco_p] -min -add_delay 1.090 [get_ports adc_fr_n]
-set_input_delay -clock [get_clocks adc_dco_p] -max -add_delay 2.035 [get_ports adc_fr_n]
-set_input_delay -clock [get_clocks adc_dco_p] -clock_fall -min -add_delay 1.090 [get_ports adc_fr_p]
-set_input_delay -clock [get_clocks adc_dco_p] -clock_fall -max -add_delay 2.035 [get_ports adc_fr_p]
-set_input_delay -clock [get_clocks adc_dco_p] -min -add_delay 1.090 [get_ports adc_fr_p]
-set_input_delay -clock [get_clocks adc_dco_p] -max -add_delay 2.035 [get_ports adc_fr_p]
+set_input_delay -clock [get_clocks adc_dco_p] -clock_fall -min -add_delay 1.090 [get_ports {adc_out_1n[*]}]
+set_input_delay -clock [get_clocks adc_dco_p] -clock_fall -max -add_delay 2.035 [get_ports {adc_out_1n[*]}]
+set_input_delay -clock [get_clocks adc_dco_p] -min -add_delay 1.090 [get_ports {adc_out_1n[*]}]
+set_input_delay -clock [get_clocks adc_dco_p] -max -add_delay 2.035 [get_ports {adc_out_1n[*]}]
 
-set_clock_groups -name decode_reset_group -asynchronous -group [get_clocks -of_objects [get_pins okHI/mmcm0/CLKOUT0]] -group [get_clocks adc_dco_p]
-set_clock_groups -name adc_data_clk_reset -asynchronous -group [get_clocks -of_objects [get_pins okHI/mmcm0/CLKOUT0]] -group [get_clocks -of_objects [get_pins adc_impl/adc_dco_impl/adc_dco_bufr/O]]
-set_clock_groups -name mmcm_clk_reset -asynchronous -group [get_clocks -of_objects [get_pins adc_impl/adc_dco_impl/adc_dco_bufr/O]] -group [get_clocks -of_objects [get_pins idelay_adc_enc_clk/inst/mmcme4_adv_inst/CLKOUT0]]
+set_input_delay -clock [get_clocks adc_dco_p] -clock_fall -min -add_delay 1.090 [get_ports {adc_out_2p[*]}]
+set_input_delay -clock [get_clocks adc_dco_p] -clock_fall -max -add_delay 2.035 [get_ports {adc_out_2p[*]}]
+set_input_delay -clock [get_clocks adc_dco_p] -min -add_delay 1.090 [get_ports {adc_out_2p[*]}]
+set_input_delay -clock [get_clocks adc_dco_p] -max -add_delay 2.035 [get_ports {adc_out_2p[*]}]
+set_input_delay -clock [get_clocks adc_dco_p] -clock_fall -min -add_delay 1.090 [get_ports {adc_out_2n[*]}]
+set_input_delay -clock [get_clocks adc_dco_p] -clock_fall -max -add_delay 2.035 [get_ports {adc_out_2n[*]}]
+set_input_delay -clock [get_clocks adc_dco_p] -min -add_delay 1.090 [get_ports {adc_out_2n[*]}]
+set_input_delay -clock [get_clocks adc_dco_p] -max -add_delay 2.035 [get_ports {adc_out_2n[*]}]
+
+set_input_delay -clock [get_clocks adc_dco_p] -clock_fall -min -add_delay 1.090 [get_ports {adc_fr_p}]
+set_input_delay -clock [get_clocks adc_dco_p] -clock_fall -max -add_delay 2.035 [get_ports {adc_fr_p}]
+set_input_delay -clock [get_clocks adc_dco_p] -min -add_delay 1.090 [get_ports {adc_fr_p}]
+set_input_delay -clock [get_clocks adc_dco_p] -max -add_delay 2.035 [get_ports {adc_fr_p}]
+set_input_delay -clock [get_clocks adc_dco_p] -clock_fall -min -add_delay 1.090 [get_ports {adc_fr_n}]
+set_input_delay -clock [get_clocks adc_dco_p] -clock_fall -max -add_delay 2.035 [get_ports {adc_fr_n}]
+set_input_delay -clock [get_clocks adc_dco_p] -min -add_delay 1.090 [get_ports {adc_fr_n}]
+set_input_delay -clock [get_clocks adc_dco_p] -max -add_delay 2.035 [get_ports {adc_fr_n}]
+
+set_clock_groups -name decode_reset_group -asynchronous -group [get_clocks -of_objects [get_pins okHI/mmcm0/CLKOUT0]] -group [get_clocks -include_generated_clocks adc_dco_p]

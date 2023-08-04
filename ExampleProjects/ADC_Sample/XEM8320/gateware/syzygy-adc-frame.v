@@ -5,7 +5,7 @@
 // generate bitslip signals used to align the ADC data ISERDES outputs.
 // 
 //------------------------------------------------------------------------
-// Copyright (c) 2022 Opal Kelly Incorporated
+// Copyright (c) 2022-2023 Opal Kelly Incorporated
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -72,36 +72,6 @@ IBUFDS #(
     .O  (frame_input)
 );
 
-IDELAYE3 #(
-      .CASCADE("NONE"),               // Cascade setting (MASTER, NONE, SLAVE_END, SLAVE_MIDDLE)
-      .DELAY_FORMAT("TIME"),          // Units of the DELAY_VALUE (COUNT, TIME)
-      .DELAY_SRC("IDATAIN"),          // Delay input (DATAIN, IDATAIN)
-      .DELAY_TYPE("FIXED"),           // Set the type of tap delay line (FIXED, VARIABLE, VAR_LOAD)
-      .DELAY_VALUE(1030),             // Input delay value setting
-      .IS_CLK_INVERTED(1'b0),         // Optional inversion for CLK
-      .IS_RST_INVERTED(1'b0),         // Optional inversion for RST
-      .REFCLK_FREQUENCY(300.0),       // IDELAYCTRL clock input frequency in MHz (200.0-800.0)
-      .SIM_DEVICE("ULTRASCALE_PLUS"), // Set the device version for simulation functionality (ULTRASCALE,
-                                      // ULTRASCALE_PLUS, ULTRASCALE_PLUS_ES1, ULTRASCALE_PLUS_ES2)
-      .UPDATE_MODE("ASYNC")           // Determines when updates to the delay will take effect (ASYNC, MANUAL,
-                                      // SYNC)
-   )
-   adc_data_delay0 (
-      .CASC_OUT(),              // 1-bit output: Cascade delay output to ODELAY input cascade
-      .CNTVALUEOUT(),           // 9-bit output: Counter value output
-      .DATAOUT(frame_delay),    // 1-bit output: Delayed data output
-      .CASC_IN(),               // 1-bit input: Cascade delay input from slave ODELAY CASCADE_OUT
-      .CASC_RETURN(),           // 1-bit input: Cascade delay returning from slave ODELAY DATAOUT
-      .CE(1'b0),                // 1-bit input: Active-High enable increment/decrement input
-      .CLK(1'b0),               // 1-bit input: Clock input Not necessary in FIXED mode.  
-      .CNTVALUEIN(9'h00),       // 9-bit input: Counter value input
-      .DATAIN(1'b0),            // 1-bit input: Data input from the logic
-      .EN_VTC(1'b1),            // 1-bit input: Keep delay constant over VT
-      .IDATAIN(frame_input),    // 1-bit input: Data input from the IOBUF
-      .INC(1'b0),               // 1-bit input: Increment / Decrement tap delay input
-      .LOAD(1'b0),              // 1-bit input: Load DELAY_VALUE input
-      .RST(reset)               // 1-bit input: Asynchronous Reset to the DELAY_VALUE
-   );
 ISERDESE3 #(
       .DATA_WIDTH(8),                 // Parallel data width (4,8)
       .FIFO_ENABLE("FALSE"),          // Enables the use of the FIFO
@@ -120,7 +90,7 @@ ISERDESE3 #(
       .CLK(adc_bufio_clk),      // 1-bit input: High-speed clock
       .CLKDIV(slow_clk),        // 1-bit input: Divided Clock
       .CLK_B(adc_bufio_clk),    // 1-bit input: Inversion of High-speed clock CLK
-      .D(frame_delay),          // 1-bit input: Serial Data Input
+      .D(frame_input),          // 1-bit input: Serial Data Input
       .FIFO_RD_CLK(),           // 1-bit input: FIFO read clock
       .FIFO_RD_EN(),            // 1-bit input: Enables reading the FIFO when asserted
       .RST(reset)               // 1-bit input: Asynchronous Reset

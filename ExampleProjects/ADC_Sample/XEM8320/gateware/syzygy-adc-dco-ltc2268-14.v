@@ -5,7 +5,7 @@
 // necessary signals required by the ISERDES input buffers.
 // 
 //------------------------------------------------------------------------
-// Copyright (c) 2022 Opal Kelly Incorporated
+// Copyright (c) 2022-2023 Opal Kelly Incorporated
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -39,6 +39,8 @@ module syzygy_adc_dco (
     );
 
 wire clk_out_int; // internal clock net
+wire mmcm0_clkfb_bufg;
+wire mmcm0_clkfb;
 
 IBUFDS #(
     .IOSTANDARD ("LVDS"),
@@ -49,25 +51,30 @@ IBUFDS #(
     .O  (clk_out_int)
 );
 
-BUFIO adc_dco_bufio (
-    .I (clk_out_int),
-    .O (clk_out_bufio)
+
+MMCME4_BASE #(
+    .BANDWIDTH("OPTIMIZED"),   // Jitter programming (OPTIMIZED, HIGH, LOW)
+    .CLKFBOUT_MULT_F(2.5),     // Multiply value for all CLKOUT (2.000-64.000).
+    .CLKFBOUT_PHASE(-126.000), // Phase offset in degrees of CLKFB (-360.000-360.000).
+    .CLKIN1_PERIOD(2),         // Input clock period in ns to ps resolution (i.e. 33.333 is 30 MHz).
+    .CLKOUT0_DIVIDE_F(2.5),    // Divide amount for CLKOUT0 (1.000-128.000).
+    .CLKOUT1_DIVIDE(10),       // Divide amount for CLKOUT1
+    .CLKOUT0_PHASE(0.0),       // Phase offset for each CLKOUT (-360.000-360.000).
+    .DIVCLK_DIVIDE(1),         // Master division value (1-106)
+    .REF_JITTER1(0.0),         // Reference input jitter in UI (0.000-0.999).
+    .STARTUP_WAIT("FALSE")     // Delays DONE until MMCM is locked (FALSE, TRUE)
+)
+mmcm_dco (
+    .CLKOUT0(clk_out_bufio),   // 1-bit output: CLKOUT0
+    .CLKOUT1(clk_out_div),     // 1-bit output: CLKOUT0
+    .CLKFBOUT(mmcm0_clkfb),    // 1-bit output: Feedback clock
+    .LOCKED(),                 // 1-bit output: LOCK
+    .CLKIN1(clk_out_int),      // 1-bit input: Clock
+    .RST(1'b0),                // 1-bit input: Reset
+    .CLKFBIN(mmcm0_clkfb_bufg) // 1-bit input: Feedback clock
 );
 
-BUFGCE_DIV #(
-    .BUFGCE_DIVIDE(4),              // 1-8
-    // Programmable Inversion Attributes: Specifies built-in programmable inversion on specific pins
-    .IS_CE_INVERTED(1'b0),          // Optional inversion for CE
-    .IS_CLR_INVERTED(1'b0),         // Optional inversion for CLR
-    .IS_I_INVERTED(1'b0),           // Optional inversion for I
-    .SIM_DEVICE("ULTRASCALE_PLUS")  // ULTRASCALE, ULTRASCALE_PLUS
-   )
- adc_dco_bufr (
-    .O(clk_out_div),    // 1-bit output: Buffer
-    .CE(1'b1),          // 1-bit input: Buffer enable
-    .CLR(reset),        // 1-bit input: Asynchronous clear
-    .I(clk_out_int)     // 1-bit input: Buffer
-   );
+BUFG  mmcm0fb_bufg (.I(mmcm0_clkfb), .O(mmcm0_clkfb_bufg));
 
 endmodule
 `default_nettype wire
