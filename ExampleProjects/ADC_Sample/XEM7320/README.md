@@ -3,8 +3,8 @@
 This project is based heavily on [Xilinx Application Note 524, XAPP524](https://www.xilinx.com/support/documentation/application_notes/xapp524-serial-lvds-adc-interface.pdf), and implements a simplified version of the design described by Xilinx. The project uses an LTC2264-12 ADC on Port A on the XEM7320 to read ADC data. Provided is a simple Python script that plots the data retrieved from the ADC and animates a graph. 
 
 ## A Note About the SZG-ADC-LTC2268-14
-The SZG-ADC-LTC2268-14 is compatible with this design, but it will operate at the speeds of the SZG-ADC-LTC2264-12. The LVDS speeds for the SZG-ADC-LTC2264-12 are at the limit of what can be managed using static timing analysis. In contrast, the LVDS speeds for the SZG-ADC-LTC2268-14 exceed the capabilities of static timing analysis and necessitate the use of Dynamic Capture techniques.
-The implementation of Dynamic Capture to leverage the higher LVDS speeds offered by the SZG-ADC-LTC2268-14 is not covered here and is left as a task for the user. For additional guidance on implementing Dynamic Capture, please refer to page 5 of XAPP524.
+The SZG-ADC-LTC2268-14 is compatible with this design, but it will operate at the speeds of the SZG-ADC-LTC2264-12. The LVDS speeds for the SZG-ADC-LTC2264-12 are at the limit of what can be managed using static timing analysis. In contrast, the LVDS speeds for the SZG-ADC-LTC2268-14 exceed the capabilities of static timing analysis and necessitate the use of dynamic phase alignment techniques.
+The implementation of dynamic phase alignment techniques to leverage the higher LVDS speeds offered by the SZG-ADC-LTC2268-14 is not covered here and is left as a task for the user. For additional guidance on implementing dynamic phase alignment techniques, please refer to page 5 of XAPP524.
 
 ## Gateware
 Instructions to build the gateware are available at [docs.opalkelly.com](https://docs.opalkelly.com/syzygy-peripherals/szg-adc-ltc226x/syzygy-adc-ltc226x-reference-design)
