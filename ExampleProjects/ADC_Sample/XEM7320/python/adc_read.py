@@ -8,7 +8,7 @@ FIFO_SIZE = 2044
 
 X_AXIS_LIMIT = 2044 # lower this value to zoom in on the waveform
 
-XEM_SN = "1937000KIP" # edit to your device's serial number, if desired
+XEM_SN = "" # edit to your device's serial number, if desired
 
 if (len(sys.argv) != 2):
     print(f"Usage: {sys.argv[0]} bitfile")
