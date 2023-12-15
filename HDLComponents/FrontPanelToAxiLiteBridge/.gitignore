@@ -1,0 +1,12 @@
+# Python related ignores
+__pycache__/
+
+# Pytest
+.pytest_cache/
+
+# Xilinx
+.Xil/
+
+# Directories in 'gateware' you want to exclude
+gateware/vivado/
+gateware/sim_build/

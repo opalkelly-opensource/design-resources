@@ -1,0 +1,21 @@
+# Compiler settings
+CC=g++
+CFLAGS=-I. -L. -lokFrontPanel
+
+# Files
+DEPS = FrontPanelToAxiLiteBridge.h okFrontPanel.h
+OBJ = example.o FrontPanelToAxiLiteBridge.o
+
+# Rule for object files
+%.o: %.cpp $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+# Rule for the final executable
+example: $(OBJ)
+	$(CC) -o $@ $^ $(CFLAGS)
+
+# Phony targets
+.PHONY: clean
+
+clean:
+	rm -f *.o *~ core example
