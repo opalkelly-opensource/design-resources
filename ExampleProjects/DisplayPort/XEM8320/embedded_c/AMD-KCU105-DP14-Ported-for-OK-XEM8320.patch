@@ -1,0 +1,203 @@
+From 71939e2ebe7de29e19695e828614c353f08fadb9 Mon Sep 17 00:00:00 2001
+From: KristofMcLovin <support@opalkelly.com>
+Date: Tue, 17 Oct 2023 21:08:18 -0700
+Subject: [PATCH] Port AMD KCU105 DP Exdes for OK XEM8320 with SZG-DisplayPort
+
+Tested against commit 8fca1ac929453ba06613b5417141483b4c2d8cf3
+from the Xilinx/embeddedsw repository. This patch, along with the
+included frontpanel.c and frontpanel.h files, implements a port of AMD's
+DisplayPort example design for the KCU105 and TED DP1.2 FMC card to the
+Opal Kelly XEM8320 with SZG-DisplayPort.
+---
+ .../dp14txss/examples/src/kcu_dp14/dppt.h     |  1 +
+ .../examples/src/kcu_dp14/dppt_vdma.h         |  2 +-
+ .../src/kcu_dp14/xdptxss_kcu105_dp14.c        | 49 +++++++++++++------
+ 3 files changed, 36 insertions(+), 16 deletions(-)
+
+diff --git a/XilinxProcessorIPLib/drivers/dp14txss/examples/src/kcu_dp14/dppt.h b/XilinxProcessorIPLib/drivers/dp14txss/examples/src/kcu_dp14/dppt.h
+index 8bac7b4e70..d8dbb39bf5 100644
+--- a/XilinxProcessorIPLib/drivers/dp14txss/examples/src/kcu_dp14/dppt.h
++++ b/XilinxProcessorIPLib/drivers/dp14txss/examples/src/kcu_dp14/dppt.h
+@@ -46,6 +46,7 @@
+ #include "stdlib.h"
+ #include "microblaze_sleep.h"
+ #include "xvid_pat_gen.h"
++#include "frontpanel.h"
+ 
+ #include "idt_8t49n24x.h"
+ #include "ti_lmk03318.h"
+diff --git a/XilinxProcessorIPLib/drivers/dp14txss/examples/src/kcu_dp14/dppt_vdma.h b/XilinxProcessorIPLib/drivers/dp14txss/examples/src/kcu_dp14/dppt_vdma.h
+index 2ef73fcb8b..219f396490 100644
+--- a/XilinxProcessorIPLib/drivers/dp14txss/examples/src/kcu_dp14/dppt_vdma.h
++++ b/XilinxProcessorIPLib/drivers/dp14txss/examples/src/kcu_dp14/dppt_vdma.h
+@@ -56,7 +56,7 @@ typedef enum
+ }vdma_run_mode;
+ 
+ //#define FRAME_LENGTH         		0x3B53800;//0x1FAA000;
+-#define FRAME_LENGTH        0x8000000; // This is good for 8K4K resolution
++#define FRAME_LENGTH        0x8000000 // This is good for 8K4K resolution
+ #define NUMBER_OF_READ_FRAMES    XPAR_AXIVDMA_0_NUM_FSTORES
+ #define NUMBER_OF_WRITE_FRAMES   XPAR_AXIVDMA_0_NUM_FSTORES
+ #define BPC (XPAR_DPRXSS_0_BITS_PER_COLOR * 3 * 4/8)
+diff --git a/XilinxProcessorIPLib/drivers/dp14txss/examples/src/kcu_dp14/xdptxss_kcu105_dp14.c b/XilinxProcessorIPLib/drivers/dp14txss/examples/src/kcu_dp14/xdptxss_kcu105_dp14.c
+index e1f5a0c1da..583b3a414a 100644
+--- a/XilinxProcessorIPLib/drivers/dp14txss/examples/src/kcu_dp14/xdptxss_kcu105_dp14.c
++++ b/XilinxProcessorIPLib/drivers/dp14txss/examples/src/kcu_dp14/xdptxss_kcu105_dp14.c
+@@ -505,11 +505,11 @@ int main(void)
+ 			   "timing table\r\r\n\n");
+ 	}
+ 
+-	VideoFMC_Init();
+-	IDT_8T49N24x_SetClock(XPAR_IIC_0_BASEADDR, I2C_IDT8N49_ADDR,
+-				0, 270000000, TRUE);
++	//VideoFMC_Init();
++	//IDT_8T49N24x_SetClock(XPAR_IIC_0_BASEADDR, I2C_IDT8N49_ADDR,
++	//			0, 270000000, TRUE);
+ 
+-	DP141_init(XPAR_IIC_0_BASEADDR, I2C_TI_DP141_ADDR);
++	DP141_init(DP_RX_I2C_DEV, I2C_TI_DP141_ADDR);
+ 
+ 	/* Initializing user_config parameters */
+ 	user_config.user_numStreams = 1;
+@@ -532,8 +532,8 @@ int main(void)
+ 	for( i = 0; i < 6; i++ ) {
+ 		UpdateBuffer[i] = si570_reg_value[2][i];
+ 	}
+-	write_si570(UpdateBuffer);
+-	xil_printf("SI570 Config done\n\r");
++	//write_si570(UpdateBuffer);
++	//xil_printf("SI570 Config done\n\r");
+ #endif
+ 	/* Reset VDMA to ensure clean recovery. */
+ 	vdma_stop(&dma_struct);
+@@ -2185,6 +2185,8 @@ char inbyte_local(void)
+ int init_peripherals()
+ {
+ 	u32 Status;
++	// Opal Kelly: XEM8320 + SZG-DisplayPort uses JTAG UART
++#if 0
+ 	/* Initialize UART */
+ 	Status = XUartLite_Initialize(&UartLite,
+ 			XPAR_PROCESSOR_SUBSYSTEM_INTERCONNECT_AXI_UARTLITE_1_DEVICE_ID);
+@@ -2192,7 +2194,7 @@ int init_peripherals()
+ 		xil_printf("ERR:UART failed to initialize. \r\n");
+ 		return XST_FAILURE;
+ 	}
+-
++#endif
+ 	/* Initialize timer. */
+ 	Status = XTmrCtr_Initialize(&TmrCtr, XPAR_TMRCTR_0_DEVICE_ID);
+ 	if (Status != XST_SUCCESS) {
+@@ -2206,6 +2208,9 @@ int init_peripherals()
+ 			      TIMER_RESET_VALUE);
+ 	XTmrCtr_Start(&TmrCtr, XPAR_TMRCTR_0_DEVICE_ID);
+ 
++	if (FrontPanelInitPeripherals()) {
++		return(XST_FAILURE);
++	}
+ 	/* Initialize Video PHY Controller */
+ 	XVphy_Config *CfgPtr = 
+ 		XVphy_LookupConfig(XPAR_VID_PHY_CONTROLLER_0_DEVICE_ID);
+@@ -2244,6 +2249,8 @@ int init_peripherals()
+ 	PHY_Configuration_Tx(&VPhy_Instance,
+ 			     PHY_User_Config_Table[5]);
+ 
++	// Opal Kelly: We've removed the internal IIC module and drive I2C traffic from the DP's internal IIC.
++#if 0
+ 	/* Pointer to configuration data */
+ 	XIic_Config *ConfigPtr_IIC; 
+ 
+@@ -2258,7 +2265,7 @@ int init_peripherals()
+ 	if (Status != XST_SUCCESS) {
+ 		return XST_FAILURE;
+ 	}
+-
++#endif
+ 	int i = 0;
+ 	dma_struct[i].Config = XAxiVdma_LookupConfig(i);
+ 	if (!dma_struct[i].Config) {
+@@ -3337,6 +3344,8 @@ int DpPt_SetupIntrSystem()
+ 		return XST_FAILURE;
+ 	}
+ 
++	// Opal Kelly: We've removed the internal IIC module and drive I2C traffic from the DP's internal IIC.
++#if 0
+ 	Status = XIntc_Connect(IntcInstPtr, XINTC_IIC_ID,
+ 				(XInterruptHandler) XIic_InterruptHandler,
+ 				   &IicInstance);
+@@ -3346,7 +3355,10 @@ int DpPt_SetupIntrSystem()
+ 	}
+ 
+ 	XIntc_Enable(IntcInstPtr, XINTC_IIC_ID);
+-
++#endif
++	if (FrontPanelInitInterrupts(IntcInstPtr)){
++		return XST_FAILURE;
++	}
+ 	/* Start the interrupt controller such that interrupts are recognized
+ 	 * and handled by the processor
+ 	 */
+@@ -3801,10 +3813,10 @@ void DpPt_pe_vs_adjustHandler(void *InstancePtr)
+ //		}
+ //		data |= (preemp << 4);
+ 
+-		i2c_write_dp141(XPAR_IIC_0_BASEADDR, I2C_TI_DP141_ADDR, 0x02, data);
+-		i2c_write_dp141(XPAR_IIC_0_BASEADDR, I2C_TI_DP141_ADDR, 0x05, data);
+-		i2c_write_dp141(XPAR_IIC_0_BASEADDR, I2C_TI_DP141_ADDR, 0x08, data);
+-		i2c_write_dp141(XPAR_IIC_0_BASEADDR, I2C_TI_DP141_ADDR, 0x0B, data);
++		i2c_write_dp141(DP_RX_I2C_DEV, I2C_TI_DP141_ADDR, 0x02, data);
++		i2c_write_dp141(DP_RX_I2C_DEV, I2C_TI_DP141_ADDR, 0x05, data);
++		i2c_write_dp141(DP_RX_I2C_DEV, I2C_TI_DP141_ADDR, 0x08, data);
++		i2c_write_dp141(DP_RX_I2C_DEV, I2C_TI_DP141_ADDR, 0x0B, data);
+ 
+ 	}
+ 
+@@ -3843,7 +3855,8 @@ void DpPt_CustomWaitUs(void *InstancePtr, u32 MicroSeconds)
+ 
+ char GetInbyte(void)
+ {
+-	return XUartLite_RecvByte(UART_BASEADDR);
++	// Opal Kelly: XEM8320 + SZG-DisplayPort uses JTAG UART
++	return xil_getc(0);
+ 
+ }
+ 
+@@ -4147,6 +4160,7 @@ u32 DpTxSubsystem_Start(XDpTxSs *InstancePtr, int with_msa)
+  * @return None
+  *
+  *****************************************************************************/
++#if 0
+ int VideoFMC_Init(void)
+ {
+ 	int Status;
+@@ -4155,7 +4169,6 @@ int VideoFMC_Init(void)
+ 
+ 	xil_printf("VFMC: Setting IO Expanders...\n\r");
+ 
+-
+ 	XIic_Config *ConfigPtr_IIC;     /* Pointer to configuration data */
+ 	/* Initialize the IIC driver so that it is ready to use. */
+ 	ConfigPtr_IIC = XIic_LookupConfig(IIC_DEVICE_ID);
+@@ -4226,6 +4239,7 @@ int VideoFMC_Init(void)
+ 	xil_printf(" done!\n\r");
+ 	return XST_SUCCESS;
+ }
++#endif
+ 
+ void I2C_Scan(u32 BaseAddress)
+ {
+@@ -4406,6 +4420,11 @@ void detect_rx_video_and_startTx(int *track_count1)
+ 
+ 		if (*track_count1 == 20000) {
+ 			Dprx_DetectResolution(DpRxSsInst.DpPtr);
++
++			// Dprx_DetectResolution above sets the Msa. We can now initialize
++			// the FrontPanel system.
++			FrontPanelConfig(Msa[0].Vtm.Timing.HActive, Msa[0].Vtm.Timing.VActive);
++
+ 			/* this is needed to ensure there are on
+ 			 * hang issues when cable is unplugged
+ 			 * */
+-- 
+2.32.0.windows.1
+
