@@ -23,10 +23,11 @@
 // ----------------------------------------------------------------------------------------
 //
 // Description:
-//    This C++ application provides functionality to test the FrontPanelToAxiLiteBridge operations 
-//    with an Opal Kelly FPGA device. It covers basic functionalities like initializing the 
-//    FPGA, AXI read/write, bit manipulations, bit mask operations, and 
-//    bitfield operations.
+//     This C++ application demonstrates how to handle common operations like opening and
+//     initializing an FPGA device, creating a FrontPanelToAxiLiteBridge instance,
+//     and performing AXI write/read tests with retry logic. Exception handling
+//     for scenarios like HardwareTimeoutException is also included, ensuring
+//     robust operation.
 //
 // Usage:
 //    1. Plug in the Opal Kelly FPGA device.

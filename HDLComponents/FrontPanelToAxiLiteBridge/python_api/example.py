@@ -23,10 +23,11 @@
 """Test Application for Opal Kelly FPGA and FrontPanelToAxiLiteBridge Operations
 
 Description:
-    This script provides functionality to test the FrontPanelToAxiLiteBridge operations 
-    with an FPGA device. It covers basic functionalities like initializing the 
-    FPGA, AXI read/write, bit manipulations, bit mask operations, and 
-    bitfield operations.
+    This script demonstrates how to handle common operations like opening and
+    initializing an FPGA device, creating a FrontPanelToAxiLiteBridge instance,
+    and performing AXI write/read tests with retry logic. Exception handling
+    for scenarios like HardwareTimeoutException is also included, ensuring
+    robust operation.
 
 Usage:
     1. Plug in the Opal Kelly FPGA device.
