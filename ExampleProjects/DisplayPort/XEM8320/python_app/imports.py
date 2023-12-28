@@ -48,7 +48,7 @@ from PyQt5.QtGui import QPainter, QColor, QPen, QFont, QFontMetrics
 from PyQt5.QtCore import Qt
 
 # Add the 'libraries' directory to the sys.path
-sys.path.append(os.path.join(os.path.dirname(__file__), '../../../HDLComponents/FrontPanelToAxiLiteBridge/python_api'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../../../HDLComponents/FrontPanelToAxiLiteBridge/python_api'))
 
 # Check for non-pip modules and notify the user if they're missing, while providing the tested version
 non_pip_modules_info = {

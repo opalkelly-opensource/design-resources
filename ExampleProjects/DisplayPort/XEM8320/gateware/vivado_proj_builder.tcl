@@ -125,8 +125,8 @@ if { ($major < 1) ||
     puts "FrontPanel Subsystem Vivado IP Core version and revision meet the requirements."
 }
 
-add_files -norecurse ../../../HDLComponents/FrontPanelToAxiLiteBridge/gateware/fp_to_axil.v
-add_files -norecurse ../../../HDLComponents/FrontPanelToAxiLiteBridge/gateware/fp_to_axil_iwrap.v
+add_files -norecurse ../../../../HDLComponents/FrontPanelToAxiLiteBridge/gateware/fp_to_axil.v
+add_files -norecurse ../../../../HDLComponents/FrontPanelToAxiLiteBridge/gateware/fp_to_axil_iwrap.v
 add_files -norecurse btpipe2axi_video_stream.v
 add_files -fileset constrs_1 -norecurse xem8320.xdc
 
