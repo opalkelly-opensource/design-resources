@@ -1,0 +1,52 @@
+{
+  "name": "@opalkellytech/frontpanel-chromium-core",
+  "type": "module",
+  "version": "0.0.16",
+  "description": "Core Library for OpalKelly FrontPanel Chromium",
+  "keywords": [
+    "FPGA",
+    "FrontPanel",
+    "OpalKelly",
+    "Chromium"
+  ],
+  "author": "Opal Kelly <support@opalkelly.com>",
+  "license": "MIT",
+  "homepage": "https://opalkelly.com/",
+  "bugs": {
+    "url": "https://forums.opalkelly.com/"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-eslint": "^9.0.5",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.5",
+    "@typescript-eslint/eslint-plugin": "^7.1.0",
+    "@typescript-eslint/parser": "^7.1.0",
+    "eslint": "^8.57.0",
+    "prettier": "3.2.5",
+    "rollup": "^4.9.1",
+    "rollup-plugin-dts": "^6.1.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "tslib": "^2.6.2",
+    "typedoc": "^0.25.11",
+    "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "sub-events": "^1.9.0"
+  },
+  "scripts": {
+    "rollup": "rollup -c",
+    "format-check": "prettier --check ./src/**",
+    "lint": "eslint ./src/**/*.{ts,tsx}",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-docs": "typedoc"
+  },
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "types": "dist/index.d.ts"
+}
