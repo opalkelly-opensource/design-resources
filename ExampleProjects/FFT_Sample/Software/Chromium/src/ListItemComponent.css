@@ -1,0 +1,10 @@
+.okListItemComponent {
+    display: flex;
+    flex-direction: row;
+    align-self: stretch;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+
+    border: 1px solid rgb(199, 199, 199);
+}
