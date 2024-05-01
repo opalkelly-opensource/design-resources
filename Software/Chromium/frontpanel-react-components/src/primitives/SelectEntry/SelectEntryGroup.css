@@ -1,0 +1,10 @@
+.okSelectEntryGroup {
+    /* Layout */
+    display: flex;
+    padding: 0px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    align-self: stretch;
+    gap: 10px;
+}

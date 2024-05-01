@@ -1,0 +1,111 @@
+.okToggleSwitchRoot {
+    /* Layout */
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+
+    /* Style */
+    border-radius: 4px;
+
+    /* Switch Style */
+    .okToggleSwitch {
+        /* Layout */
+        display: flex;
+        width: var(--toggle-switch-width, 16.5px);
+        height: var(--toggle-switch-height, 9px);
+        padding: var(--toggle-switch-padding, 0.75px);
+        align-items: center;
+
+        /* Style */
+        border-width: 0px;
+        border-radius: var(--toggle-switch-border-radius, 4.5px);
+        background: var(--Gray-2, #d0d7df);
+
+        /* Switch Icon Style */
+        .okIndicatorIcon {
+            width: var(--toggle-switch-icon-width, 9px);
+            height: var(--toggle-switch-icon-height, 9px);
+        }
+    }
+
+    /* Label Style */
+    .okToggleSwitchLabel {
+        /* Typography */
+        color: var(--Dark, #343434);
+        text-align: center;
+        font-family: Inter, "Nunito Sans", sans-serif, ui-sans-serif;
+        font-size: var(--toggle-switch-font-size, 12px);
+        font-style: normal;
+        font-weight: 500;
+        line-height: var(--toggle-switch-line-height, 12px); /* 100% */
+    }
+
+    /* Size 1 */
+    &:where(.ok-r-size-1) {
+        --toggle-switch-width: 16.5px;
+        --toggle-switch-height: 9px;
+
+        --toggle-switch-padding: 0.75px;
+        --toggle-switch-border-radius: 4.5px;
+
+        --toggle-switch-font-size: 12px;
+        --toggle-switch-line-height: 12px;
+
+        --toggle-switch-icon-width: 7.5px;
+        --toggle-switch-icon-height: 7.5px;
+    }
+
+    /* Sizes 2*/
+    &:where(.ok-r-size-2) {
+        --toggle-switch-width: 18.333px;
+        --toggle-switch-height: 10px;
+
+        --toggle-switch-padding: 0.883px;
+        --toggle-switch-border-radius: 5px;
+
+        --toggle-switch-font-size: 14px;
+        --toggle-switch-line-height: 14px;
+
+        --toggle-switch-icon-width: 8.33px;
+        --toggle-switch-icon-height: 8.33px;
+    }
+
+    /* Sizes 3*/
+    &:where(.ok-r-size-3) {
+        --toggle-switch-width: 27.5px;
+        --toggle-switch-height: 15px;
+
+        --toggle-switch-padding: 1.25px;
+        --toggle-switch-border-radius: 7.5px;
+
+        --toggle-switch-font-size: 20px;
+        --toggle-switch-line-height: 20px;
+
+        --toggle-switch-icon-width: 12.5px;
+        --toggle-switch-icon-height: 12.5px;
+    }
+}
+
+/* State Disabled */
+.okToggleSwitchRoot[data-disabled="true"] {
+    opacity: 0.5;
+}
+
+/* State On */
+.okToggleSwitch[data-state="on"] {
+    justify-content: flex-end;
+}
+
+.okToggleSwitch[data-state="on"]:not([data-disabled="true"]) {
+    background: var(--brand-12, #44bd84);
+}
+
+/* State Off */
+.okToggleSwitch[data-state="off"] {
+    justify-content: flex-start;
+}
+
+.okToggleSwitch[data-state="off"]:not([data-disabled="true"]) {
+    background: var(--Gray-2, #d0d7df);
+}

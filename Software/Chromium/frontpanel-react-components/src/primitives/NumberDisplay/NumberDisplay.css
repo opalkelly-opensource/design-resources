@@ -1,0 +1,56 @@
+.okNumberDisplay {
+    /* Layout */
+    display: flex;
+    padding: var(--number-display-padding, 6px 12px);
+    justify-content: flex-end;
+    align-items: center;
+    gap: 4px;
+
+    /* Style */
+    border-radius: 4px;
+    border: 1px solid var(--Gray-2, #d0d7df);
+    background: #f5f5f5;
+
+    /* Content Style */
+    .okNumberDisplayContent {
+        display: flex;
+        padding: var(--spacing-0, 0px);
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+        flex: 1 0 0;
+    }
+
+    /* Text Style */
+    .okNumberDisplayText {
+        /* Typography */
+        color: var(--Dark, #343434);
+        text-align: center;
+        font-family: Monaco;
+        font-size: var(--number-display-font-size, 12px);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--number-display-line-height, 12px); /* 100% */
+    }
+
+    /* Size 1 */
+    &:where(.ok-r-size-1) {
+        --number-display-padding: 6px 6px;
+        --number-display-font-size: 12px;
+        --number-display-line-height: 12px;
+    }
+
+    /* Sizes 2 */
+    &:where(.ok-r-size-2) {
+        --number-display-padding: 6px 10px;
+        --number-display-font-size: 14px;
+        --number-display-line-height: 14px;
+    }
+
+    /* Sizes 3 */
+    &:where(.ok-r-size-3) {
+        --number-display-padding: 6px 18px;
+        --number-display-font-size: 20px;
+        --number-display-line-height: 20px;
+    }
+}

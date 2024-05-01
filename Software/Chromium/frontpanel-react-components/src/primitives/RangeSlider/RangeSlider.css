@@ -1,0 +1,103 @@
+.okRangeSlider {
+    --range-slider-thumb-outline-size: 2px;
+    --range-slider-thumb-border-size: 2px;
+    --range-slider-thumb-size: 22px;
+    --range-slider-track-size: 8px;
+
+    /* Layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    align-self: stretch;
+    width: 100%;
+    height: fit-content;
+
+    /* Typography */
+    color: var(--Dark, #343434);
+    text-align: right;
+    font-family: Inter, "Nunito Sans", sans-serif, ui-sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 12px; /* 100% */
+}
+
+/* State Disabled */
+.okRangeSlider[data-disabled="true"] {
+    opacity: 0.5;
+}
+
+.okRangeSliderLabel {
+    width: 100%;
+}
+
+.okRangeSliderRoot {
+    /* Layout */
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: var(--range-slider-thumb-size);
+    min-width: 100px;
+
+    /* Style */
+    user-select: none;
+    touch-action: none;
+}
+
+.okRangeSliderTrack {
+    /* Layout */
+    position: relative;
+    flex-grow: 1;
+    height: var(--range-slider-track-size);
+
+    /* Style */
+    background: var(--Gray-2, #d0d7df);
+    border-radius: 9999px;
+}
+
+.okRangeSliderRange {
+    /* Layout */
+    position: absolute;
+    height: 100%;
+
+    /* Style */
+    background-color: #44bd84;
+    border-radius: inherit;
+}
+
+.okRangeSliderThumb {
+    /* Layout */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: calc(
+        var(--range-slider-thumb-size) -
+            (2 * (var(--range-slider-thumb-border-size) + var(--range-slider-thumb-outline-size)))
+    );
+    height: calc(
+        var(--range-slider-thumb-size) -
+            (2 * (var(--range-slider-thumb-border-size) + var(--range-slider-thumb-outline-size)))
+    );
+
+    /* Style */
+    background: var(--Base-White, #fff);
+    border: var(--range-slider-thumb-border-size) solid var(--brand-12, #44bd84);
+    border-radius: var(--range-slider-thumb-size);
+}
+
+.okRangeSliderThumb:hover {
+    background-color: #44bd84;
+}
+
+.okRangeSliderThumb:focus {
+    outline: none;
+    box-shadow: 0 0 0 var(--range-slider-thumb-outline-size) #d0d7df;
+}
+
+.okRangeSliderThumbLabel {
+    /* Layout */
+    position: absolute;
+    bottom: -14px;
+}

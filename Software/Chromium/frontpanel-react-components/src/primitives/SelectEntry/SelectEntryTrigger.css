@@ -1,0 +1,42 @@
+.okSelectEntryTrigger {
+    /* Layout */
+    display: flex;
+    padding: 0px 18px;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+
+    /* Style */
+    border-radius: 4px;
+    border: 1px solid var(--Gray-2, #d0d7df);
+    background: var(--Light, #fff);
+
+    /* Typography */
+    color: var(--Dark, #343434);
+    font-family: Inter, "Nunito Sans", sans-serif, ui-sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 14px; /* 100% */
+
+    /* State Disabled */
+    &:is(:disabled) {
+        opacity: 0.5;
+        background: var(--Gray-3, #e7ebef);
+    }
+}
+
+.okSelectEntryTriggerInner {
+    /* Layout */
+    padding: 10px 0px;
+
+    /* Style */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* State Disabled */
+.okSelectEntryTrigger[data-disabled="true"] {
+    opacity: 0.5;
+}

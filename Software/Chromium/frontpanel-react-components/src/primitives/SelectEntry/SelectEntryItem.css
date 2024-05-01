@@ -1,0 +1,28 @@
+.okSelectEntryItem {
+    /* Layout */
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    /* Style */
+    color: var(--Dark, #343434);
+    font-family: Inter, "Nunito Sans", sans-serif, ui-sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 14px; /* 100% */
+
+    /* Indicator Style */
+    .okSelectEntryItemIndicator {
+        width: 14px;
+        height: 14px;
+    }
+}
+
+.okSelectEntryItem[data-disabled] {
+    opacity: 0.5;
+    pointer-events: none;
+}
+.okSelectEntryItem[data-highlighted] {
+    outline: none;
+}
