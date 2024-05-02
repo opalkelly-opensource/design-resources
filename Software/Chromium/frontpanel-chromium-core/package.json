@@ -1,7 +1,7 @@
 {
-  "name": "@opalkellytech/frontpanel-chromium-core",
+  "name": "@opalkelly/frontpanel-chromium-core",
   "type": "module",
-  "version": "0.0.16",
+  "version": "0.1.0",
   "description": "Core Library for OpalKelly FrontPanel Chromium",
   "keywords": [
     "FPGA",
@@ -11,6 +11,10 @@
   ],
   "author": "Opal Kelly <support@opalkelly.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/opalkelly-opensource/design-resources"
+  },
   "homepage": "https://opalkelly.com/",
   "bugs": {
     "url": "https://forums.opalkelly.com/"
