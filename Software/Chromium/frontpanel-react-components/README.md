@@ -26,6 +26,6 @@ $ npm install @opalkellytech/frontpanel-react-components
 Docs
 -------
 
-[FrontPanel Chromium documentation](https://docs.opalkelly.com/fpsdk/getting-started/)
+[FrontPanel Chromium documentation](https://docs.opalkelly.com/fpsdk/frontpanel-chromium-introduction/)
 
 [React Component Library reference](https://library.opalkelly.com/FrontPanelReactComponents/)

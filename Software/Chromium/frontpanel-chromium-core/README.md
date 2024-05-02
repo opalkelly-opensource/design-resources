@@ -26,6 +26,6 @@ $ npm install @opalkellytech/frontpanel-chromium-core
 Docs
 -------
 
-[FrontPanel Chromium documentation](https://docs.opalkelly.com/fpsdk/getting-started/)
+[FrontPanel Chromium documentation](https://docs.opalkelly.com/fpsdk/frontpanel-chromium-introduction/)
 
 [Core Library reference](https://library.opalkelly.com/FrontPanelChromiumCore/)
