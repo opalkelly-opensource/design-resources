@@ -13,7 +13,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/opalkelly-opensource/design-resources"
+    "url": "git+https://github.com/opalkelly-opensource/design-resources.git"
   },
   "homepage": "https://opalkelly.com/",
   "bugs": {
