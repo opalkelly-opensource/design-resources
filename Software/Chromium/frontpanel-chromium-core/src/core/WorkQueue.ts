@@ -1,4 +1,11 @@
 /**
+ * Copyright (c) 2024 Opal Kelly Incorporated
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/**
  * Type representing a task that can be posted to a work queue.
  * A task is defined as a function that returns a promise which resolves to void.
  */
