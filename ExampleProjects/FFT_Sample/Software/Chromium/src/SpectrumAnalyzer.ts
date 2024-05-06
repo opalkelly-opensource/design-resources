@@ -1,5 +1,8 @@
 import { IFrontPanel, ByteCount } from "@opalkellytech/frontpanel-chromium-core";
 
+/**
+ * Spectrum Analyzer
+ */
 export class SpectrumAnalyzer {
     private readonly _FrontPanel: IFrontPanel;
     private readonly _SampleSize: ByteCount;
@@ -13,12 +16,24 @@ export class SpectrumAnalyzer {
         return this._SampleCount;
     }
 
+    /**
+     * Creates a new instance of the Spectrum Analyzer
+     * @param frontpanel - Object that implements the IFrontPanel interface used to communicate with device.
+     * @param sampleSize - Sample size
+     * @param sampleCount - Sample count
+     */
     constructor(frontpanel: IFrontPanel, sampleSize: ByteCount, sampleCount: number) {
         this._FrontPanel = frontpanel;
         this._SampleSize = sampleSize;
         this._SampleCount = sampleCount;
     }
 
+    /**
+     * Computes the spectrum of the input samples
+     * @param sourceSamples - Time domain signal samples
+     * @param outputSamples - Frequency domain samples
+     * @returns True if the operation was successful, otherwise false
+     */
     public async ComputeSpectrum(
         sourceSamples: Int16Array,
         outputSamples: Float64Array

@@ -66,7 +66,13 @@ class FrontPanel extends Component<FrontPanelProps> {
         );
     }
 
+    /**
+     * Event handler called by the Digital Signal Sampler when it has retrieved a new set of samples
+     * for the two channels.
+     * @param sampleChannels - Array of two Int16Arrays that store the samples for each channel.
+     */
     private async OnSampleChannelsUpdate(sampleChannels: Int16Array[]): Promise<void> {
+        // Update the Spectrum Analyzer with the new samples.
         await this._SpectrumAnalyzerRef.current?.UpdateChartData(sampleChannels);
     }
 }

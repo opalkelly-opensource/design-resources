@@ -18,18 +18,27 @@ import { SpectrumAnalyzer } from "./SpectrumAnalyzer";
 
 import { IFrontPanel, WorkQueue, ByteCount } from "@opalkellytech/frontpanel-chromium-core";
 
-import FFTConfiguration, { hertz } from "./FFTConfiguration";
+import FFTConfiguration, { Hertz } from "./FFTConfiguration";
 
 import { Vector2D } from "./Vector";
 
+/**
+ * Event handler for updating the chart data.
+ */
 export type UpdateChartDataEventHandler = (data: Vector2D[]) => void;
 
+/**
+ * Properties for the Spectrum Analyzer View.
+ */
 interface SpectrumAnalyzerViewProps {
     label: string;
     frontpanel: IFrontPanel;
     workQueue: WorkQueue;
 }
 
+/**
+ * Spectrum Analyzer View component for displaying the spectrum of a signal.
+ */
 class SpectrumAnalyzerView extends Component<SpectrumAnalyzerViewProps> {
     private readonly _FFTConfiguration: FFTConfiguration;
     private readonly _SpectrumAnalyzer: SpectrumAnalyzer;
@@ -49,25 +58,27 @@ class SpectrumAnalyzerView extends Component<SpectrumAnalyzerViewProps> {
     constructor(props: SpectrumAnalyzerViewProps) {
         super(props);
 
-        // Create FFT Signal Generator
+        // Create FFT Configuration
         const fftLength = 1024; // 1024 bin FFT Length
-        const sampleRate: hertz = 125000000; // 125MHz Sample Rate
+        const sampleRate: Hertz = 125000000; // 125MHz Sample Rate
         const maxAmplitudeValue = 0x1fffff;
         //const maxAmplitudeValue = 0x7ffff;      // 19 bits
 
         this._FFTConfiguration = new FFTConfiguration(fftLength, sampleRate, maxAmplitudeValue);
 
+        // Create Spectrum Analyzer
         const sampleSize: ByteCount = 8;
         const sampleCount: number = this._FFTConfiguration.FFTLength;
 
         this._SpectrumAnalyzer = new SpectrumAnalyzer(props.frontpanel, sampleSize, sampleCount);
 
-        //
+        // Creates an array of two Float64Array objects one for each of the two channels available.
         this._SampleChannels = new Array(2);
 
         this._SampleChannels[0] = new Float64Array(this._SpectrumAnalyzer.SampleCount);
         this._SampleChannels[1] = new Float64Array(this._SpectrumAnalyzer.SampleCount);
 
+        // Create ChartJS Chart Reference to display the output of the Spectrum Analyzer
         ChartJS.register(LinearScale, PointElement, LineElement, Title, Legend);
 
         this._ChartRef = React.createRef();
@@ -103,6 +114,7 @@ class SpectrumAnalyzerView extends Component<SpectrumAnalyzerViewProps> {
             }
         };
 
+        // Create Chart Data that will be displayed by the ChartJS Chart
         const channels: Vector2D[][] = Array(2);
 
         channels[0] = new Array<Vector2D>(this._SpectrumAnalyzer.SampleCount)
@@ -138,16 +150,13 @@ class SpectrumAnalyzerView extends Component<SpectrumAnalyzerViewProps> {
         );
     }
 
+    /**
+     * Updates the chart data to display the frequency spectrum computed from the time domain
+     * signal samples.
+     * @param sampleChannels - Array of two Int16Arrays that store the samples for each channel.
+     * @returns A promise that resolves when the chart data has been updated.
+     */
     public async UpdateChartData(sampleChannels: Int16Array[]): Promise<void> {
-        //console.log("SpectrumAnalyzer::UpdateChartData")
-
-        //const start: number = performance.now();
-
-        //const hammingWindow = await tf.signal.hammingWindow(this._SampleCount).array();
-
-        //channels[0][sampleIndex] = Math.round(channels[0][sampleIndex] * hammingWindow[sampleIndex]);
-        //channels[1][sampleIndex] = Math.round(channels[1][sampleIndex] * hammingWindow[sampleIndex]);
-
         await this.WorkQueue.Post(async () => {
             await this._SpectrumAnalyzer.ComputeSpectrum(
                 sampleChannels[0],
@@ -158,10 +167,6 @@ class SpectrumAnalyzerView extends Component<SpectrumAnalyzerViewProps> {
                 this._SampleChannels[1]
             );
         });
-
-        //const elapsed: number = performance.now() - start;
-
-        //console.log("SpectrumAnalyzer::ComputeSpectrum ElapsedTime=" + elapsed + "ms");
 
         const maximumAmplitudeValue: number = this._FFTConfiguration.MaximumAmplitudeValue;
 

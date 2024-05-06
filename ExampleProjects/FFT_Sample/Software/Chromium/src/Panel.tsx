@@ -4,12 +4,18 @@ import classnames from "classnames";
 
 import "./Panel.css";
 
+/**
+ * Properties for the Panel component.
+ */
 interface PanelProps extends React.PropsWithChildren<NonNullable<unknown>> {
     title: string;
     description: string;
     className?: string;
 }
 
+/**
+ * Panel component for displaying a title, description, and content.
+ */
 class Panel extends Component<PanelProps> {
     render() {
         return (

@@ -2,6 +2,9 @@ import { IFrontPanel, ByteCount } from "@opalkellytech/frontpanel-chromium-core"
 
 import { SubEvent } from "sub-events";
 
+/**
+ * Enumeration representing the possible states of the Digital Signal Sampler.
+ */
 export enum DigitalSignalSamplerState {
     Initial,
     InitializePending,
@@ -12,12 +15,18 @@ export enum DigitalSignalSamplerState {
     ResetFailed
 }
 
+/**
+ * Event arguments for the Digital Signal Sampler State Change Event
+ */
 export interface DigitalSignalSamplerStateChangeEventArgs {
     sender: DigitalSignalSampler;
     newState: DigitalSignalSamplerState;
     previousState: DigitalSignalSamplerState;
 }
 
+/**
+ * Class representing a Digital Signal Sampler.
+ */
 export class DigitalSignalSampler {
     private readonly _FrontPanel: IFrontPanel;
     private readonly _SampleSize: ByteCount;
@@ -28,22 +37,40 @@ export class DigitalSignalSampler {
     private readonly _StateChangedEvent: SubEvent<DigitalSignalSamplerStateChangeEventArgs> =
         new SubEvent<DigitalSignalSamplerStateChangeEventArgs>();
 
+    /**
+     * Get the size of each sample in bytes.
+     */
     public get SampleSize() {
         return this._SampleSize;
     }
 
+    /**
+     * Get the sample count.
+     */
     public get SampleCount() {
         return this._SampleCount;
     }
 
+    /**
+     * Get the current state of the Digital Signal Sampler.
+     */
     public get State() {
         return this._State;
     }
 
+    /**
+     *  Get the StateChanged event used to monitor changes to the state of the Digital Signal Sampler.
+     */
     public get StateChangedEvent() {
         return this._StateChangedEvent;
     }
 
+    /**
+     * Create a new instance of the Digital Signal Sampler.
+     * @param frontpanel - Object that implements the IFrontPanel interface used to communicate with device.
+     * @param sampleSize - Size of each sample in bytes.
+     * @param sampleCount - Number of samples to read from the ADC.
+     */
     constructor(frontpanel: IFrontPanel, sampleSize: ByteCount, sampleCount: number) {
         this._FrontPanel = frontpanel;
         this._SampleSize = sampleSize;
@@ -52,6 +79,10 @@ export class DigitalSignalSampler {
         this._State = DigitalSignalSamplerState.InitializationComplete;
     }
 
+    /**
+     * Performs reset of the Digital Signal Sampler.
+     * @returns Promise that resolves to true when the reset is successful, otherwise false.
+     */
     public async Reset(): Promise<boolean> {
         let retval: boolean;
 
@@ -98,6 +129,11 @@ export class DigitalSignalSampler {
         return retval;
     }
 
+    /**
+     * Reads samples from ADC for two channels.
+     * @param channels - Array of at least two Int16Arrays used to store the samples for each of the two channels.
+     * @returns Promise that resolves to true when the samples are read successfully, otherwise false.
+     */
     public async ReadSamples(channels: Int16Array[]): Promise<boolean> {
         let retval: boolean;
 
@@ -140,7 +176,10 @@ export class DigitalSignalSampler {
         return retval;
     }
 
-    //
+    /**
+     * Updates the current state of the Digital Signal Sampler and dispatches the StateChangedEvent.
+     * @param newState - The new state of thej Digital Signal Sampler.
+     */
     private UpdateState(newState: DigitalSignalSamplerState) {
         if (newState !== this._State) {
             const previousState: DigitalSignalSamplerState = this._State;

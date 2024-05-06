@@ -28,8 +28,14 @@ import { WorkQueue, ByteCount, IFrontPanel } from "@opalkellytech/frontpanel-chr
 
 import { Button, ToggleSwitch, ToggleState } from "@opalkellytech/frontpanel-react-components";
 
+/**
+ * Event handler for the SampleChannelsUpdate event.
+ */
 export type SampleChannelsUpdateEventHandler = (sampleChannels: Int16Array[]) => Promise<void>;
 
+/**
+ * Digital Signal Sampler View Properties
+ */
 interface DigitalSignalSamplerViewProps {
     label: string;
     frontpanel: IFrontPanel;
@@ -38,11 +44,17 @@ interface DigitalSignalSamplerViewProps {
     onSampleChannelsUpdate: SampleChannelsUpdateEventHandler;
 }
 
+/**
+ * Digital Signal Sampler View State
+ */
 interface DigitalSignalSamplerViewState {
-    statusMessage: string;
+    //statusMessage: string;
     isUpdateTimerEnabled: boolean;
 }
 
+/**
+ * Digital Signal Sampler view component used to display the output of a Digital Signal Sampler.
+ */
 class DigitalSignalSamplerView extends Component<
     DigitalSignalSamplerViewProps,
     DigitalSignalSamplerViewState
@@ -64,17 +76,19 @@ class DigitalSignalSamplerView extends Component<
     constructor(props: DigitalSignalSamplerViewProps) {
         super(props);
 
+        // Create Digital Signal Sampler
         const sampleSize: ByteCount = 4;
         const sampleCount = 1024;
 
         this._Sampler = new DigitalSignalSampler(props.frontpanel, sampleSize, sampleCount);
 
-        //
+        // Creates an array of two Int16Array objects one for each of the two channels available.
         this._SampleChannels = new Array(2);
 
         this._SampleChannels[0] = new Int16Array(this._Sampler.SampleCount);
         this._SampleChannels[1] = new Int16Array(this._Sampler.SampleCount);
 
+        // Create ChartJS Chart Reference to display the output of the Digital Signal Sampler
         ChartJS.register(LinearScale, PointElement, LineElement, Title, Legend);
 
         this._ChartRef = React.createRef();
@@ -107,6 +121,7 @@ class DigitalSignalSamplerView extends Component<
             }
         };
 
+        // Create Chart Data that will be displayed by the ChartJS Chart
         const channels: Vector2D[][] = Array(2);
 
         channels[0] = new Array<Vector2D>(this._Sampler.SampleCount)
@@ -133,8 +148,9 @@ class DigitalSignalSamplerView extends Component<
             ]
         };
 
+        // Set the initial state of the component
         this.state = {
-            statusMessage: this.GetStatusMessage(this._Sampler.State),
+            //statusMessage: this.GetStatusMessage(this._Sampler.State),
             isUpdateTimerEnabled: false
         };
     }
@@ -160,7 +176,6 @@ class DigitalSignalSamplerView extends Component<
                         onToggleStateChanged={this.ToggleChartDataUpdateTimer.bind(this)}
                     />
                     <Button label="Sample" onButtonDown={this.UpdateChartData.bind(this)} />
-                    {/*<Text>{this.state.statusMessage}</Text>*/}
                 </div>
                 <div className="okDigitalSignalSamplerChartPanel">
                     <div className="okDigitalSignalChartContainer">
@@ -175,12 +190,14 @@ class DigitalSignalSamplerView extends Component<
         );
     }
 
+    // TODO: Remove this method
     private async Reset(): Promise<void> {
         await this.WorkQueue.Post(async () => {
             await this._Sampler.Reset();
         });
     }
 
+    // TODO: Remove this method
     private ToggleChartDataUpdateTimer(state: ToggleState) {
         this.setState(() => {
             if (state == ToggleState.On) {
@@ -191,6 +208,10 @@ class DigitalSignalSamplerView extends Component<
         });
     }
 
+    /**
+     * Loop that periodically reads samples from the Digital Signal Sampler and updates the
+     * Chart with the new data.
+     */
     private async UpdateChartDataLoop(): Promise<void> {
         const start: number = performance.now();
 
@@ -212,18 +233,14 @@ class DigitalSignalSamplerView extends Component<
         }
     }
 
+    /**
+     * Reads samples from the Digital Signal Sampler and updates the Chart with the new data.
+     * @returns Promise that resolves when the Chart has been updated with the new data.
+     */
     private async UpdateChartData(): Promise<void> {
-        //console.log("DigitalSignalSampler::UpdateChartData")
-
-        //const start: number = performance.now();
-
         await this.WorkQueue.Post(async () => {
             await this._Sampler.ReadSamples(this._SampleChannels);
         });
-
-        //const elapsed: number = performance.now() - start;
-
-        //console.log("DigitalSignalSampler::ReadSamples ElapsedTime=" + elapsed + "ms");
 
         for (let sampleIndex = 0; sampleIndex < this._SampleChannels[0].length; sampleIndex++) {
             this._ChartData.datasets[0].data[sampleIndex].x = sampleIndex;
@@ -242,6 +259,7 @@ class DigitalSignalSamplerView extends Component<
         return this.props.onSampleChannelsUpdate(this._SampleChannels);
     }
 
+    // TODO: Remove this Method
     private GetStatusMessage(state: DigitalSignalSamplerState): string {
         let message: string;
 
@@ -275,13 +293,16 @@ class DigitalSignalSamplerView extends Component<
         return message;
     }
 
-    // Event Handlers
+    /**
+     * Event handler used to monitor the state of the Digital Signal Sampler.
+     * @param args - Event arguments detailing the state transition.
+     */
     private OnSamplerStateChange(args: DigitalSignalSamplerStateChangeEventArgs): void {
-        const message: string = this.GetStatusMessage(args.newState);
+        //const message: string = this.GetStatusMessage(args.newState);
 
         console.log("Sampler State: " + args.previousState + " => " + args.newState);
 
-        this.setState({ statusMessage: message });
+        //this.setState({ statusMessage: message });
     }
 }
 

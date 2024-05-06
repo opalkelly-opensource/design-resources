@@ -4,11 +4,12 @@ import "./FFTSignalGeneratorView.css";
 
 import FrequencyVectorComponent from "./FrequencyVectorComponent";
 
+import FFTConfiguration from "./FFTConfiguration";
+
 import {
     FFTSignalGenerator,
     FFTSignalGeneratorState,
-    FFTSignalGeneratorStateChangeEventArgs,
-    hertz
+    FFTSignalGeneratorStateChangeEventArgs
 } from "./FFTSignalGenerator";
 
 import { FFTSignalGenerator2, FrequencyVector } from "./FFTSignalGenerator2";
@@ -21,25 +22,36 @@ import { Button, ToggleState, ToggleSwitch } from "@opalkellytech/frontpanel-rea
 
 import { Subscription } from "sub-events";
 
+/**
+ * Type representing the state of a Frequency Vector.
+ */
 type FrequencyVectorState = {
     vector: FrequencyVector;
     isEnabled: boolean;
 };
 
-//
+/**
+ * FFT Signal Generator View Properties
+ */
 interface FFTSignalGeneratorViewProps {
     label: string;
     frontpanel: IFrontPanel;
     workQueue: WorkQueue;
 }
 
+/**
+ * FFT Signal Generator View State
+ */
 interface FFTSignalGeneratorViewState {
     frequencyVectors: FrequencyVectorState[];
     isAutoScaleEnabled: boolean;
-    statusMessage: string;
+    //statusMessage: string;
     amplitudeScaleFactor: number;
 }
 
+/**
+ * FFT Signal Generator View component used to configure the FFT Signal Generator.
+ */
 class FFTSignalGeneratorView extends Component<
     FFTSignalGeneratorViewProps,
     FFTSignalGeneratorViewState
@@ -56,19 +68,19 @@ class FFTSignalGeneratorView extends Component<
     constructor(props: FFTSignalGeneratorViewProps) {
         super(props);
 
-        const retryCount = 100;
-
         // Create FFT Signal Generator
         const fftLength = 1024; // 1024 bin FFT Length
-        const sampleRate: hertz = 125000000; // 125MHz Sample Rate
+        const sampleRate = 125000000; // 125MHz Sample Rate
         const maxAmplitudeValue = 0x1fffff;
+        //TODO: Check this value
         //const maxAmplitudeValue = 0x7ffff;      // 19 bits
+
+        const fftConfiguration = new FFTConfiguration(fftLength, sampleRate, maxAmplitudeValue);
+        const retryCount = 100;
 
         this._SignalGenerator = new FFTSignalGenerator(
             props.frontpanel,
-            fftLength,
-            sampleRate,
-            maxAmplitudeValue,
+            fftConfiguration,
             retryCount
         );
         this._SignalGenerator2 = new FFTSignalGenerator2(this._SignalGenerator);
@@ -84,7 +96,7 @@ class FFTSignalGeneratorView extends Component<
         this.state = {
             frequencyVectors: frequencyVectors,
             isAutoScaleEnabled: true,
-            statusMessage: this.FormatStatusMessage(this._SignalGenerator.State),
+            //statusMessage: this.FormatStatusMessage(this._SignalGenerator.State),
             amplitudeScaleFactor: 1.0
         };
     }
@@ -135,7 +147,9 @@ class FFTSignalGeneratorView extends Component<
                             onRemove={this.OnRemoveFrequencyVector.bind(this)}>
                             <FrequencyVectorComponent
                                 id={i}
-                                frequency={this._SignalGenerator.GetBinFrequency(item.vector.bin)}
+                                frequency={this._SignalGenerator.FFTConfiguration.GetBinFrequency(
+                                    item.vector.bin
+                                )}
                                 vector={item.vector}
                                 onVectorChange={this.OnFrequencyVectorChange.bind(this)}
                             />
@@ -146,8 +160,11 @@ class FFTSignalGeneratorView extends Component<
         );
     }
 
-    //
-    private async Initialize(): Promise<void> {
+    /**
+     * Initialize the FFT Signal Generator.
+     * @returns A Promise that resolves when the FFT Signal Generator has been initialized.
+     */
+    public async Initialize(): Promise<void> {
         await this.WorkQueue.Post(async () => {
             await this._SignalGenerator.Initialize();
 
@@ -176,11 +193,16 @@ class FFTSignalGeneratorView extends Component<
         console.log("Initialize Frequency Bins ElapsedTime=" + elapsed + "ms");
     }
 
-    private async Reset(): Promise<void> {
+    /**
+     * Reset the FFT Signal Generator.
+     * @returns A Promise that resolves when the FFT Signal Generator has been reset.
+     */
+    public async Reset(): Promise<void> {
         await this.WorkQueue.Post(async () => {
             await this._SignalGenerator.Reset();
         });
 
+        // Reset the state of all the Frequency Vectors
         this.setState((previousState: FFTSignalGeneratorViewState) => {
             const newFrequencyVectors: FrequencyVectorState[] =
                 previousState.frequencyVectors.slice();
@@ -195,6 +217,11 @@ class FFTSignalGeneratorView extends Component<
         });
     }
 
+    /**
+     * Remove a Frequency Vector from the output of the signal generator.
+     * @param vector - Frequency Vector to remove from the output of the signal generator.
+     * @returns A Promise that resolves when the Frequency Vector has been removed.
+     */
     private async RemoveFrequencyVector(vector: FrequencyVector): Promise<void> {
         let amplitudeScaleFactor: number = this._SignalGenerator2.AmplitudeScaleFactor;
 
@@ -209,6 +236,13 @@ class FFTSignalGeneratorView extends Component<
         this.setState({ amplitudeScaleFactor: amplitudeScaleFactor });
     }
 
+    /**
+     * Adds or removes a Frequency Vector from the output of the signal generator based
+     * on the specified isEnabled flag.
+     * @param vector - Frequency Vector to add or remove from the output of the signal generator.
+     * @param isEnabled - Flag indicating whether the Frequency Vector should be added or removed.
+     * @returns A Promise that resolves when the Frequency Vector has been added or removed.
+     */
     private async EnableFrequencyVector(
         vector: FrequencyVector,
         isEnabled: boolean
@@ -230,6 +264,12 @@ class FFTSignalGeneratorView extends Component<
         this.setState({ amplitudeScaleFactor: amplitudeScaleFactor });
     }
 
+    /**
+     * Updates an existing Frequency Vector with a new Frequency Vector.
+     * @param newVector - New Frequency Vector to update the existing Frequency Vector.
+     * @param previousVector - Existing Frequency Vector to update.
+     * @returns A Promise that resolves when the Frequency Vector has been updated.
+     */
     private async UpdateFrequencyVector(
         newVector: FrequencyVector,
         previousVector: FrequencyVector
@@ -249,7 +289,7 @@ class FFTSignalGeneratorView extends Component<
         this.setState({ amplitudeScaleFactor: amplitudeScaleFactor });
     }
 
-    //
+    // TODO: Remove this Method
     private FormatStatusMessage(state: FFTSignalGeneratorState): string {
         let message: string;
 
@@ -283,13 +323,20 @@ class FFTSignalGeneratorView extends Component<
         return message;
     }
 
+    /**
+     * Formats the string representation of a decibel value.
+     * @param value - Decibel value to format.
+     * @returns String representation of the decibel value.
+     */
     private FormatDecibelString(value: number): string {
         const decibelValue: number = 20.0 * Math.log10(value);
 
         return decibelValue.toPrecision(3) + " dB";
     }
 
-    // Event Handlers
+    /**
+     * Event handler that appends a new Frequency Vector with an initial state.
+     */
     private OnAddFrequencyVector(): void {
         this.setState((previousState: FFTSignalGeneratorViewState) => {
             const newFrequencyVectors: FrequencyVectorState[] =
@@ -301,13 +348,18 @@ class FFTSignalGeneratorView extends Component<
         });
     }
 
-    private async OnRemoveFrequencyVector(id: number): Promise<void> {
+    /**
+     * Event handler that removes a Frequency Vector from the output of the signal generator.
+     * @param vectorId - Identifier of the Frequency Vector to remove.
+     * @returns A Promise that resolves when the Frequency Vector has been removed.
+     */
+    private async OnRemoveFrequencyVector(vectorId: number): Promise<void> {
         this.setState((previousState: FFTSignalGeneratorViewState) => {
             const newFrequencyVectors: FrequencyVectorState[] =
                 previousState.frequencyVectors.slice();
 
             newFrequencyVectors
-                .splice(id, 1)
+                .splice(vectorId, 1)
                 .forEach((vectorState: FrequencyVectorState) =>
                     this.RemoveFrequencyVector(vectorState.vector)
                 );
@@ -316,6 +368,12 @@ class FFTSignalGeneratorView extends Component<
         });
     }
 
+    /**
+     * Event handler that updates a Frequency Vector with a new Frequency Vector.
+     * @param vectorId - Identifier of the Frequency Vector to update.
+     * @param vector - New Frequency Vector to update the existing Frequency Vector.
+     * @returns A Promise that resolves when the Frequency Vector has been updated.
+     */
     private async OnFrequencyVectorChange(vectorId: number, vector: FrequencyVector) {
         this.setState((previousState: FFTSignalGeneratorViewState) => {
             const previousVector: FrequencyVector = previousState.frequencyVectors[vectorId].vector;
@@ -326,21 +384,6 @@ class FFTSignalGeneratorView extends Component<
             newFrequencyVectors[vectorId].vector = vector;
 
             if (newFrequencyVectors[vectorId].isEnabled) {
-                console.log(
-                    "Freqency Vector Changed (Id=" +
-                        vectorId +
-                        " [Bin=" +
-                        newFrequencyVectors[vectorId].vector.bin +
-                        " Amplitude=" +
-                        newFrequencyVectors[vectorId].vector.amplitude +
-                        " dBFS]" +
-                        " <= [Bin=" +
-                        previousVector.bin +
-                        " Amplitude=" +
-                        previousVector.amplitude +
-                        " dBFS])"
-                );
-
                 this.UpdateFrequencyVector(newFrequencyVectors[vectorId].vector, previousVector);
             }
 
@@ -348,18 +391,14 @@ class FFTSignalGeneratorView extends Component<
         });
     }
 
+    /**
+     * Event handler that updates the isEnabled state of a Frequency Vector.
+     * @param vectorId - Identifier of the Frequency Vector to update.
+     * @param isEnabled - New state of the isEnabled flag.
+     * @returns A Promise that resolves when the isEnabled state of the Frequency Vector has been updated.
+     */
     private async OnFrequencyVectorIsEnabledChange(vectorId: number, isEnabled: boolean) {
         this.setState((previousState: FFTSignalGeneratorViewState) => {
-            console.log(
-                "Freqency Vector Changed (Id=" +
-                    vectorId +
-                    " [IsEnabled=" +
-                    isEnabled +
-                    " <= " +
-                    previousState.frequencyVectors[vectorId].isEnabled +
-                    "])"
-            );
-
             const newFrequencyVectors: FrequencyVectorState[] =
                 previousState.frequencyVectors.slice();
 
@@ -374,14 +413,22 @@ class FFTSignalGeneratorView extends Component<
         });
     }
 
+    /**
+     * Event handler that is called when the state of the Signal Generator changes.
+     * @param args - Event arguments containing the previous and new state of the Signal Generator.
+     */
     private OnSignalGeneratorStateChange(args: FFTSignalGeneratorStateChangeEventArgs): void {
-        const message: string = this.FormatStatusMessage(args.newState);
+        //const message: string = this.FormatStatusMessage(args.newState);
 
         console.log("SignalGenerator State: " + args.previousState + " => " + args.newState);
 
-        this.setState({ statusMessage: message });
+        //this.setState({ statusMessage: message });
     }
 
+    /**
+     * Event handler that is called when the AutoScale state changes.
+     * @param state - New state of the AutoScale switch.
+     */
     private async OnUpdateAutoScaleChange(state: ToggleState): Promise<void> {
         let amplitudeScaleFactor: number = this._SignalGenerator2.AmplitudeScaleFactor;
 

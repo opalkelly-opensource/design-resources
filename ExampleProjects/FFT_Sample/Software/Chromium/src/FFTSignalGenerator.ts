@@ -2,16 +2,19 @@ import { IFrontPanel } from "@opalkellytech/frontpanel-chromium-core";
 
 import { SubEvent } from "sub-events/dist/src/event";
 
-export type FrequencyBinNumber = number;
+import FFTConfiguration, { BinNumber } from "./FFTConfiguration";
 
-export type dBFS = number;
-export type hertz = number;
-
+/**
+ * Type representing a frequency bin defined by a bin number and an amplitude value.
+ */
 export type FrequencyBin = {
-    number: FrequencyBinNumber;
+    number: BinNumber;
     amplitude: number;
 };
 
+/**
+ * Enumeration representing the possible states of the FFT Signal Generator.
+ */
 export enum FFTSignalGeneratorState {
     Initial,
     InitializePending,
@@ -22,12 +25,18 @@ export enum FFTSignalGeneratorState {
     ResetFailed
 }
 
+/**
+ * Event arguments for the FFT Signal Generator StateChanged event.
+ */
 export interface FFTSignalGeneratorStateChangeEventArgs {
     sender: FFTSignalGenerator;
     newState: FFTSignalGeneratorState;
     previousState: FFTSignalGeneratorState;
 }
 
+/**
+ * Signal Generator
+ */
 export class FFTSignalGenerator {
     private readonly _FrontPanel: IFrontPanel;
 
@@ -35,9 +44,8 @@ export class FFTSignalGenerator {
     // bin n real component = n * 2
     // bin n imaginary component = n * 2 + 1
 
-    private readonly _FFTLength: number;
-    private readonly _SampleRate: hertz;
-    private readonly _MaximumAmplitudeValue: number;
+    private readonly _FFTConfiguration: FFTConfiguration;
+
     private readonly _RetryCount: number;
 
     private _State: FFTSignalGeneratorState = FFTSignalGeneratorState.Initial;
@@ -45,37 +53,36 @@ export class FFTSignalGenerator {
     private readonly _StateChangedEvent: SubEvent<FFTSignalGeneratorStateChangeEventArgs> =
         new SubEvent<FFTSignalGeneratorStateChangeEventArgs>();
 
-    public get FFTLength() {
-        return this._FFTLength;
+    /**
+     * Get the configuration of the FFT.
+     */
+    public get FFTConfiguration() {
+        return this._FFTConfiguration;
     }
 
-    public get SampleRate() {
-        return this._SampleRate;
-    }
-
-    public get MaximumAmplitudeValue() {
-        return this._MaximumAmplitudeValue;
-    }
-
+    /**
+     * Get the current state of the Signal Generator.
+     */
     public get State() {
         return this._State;
     }
 
+    /**
+     * Get the StateChanged event used to monitor changes to the state of the Signal Generator.
+     */
     public get StatechangedEvent() {
         return this._StateChangedEvent;
     }
 
-    constructor(
-        frontpanel: IFrontPanel,
-        fftLength: number,
-        sampleRate: hertz,
-        maximumAmplitudeValue: number,
-        retryCount: number
-    ) {
+    /**
+     * Creates a new instance of the FFTSignalGenerator class.
+     * @param frontpanel - Object that implements the IFrontPanel interface used to communicate with device.
+     * @param fftConfiguration - Configuration of the FFT.
+     * @param retryCount - Number of times to retry an operation.
+     */
+    constructor(frontpanel: IFrontPanel, fftConfiguration: FFTConfiguration, retryCount: number) {
         this._FrontPanel = frontpanel;
-        this._FFTLength = fftLength;
-        this._SampleRate = sampleRate;
-        this._MaximumAmplitudeValue = maximumAmplitudeValue;
+        this._FFTConfiguration = fftConfiguration;
         this._RetryCount = retryCount;
     }
 
@@ -172,12 +179,33 @@ export class FFTSignalGenerator {
         return retval;
     }
 
+    /**
+     * Updates the current state of the Signal Generator and dispatches the StateChanged event.
+     * @param newState - The new state of the Signal Generator.
+     */
+    private UpdateState(newState: FFTSignalGeneratorState) {
+        if (newState !== this._State) {
+            const previousState: FFTSignalGeneratorState = this._State;
+            this._State = newState;
+
+            this._StateChangedEvent.emit({
+                sender: this,
+                newState: this._State,
+                previousState: previousState
+            });
+        }
+    }
+
+    /**
+     * Clears all of the IFFT bins.
+     * @returns Promise that resolves to true when all the bins are cleared, otherwise false.
+     */
     public async ClearAllBins(): Promise<boolean> {
         let retval: boolean;
 
         if (this._State === FFTSignalGeneratorState.ResetComplete) {
             // Reset the real and imaginary components of each frequency bin. (2 registers per bin)
-            const registerCount: number = this._FFTLength;
+            const registerCount: number = this._FFTConfiguration.FFTLength;
 
             for (let registerIndex = 0; registerIndex < registerCount; registerIndex++) {
                 await this._FrontPanel.writeRegister(registerIndex, 0x00);
@@ -193,6 +221,12 @@ export class FFTSignalGenerator {
         return retval;
     }
 
+    /**
+     * Sets the specified IFFT bins.
+     * @param bins - Array of frequency bins to set.
+     * @param scale - Scale factor to apply to the frequency bin amplitude values.
+     * @returns Promise that resolves to true when all the specified bins are set, otherwise false.
+     */
     public async SetBins(bins: FrequencyBin[], scale: number): Promise<boolean> {
         let retval: boolean;
 
@@ -209,29 +243,12 @@ export class FFTSignalGenerator {
         return retval;
     }
 
-    public async UpdateBins(
-        updateBins: FrequencyBin[],
-        clearBins: FrequencyBinNumber[],
-        scale: number
-    ): Promise<boolean> {
-        let retval: boolean;
-
-        if (this._State === FFTSignalGeneratorState.ResetComplete) {
-            await this.ClearBinRegisters(clearBins);
-
-            await this.SetBinRegisters(updateBins, scale);
-
-            await this.SubmitBins(); // Submits the Bin data to the IFFT
-
-            retval = true; // SUCCESS: Bins Set
-        } else {
-            retval = false; // ERROR: Invalid State
-        }
-
-        return retval;
-    }
-
-    public async ClearBins(clearBins: FrequencyBinNumber[]): Promise<boolean> {
+    /**
+     * Clears the specified IFFT bins.
+     * @param clearBins - Array of frequency bin numbers of the bins to clear.
+     * @returns Promise that resolves to true when all the specified bins are cleared, otherwise false.
+     */
+    public async ClearBins(clearBins: BinNumber[]): Promise<boolean> {
         let retval: boolean;
 
         if (this._State === FFTSignalGeneratorState.ResetComplete) {
@@ -247,12 +264,11 @@ export class FFTSignalGenerator {
         return retval;
     }
 
-    public GetBinFrequency(binNumber: FrequencyBinNumber): hertz {
-        return this._SampleRate * (binNumber / this._FFTLength);
-    }
-
-    //
-    protected async ClearBinRegisters(binNumbers: FrequencyBinNumber[]): Promise<void> {
+    /**
+     * Clears register values for the specified bin numbers
+     * @param binNumbers - Array of bin numbers to clear
+     */
+    protected async ClearBinRegisters(binNumbers: BinNumber[]): Promise<void> {
         for (let binIndex = 0; binIndex < binNumbers.length; binIndex++) {
             const address = binNumbers[binIndex] * 2;
 
@@ -260,6 +276,12 @@ export class FFTSignalGenerator {
         }
     }
 
+    /**
+     * Sets the register value for the each specified frequency bin using the bin number and the amplitude value multiplied by the scale factor.
+     * @param bins - Array of frequency bins to set.
+     * @param amplitudeScaleFactor - Scale factor to apply to the amplitude values.
+     * @returns Promise that resolves when all of the bin registers have been set.
+     */
     protected async SetBinRegisters(
         bins: FrequencyBin[],
         amplitudeScaleFactor: number
@@ -267,43 +289,20 @@ export class FFTSignalGenerator {
         for (let binIndex = 0; binIndex < bins.length; binIndex++) {
             const address = bins[binIndex].number * 2;
             const value = Math.floor(
-                bins[binIndex].amplitude * this._MaximumAmplitudeValue * amplitudeScaleFactor
+                bins[binIndex].amplitude *
+                    this._FFTConfiguration.MaximumAmplitudeValue *
+                    amplitudeScaleFactor
             );
 
             await this._FrontPanel.writeRegister(address, value);
         }
     }
 
+    /**
+     * Submits the frequency bin data to the IFFT.
+     * @returns Promise that resolves when the bin data has been submitted.
+     */
     protected SubmitBins(): Promise<void> {
         return this._FrontPanel.activateTriggerIn(0x40, 1); // Submits the Bin data to the IFFT
-    }
-
-    //
-    private UpdateState(newState: FFTSignalGeneratorState) {
-        if (newState !== this._State) {
-            const previousState: FFTSignalGeneratorState = this._State;
-            this._State = newState;
-
-            this._StateChangedEvent.emit({
-                sender: this,
-                newState: this._State,
-                previousState: previousState
-            });
-        }
-    }
-
-    // Converts a dbfs value to an integer the IFFT can use.
-    // IFFT uses a 20 bit signed ap_fixed value.
-    // We ignore the sign bit here, so:
-    // 20 log(2 ^ 19) = ~115 dB scale
-    // Return scaled integer value based on the dynamic range of 120 dB
-    protected DBfsConversion(value: dBFS, scaleFactor: number) {
-        const maximumAmplitudeValue = this._MaximumAmplitudeValue * scaleFactor;
-
-        if (value === 0) {
-            return maximumAmplitudeValue;
-        } else {
-            return Math.floor(Math.pow(10, value / 20) * maximumAmplitudeValue);
-        }
     }
 }

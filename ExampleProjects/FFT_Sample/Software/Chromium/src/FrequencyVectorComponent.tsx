@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Component, ReactNode } from "react";
+import React, { Component, ReactNode } from "react";
 
 import {
     NumberDisplay,
@@ -7,22 +7,30 @@ import {
     RangeSlider
 } from "@opalkellytech/frontpanel-react-components";
 
-import { FrequencyBinNumber, dBFS, hertz } from "./FFTSignalGenerator";
-import { FrequencyVector } from "./FFTSignalGenerator2";
+import { Hertz } from "./FFTConfiguration";
+
+import { FrequencyVector, dBFS } from "./FFTSignalGenerator2";
 
 import "./FrequencyVectorComponent.css";
 
-//
+/**
+ * Event handler for handling changes in the frequency vector.
+ */
 export type FrequencyVectorChangeEventHandler = (vectorId: number, vector: FrequencyVector) => void;
 
-//
+/**
+ * Properties for the Frequency Vector Component.
+ */
 interface FrequencyVectorComponentProps {
     id: number;
-    frequency: hertz;
+    frequency: Hertz;
     vector: FrequencyVector;
     onVectorChange: FrequencyVectorChangeEventHandler;
 }
 
+/**
+ * Frequency Vector Component for displaying and editing a frequency vector.
+ */
 class FrequencyVectorComponent extends Component<FrequencyVectorComponentProps> {
     render(): ReactNode {
         return (
@@ -64,16 +72,10 @@ class FrequencyVectorComponent extends Component<FrequencyVectorComponentProps> 
         );
     }
 
-    // Event Handlers
-    private onBinNumberChange(event: ChangeEvent<HTMLInputElement>) {
-        const targetBinNumber: FrequencyBinNumber = Number(event.target.value);
-
-        this.props.onVectorChange(this.props.id, {
-            bin: targetBinNumber,
-            amplitude: this.props.vector.amplitude
-        });
-    }
-
+    /**
+     * Event handler for changes in the bin number slider.
+     * @param value - The new value of the bin number slider.
+     */
     private onBinNumberSliderChange(value: number) {
         this.props.onVectorChange(this.props.id, {
             bin: value,
@@ -81,20 +83,16 @@ class FrequencyVectorComponent extends Component<FrequencyVectorComponentProps> 
         });
     }
 
-    //
+    /**
+     * Event handler for changes in the amplitude value.
+     * @param value - The new value of the amplitude value.
+     */
     private onAmplitudeValueChange(value: bigint) {
         const targetAmplitude: dBFS = Number(value);
 
         this.props.onVectorChange(this.props.id, {
             bin: this.props.vector.bin,
             amplitude: targetAmplitude
-        });
-    }
-
-    private onAmplitudeSliderChange(value: number[]) {
-        this.props.onVectorChange(this.props.id, {
-            bin: this.props.vector.bin,
-            amplitude: value[0]
         });
     }
 }

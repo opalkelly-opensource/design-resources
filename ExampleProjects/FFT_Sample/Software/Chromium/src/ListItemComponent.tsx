@@ -6,19 +6,30 @@ import "./ListItemComponent.css";
 
 import { Button, ToggleState, ToggleSwitch } from "@opalkellytech/frontpanel-react-components";
 
-//
+/**
+ * Event handler for handling changes to the isEnabled state of a list item.
+ */
 export type IsEnabledChangeEventHandler = (id: number, isEnabled: boolean) => void;
-export type RemoveListItemHandler = (id: number) => void;
 
-//
+/**
+ * Event handler for removing a list item.
+ */
+export type RemoveListItemEventHandler = (id: number) => void;
+
+/**
+ * Properties for the List Item Component.
+ */
 interface ListItemComponentProps extends React.PropsWithChildren<NonNullable<unknown>> {
     className?: string;
     id: number;
     isEnabled: boolean;
     onIsEnabledChange: IsEnabledChangeEventHandler;
-    onRemove: RemoveListItemHandler;
+    onRemove: RemoveListItemEventHandler;
 }
 
+/**
+ * List Item Component that displays child components along with a toggle switch and remove button.
+ */
 class ListItemComponent extends Component<ListItemComponentProps> {
     render(): ReactNode {
         return (
@@ -27,19 +38,25 @@ class ListItemComponent extends Component<ListItemComponentProps> {
                 <ToggleSwitch
                     label="Enabled"
                     state={this.props.isEnabled ? ToggleState.On : ToggleState.Off}
-                    onToggleStateChanged={this.onIsEnabledChange.bind(this)}
+                    onToggleStateChanged={this.OnIsEnabledChange.bind(this)}
                 />
-                <Button label="X" onButtonDown={this.onRemove.bind(this)} />
+                <Button label="X" onButtonDown={this.OnRemove.bind(this)} />
             </div>
         );
     }
 
-    // Event Handlers
-    private onIsEnabledChange(state: ToggleState) {
+    /**
+     * Event handler for handling changes to the isEnabled state of the list item.
+     * @param state - New state of the toggle switch.
+     */
+    private OnIsEnabledChange(state: ToggleState) {
         this.props.onIsEnabledChange(this.props.id, state === ToggleState.On);
     }
 
-    private onRemove() {
+    /**
+     * Event handler for removing the list item.
+     */
+    private OnRemove() {
         this.props.onRemove(this.props.id);
     }
 }
