@@ -6,11 +6,14 @@
  */
 
 .okFrontPanel {
+    /* Layout */
     align-self: stretch;
     display: flex;
     flex-direction: row;
     align-content: center;
     gap: 4px;
+
+    /* Style */
     background-color: rgb(82, 82, 82);
     padding: 6px;
     margin: 6px;
@@ -18,11 +21,14 @@
 }
 
 .okControlPanel {
+    /* Layout */
     align-self: stretch;
     display: flex;
     flex-direction: column;
     align-content: stretch;
     gap: 8px;
+
+    /* Style */
     background-color: rgb(255, 255, 255);
     padding: 6px;
     margin: 6px;
