@@ -49,6 +49,7 @@ interface DigitalSignalSamplerViewProps {
  */
 interface DigitalSignalSamplerViewState {
     //statusMessage: string;
+    isOperationPending: boolean;
     isUpdateTimerEnabled: boolean;
 }
 
@@ -151,17 +152,28 @@ class DigitalSignalSamplerView extends Component<
         // Set the initial state of the component
         this.state = {
             //statusMessage: this.GetStatusMessage(this._Sampler.State),
+            isOperationPending: false,
             isUpdateTimerEnabled: false
         };
     }
 
     componentDidMount(): void {
+        this.setState({
+            isOperationPending:
+                this._Sampler.State === DigitalSignalSamplerState.InitializePending ||
+                this._Sampler.State === DigitalSignalSamplerState.ResetPending
+        });
+
         this._SamplerStateChangeEventSubscription = this._Sampler.StateChangedEvent.subscribe(
             this.OnSamplerStateChange.bind(this)
         );
+
+        this.OnReset();
     }
 
     componentWillUnmount(): void {
+        this.setState({ isUpdateTimerEnabled: false });
+
         this._SamplerStateChangeEventSubscription?.cancel();
     }
 
@@ -169,13 +181,22 @@ class DigitalSignalSamplerView extends Component<
         return (
             <div className="okDigitalSignalSampler">
                 <div className="okDigitalSignalSamplerControlPanel">
-                    <Button label="Reset" onButtonDown={this.Reset.bind(this)} />
                     <ToggleSwitch
                         label="Start"
                         state={this.state.isUpdateTimerEnabled ? ToggleState.On : ToggleState.Off}
-                        onToggleStateChanged={this.ToggleChartDataUpdateTimer.bind(this)}
+                        onToggleStateChanged={this.OnToggleChartDataUpdateTimer.bind(this)}
+                        disabled={this.state.isOperationPending}
                     />
-                    <Button label="Sample" onButtonDown={this.UpdateChartData.bind(this)} />
+                    <Button
+                        label="Sample"
+                        onButtonDown={this.UpdateChartData.bind(this)}
+                        disabled={this.state.isOperationPending}
+                    />
+                    <Button
+                        label="Reset"
+                        onButtonDown={this.OnReset.bind(this)}
+                        disabled={this.state.isOperationPending}
+                    />
                 </div>
                 <div className="okDigitalSignalSamplerChartPanel">
                     <div className="okDigitalSignalChartContainer">
@@ -190,21 +211,32 @@ class DigitalSignalSamplerView extends Component<
         );
     }
 
-    // TODO: Remove this method
-    private async Reset(): Promise<void> {
+    /**
+     * Event handler for the Resetting.
+     * @returns Promise that resolves when the Digital Signal Sampler has been reset.
+     */
+    private async OnReset(): Promise<void> {
         await this.WorkQueue.Post(async () => {
             await this._Sampler.Reset();
         });
+
+        // Start the periodic update timer if it is not already running.
+        if (!this.state.isUpdateTimerEnabled) {
+            this.OnToggleChartDataUpdateTimer(ToggleState.On);
+        }
     }
 
-    // TODO: Remove this method
-    private ToggleChartDataUpdateTimer(state: ToggleState) {
+    /**
+     * Event handler for the Starting and Stoping the periodic update timer.
+     * @param state - New state of the ToggleSwitch.
+     */
+    private OnToggleChartDataUpdateTimer(state: ToggleState) {
         this.setState(() => {
             if (state == ToggleState.On) {
                 this.UpdateChartDataLoop();
             }
 
-            return { isUpdateTimerEnabled: state == ToggleState.On };
+            return { isUpdateTimerEnabled: state === ToggleState.On };
         });
     }
 
@@ -298,6 +330,11 @@ class DigitalSignalSamplerView extends Component<
      * @param args - Event arguments detailing the state transition.
      */
     private OnSamplerStateChange(args: DigitalSignalSamplerStateChangeEventArgs): void {
+        this.setState({
+            isOperationPending:
+                args.newState === DigitalSignalSamplerState.InitializePending ||
+                args.newState === DigitalSignalSamplerState.ResetPending
+        });
         //const message: string = this.GetStatusMessage(args.newState);
 
         console.log("Sampler State: " + args.previousState + " => " + args.newState);

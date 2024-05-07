@@ -46,6 +46,7 @@ interface FFTSignalGeneratorViewState {
     frequencyVectors: FrequencyVectorState[];
     isAutoScaleEnabled: boolean;
     //statusMessage: string;
+    isOperationPending: boolean;
     amplitudeScaleFactor: number;
 }
 
@@ -96,12 +97,19 @@ class FFTSignalGeneratorView extends Component<
         this.state = {
             frequencyVectors: frequencyVectors,
             isAutoScaleEnabled: true,
+            isOperationPending: false,
             //statusMessage: this.FormatStatusMessage(this._SignalGenerator.State),
             amplitudeScaleFactor: 1.0
         };
     }
 
     componentDidMount(): void {
+        this.setState({
+            isOperationPending:
+                this._SignalGenerator.State === FFTSignalGeneratorState.InitializePending ||
+                this._SignalGenerator.State === FFTSignalGeneratorState.ResetPending
+        });
+
         this._SignalGeneratorStateChangeEventSubscription =
             this._SignalGenerator.StatechangedEvent.subscribe(
                 this.OnSignalGeneratorStateChange.bind(this)
@@ -118,7 +126,11 @@ class FFTSignalGeneratorView extends Component<
         const initializeButton: ReactNode = (this._SignalGenerator.State ===
             FFTSignalGeneratorState.InitializationFailed ||
             this._SignalGenerator.State === FFTSignalGeneratorState.Initial) ?? (
-            <Button label="Initialize" onButtonDown={this.Initialize.bind(this)} />
+            <Button
+                label="Initialize"
+                onButtonDown={this.Initialize.bind(this)}
+                disabled={this.state.isOperationPending}
+            />
         );
 
         const autoscaleText: string =
@@ -133,7 +145,11 @@ class FFTSignalGeneratorView extends Component<
                         onToggleStateChanged={this.OnUpdateAutoScaleChange.bind(this)}
                     />
                     {initializeButton}
-                    <Button label="Reset" onButtonDown={this.Reset.bind(this)} />
+                    <Button
+                        label="Reset"
+                        onButtonDown={this.Reset.bind(this)}
+                        disabled={this.state.isOperationPending}
+                    />
                     {/*<Text>{this.state.statusMessage}</Text>*/}
                 </div>
                 <div className="okSignalGeneratorContentPanel">
@@ -418,6 +434,12 @@ class FFTSignalGeneratorView extends Component<
      * @param args - Event arguments containing the previous and new state of the Signal Generator.
      */
     private OnSignalGeneratorStateChange(args: FFTSignalGeneratorStateChangeEventArgs): void {
+        this.setState({
+            isOperationPending:
+                args.newState === FFTSignalGeneratorState.InitializePending ||
+                args.newState === FFTSignalGeneratorState.ResetPending
+        });
+
         //const message: string = this.FormatStatusMessage(args.newState);
 
         console.log("SignalGenerator State: " + args.previousState + " => " + args.newState);
