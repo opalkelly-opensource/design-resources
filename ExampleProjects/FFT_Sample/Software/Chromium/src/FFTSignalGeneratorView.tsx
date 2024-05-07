@@ -19,7 +19,7 @@ import {
     FFTSignalGeneratorStateChangeEventArgs
 } from "./FFTSignalGenerator";
 
-import { FFTSignalGenerator2, FrequencyVector } from "./FFTSignalGenerator2";
+import { FFTSignalGeneratorAdapter, FrequencyVector } from "./FFTSignalGeneratorAdapter";
 
 import ListItemComponent from "./ListItemComponent";
 
@@ -64,7 +64,7 @@ class FFTSignalGeneratorView extends Component<
     FFTSignalGeneratorViewState
 > {
     private readonly _SignalGenerator: FFTSignalGenerator;
-    private readonly _SignalGenerator2: FFTSignalGenerator2;
+    private readonly _SignalGeneratorAdapter: FFTSignalGeneratorAdapter;
 
     private _SignalGeneratorStateChangeEventSubscription: Subscription | null = null;
 
@@ -90,7 +90,7 @@ class FFTSignalGeneratorView extends Component<
             fftConfiguration,
             retryCount
         );
-        this._SignalGenerator2 = new FFTSignalGenerator2(this._SignalGenerator);
+        this._SignalGeneratorAdapter = new FFTSignalGeneratorAdapter(this._SignalGenerator);
 
         // Set Initial State
         const frequencyVectors: FrequencyVectorState[] = [];
@@ -198,14 +198,14 @@ class FFTSignalGeneratorView extends Component<
 
         // Add the Frequency Vectors to the Signal Generator
         vectors.forEach((vector: FrequencyVector) =>
-            this._SignalGenerator2.AddFrequencyVector(vector)
+            this._SignalGeneratorAdapter.AddFrequencyVector(vector)
         );
 
         // Update the Signal Generator Frequency Bins
         const start: number = performance.now();
 
         await this.WorkQueue.Post(async () => {
-            await this._SignalGenerator2.UpdateFrequencyBins(false);
+            await this._SignalGeneratorAdapter.UpdateFrequencyBins(false);
         });
 
         const elapsed: number = performance.now() - start;
@@ -243,12 +243,12 @@ class FFTSignalGeneratorView extends Component<
      * @returns A Promise that resolves when the Frequency Vector has been removed.
      */
     private async RemoveFrequencyVector(vector: FrequencyVector): Promise<void> {
-        let amplitudeScaleFactor: number = this._SignalGenerator2.AmplitudeScaleFactor;
+        let amplitudeScaleFactor: number = this._SignalGeneratorAdapter.AmplitudeScaleFactor;
 
         await this.WorkQueue.Post(async () => {
-            await this._SignalGenerator2.RemoveFrequencyVector(vector);
+            await this._SignalGeneratorAdapter.RemoveFrequencyVector(vector);
 
-            amplitudeScaleFactor = await this._SignalGenerator2.UpdateFrequencyBins(
+            amplitudeScaleFactor = await this._SignalGeneratorAdapter.UpdateFrequencyBins(
                 this.state.isAutoScaleEnabled
             );
         });
@@ -267,16 +267,16 @@ class FFTSignalGeneratorView extends Component<
         vector: FrequencyVector,
         isEnabled: boolean
     ): Promise<void> {
-        let amplitudeScaleFactor: number = this._SignalGenerator2.AmplitudeScaleFactor;
+        let amplitudeScaleFactor: number = this._SignalGeneratorAdapter.AmplitudeScaleFactor;
 
         await this.WorkQueue.Post(async () => {
             if (isEnabled) {
-                this._SignalGenerator2.AddFrequencyVector(vector);
+                this._SignalGeneratorAdapter.AddFrequencyVector(vector);
             } else {
-                await this._SignalGenerator2.RemoveFrequencyVector(vector);
+                await this._SignalGeneratorAdapter.RemoveFrequencyVector(vector);
             }
 
-            amplitudeScaleFactor = await this._SignalGenerator2.UpdateFrequencyBins(
+            amplitudeScaleFactor = await this._SignalGeneratorAdapter.UpdateFrequencyBins(
                 this.state.isAutoScaleEnabled
             );
         });
@@ -294,14 +294,14 @@ class FFTSignalGeneratorView extends Component<
         newVector: FrequencyVector,
         previousVector: FrequencyVector
     ): Promise<void> {
-        let amplitudeScaleFactor: number = this._SignalGenerator2.AmplitudeScaleFactor;
+        let amplitudeScaleFactor: number = this._SignalGeneratorAdapter.AmplitudeScaleFactor;
 
         await this.WorkQueue.Post(async () => {
-            await this._SignalGenerator2.RemoveFrequencyVector(previousVector);
+            await this._SignalGeneratorAdapter.RemoveFrequencyVector(previousVector);
 
-            this._SignalGenerator2.AddFrequencyVector(newVector);
+            this._SignalGeneratorAdapter.AddFrequencyVector(newVector);
 
-            amplitudeScaleFactor = await this._SignalGenerator2.UpdateFrequencyBins(
+            amplitudeScaleFactor = await this._SignalGeneratorAdapter.UpdateFrequencyBins(
                 this.state.isAutoScaleEnabled
             );
         });
@@ -418,10 +418,10 @@ class FFTSignalGeneratorView extends Component<
      * @param state - New state of the AutoScale switch.
      */
     private async OnUpdateAutoScaleChange(state: ToggleState): Promise<void> {
-        let amplitudeScaleFactor: number = this._SignalGenerator2.AmplitudeScaleFactor;
+        let amplitudeScaleFactor: number = this._SignalGeneratorAdapter.AmplitudeScaleFactor;
 
         await this.WorkQueue.Post(async () => {
-            amplitudeScaleFactor = await this._SignalGenerator2.UpdateFrequencyBins(
+            amplitudeScaleFactor = await this._SignalGeneratorAdapter.UpdateFrequencyBins(
                 state === ToggleState.On
             );
         });

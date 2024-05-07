@@ -20,10 +20,10 @@ export type FrequencyVector = {
 };
 
 /**
- * TODO: Rename this Class
- * Signal Generator that outputs a set of frequency bins
+ * Adapter that provides an interface that allows specifying the output of the FFT Signal Generator by
+ * adding and removing Frequency Vectors.
  */
-export class FFTSignalGenerator2 {
+export class FFTSignalGeneratorAdapter {
     private readonly _SignalGenerator: FFTSignalGenerator;
 
     private readonly _FrequencyBinMap: Map<BinNumber, FrequencyBin> = new Map<
@@ -41,8 +41,8 @@ export class FFTSignalGenerator2 {
     }
 
     /**
-     * Creates a new instance of the FFTSignalGenerator2 class.
-     * @param signalGenerator - TODO:
+     * Creates a new instance of the FFT Signal Generator Adapter class.
+     * @param signalGenerator - The FFT Signal Generator that will be attached to the adapter.
      */
     constructor(signalGenerator: FFTSignalGenerator) {
         this._SignalGenerator = signalGenerator;
@@ -61,7 +61,7 @@ export class FFTSignalGenerator2 {
             // Target frequency bin does not exist, then create it
             targetFrequencyBin = {
                 number: vector.bin,
-                amplitude: FFTSignalGenerator2.GetAmplitudeValue(vector.amplitude)
+                amplitude: FFTSignalGeneratorAdapter.GetAmplitudeValue(vector.amplitude)
             };
 
             this._FrequencyBinMap.set(targetFrequencyBin.number, targetFrequencyBin);
@@ -74,7 +74,9 @@ export class FFTSignalGenerator2 {
             );
         } else {
             // Target frequency bin does exist, then add the amplitude of the source vector to the target bin
-            targetFrequencyBin.amplitude += FFTSignalGenerator2.GetAmplitudeValue(vector.amplitude);
+            targetFrequencyBin.amplitude += FFTSignalGeneratorAdapter.GetAmplitudeValue(
+                vector.amplitude
+            );
 
             console.log(
                 "Update FrequencyBin Number=" +
@@ -98,7 +100,9 @@ export class FFTSignalGenerator2 {
 
         if (targetFrequencyBin !== undefined) {
             // Subtract the amplitude of the source vector from the target bin
-            targetFrequencyBin.amplitude -= FFTSignalGenerator2.GetAmplitudeValue(vector.amplitude);
+            targetFrequencyBin.amplitude -= FFTSignalGeneratorAdapter.GetAmplitudeValue(
+                vector.amplitude
+            );
 
             console.log(
                 "Update FrequencyBin Number=" +

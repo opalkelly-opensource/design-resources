@@ -16,7 +16,7 @@ import {
 
 import { Hertz } from "./FFTConfiguration";
 
-import { FrequencyVector, dBFS } from "./FFTSignalGenerator2";
+import { FrequencyVector, dBFS } from "./FFTSignalGeneratorAdapter";
 
 import "./FrequencyVectorComponent.css";
 
