@@ -44,7 +44,7 @@ class FrontPanel extends Component<FrontPanelProps> {
                         className="ChartControlPanel">
                         <DigitalSignalSamplerView
                             label="OutputView"
-                            updatePeriodMilliseconds={180}
+                            updatePeriodMilliseconds={90}
                             frontpanel={this._FrontPanel}
                             workQueue={this._WorkQueue}
                             onSampleChannelsUpdate={this.OnSampleChannelsUpdate.bind(this)}
