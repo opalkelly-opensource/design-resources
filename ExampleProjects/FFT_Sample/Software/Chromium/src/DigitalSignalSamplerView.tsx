@@ -48,7 +48,6 @@ interface DigitalSignalSamplerViewProps {
  * Digital Signal Sampler View State
  */
 interface DigitalSignalSamplerViewState {
-    //statusMessage: string;
     isOperationPending: boolean;
     isUpdateTimerEnabled: boolean;
 }
@@ -151,7 +150,6 @@ class DigitalSignalSamplerView extends Component<
 
         // Set the initial state of the component
         this.state = {
-            //statusMessage: this.GetStatusMessage(this._Sampler.State),
             isOperationPending: false,
             isUpdateTimerEnabled: false
         };
@@ -291,40 +289,6 @@ class DigitalSignalSamplerView extends Component<
         return this.props.onSampleChannelsUpdate(this._SampleChannels);
     }
 
-    // TODO: Remove this Method
-    private GetStatusMessage(state: DigitalSignalSamplerState): string {
-        let message: string;
-
-        switch (state) {
-            case DigitalSignalSamplerState.Initial:
-                message = "Initial";
-                break;
-            case DigitalSignalSamplerState.InitializePending:
-                message = "Initializing...";
-                break;
-            case DigitalSignalSamplerState.InitializationComplete:
-                message = "Ready";
-                break;
-            case DigitalSignalSamplerState.InitializationFailed:
-                message = "Initialization Failed";
-                break;
-            case DigitalSignalSamplerState.ResetPending:
-                message = "Resetting...";
-                break;
-            case DigitalSignalSamplerState.ResetComplete:
-                message = "Ready";
-                break;
-            case DigitalSignalSamplerState.ResetFailed:
-                message = "Reset Failed";
-                break;
-            default:
-                message = "None";
-                break;
-        }
-
-        return message;
-    }
-
     /**
      * Event handler used to monitor the state of the Digital Signal Sampler.
      * @param args - Event arguments detailing the state transition.
@@ -335,11 +299,8 @@ class DigitalSignalSamplerView extends Component<
                 args.newState === DigitalSignalSamplerState.InitializePending ||
                 args.newState === DigitalSignalSamplerState.ResetPending
         });
-        //const message: string = this.GetStatusMessage(args.newState);
 
         console.log("Sampler State: " + args.previousState + " => " + args.newState);
-
-        //this.setState({ statusMessage: message });
     }
 }
 

@@ -45,7 +45,6 @@ interface FFTSignalGeneratorViewProps {
 interface FFTSignalGeneratorViewState {
     frequencyVectors: FrequencyVectorState[];
     isAutoScaleEnabled: boolean;
-    //statusMessage: string;
     isOperationPending: boolean;
     amplitudeScaleFactor: number;
 }
@@ -98,7 +97,6 @@ class FFTSignalGeneratorView extends Component<
             frequencyVectors: frequencyVectors,
             isAutoScaleEnabled: true,
             isOperationPending: false,
-            //statusMessage: this.FormatStatusMessage(this._SignalGenerator.State),
             amplitudeScaleFactor: 1.0
         };
     }
@@ -150,7 +148,6 @@ class FFTSignalGeneratorView extends Component<
                         onButtonDown={this.Reset.bind(this)}
                         disabled={this.state.isOperationPending}
                     />
-                    {/*<Text>{this.state.statusMessage}</Text>*/}
                 </div>
                 <div className="okSignalGeneratorContentPanel">
                     {this.state.frequencyVectors.map((item, i) => (
@@ -305,40 +302,6 @@ class FFTSignalGeneratorView extends Component<
         this.setState({ amplitudeScaleFactor: amplitudeScaleFactor });
     }
 
-    // TODO: Remove this Method
-    private FormatStatusMessage(state: FFTSignalGeneratorState): string {
-        let message: string;
-
-        switch (state) {
-            case FFTSignalGeneratorState.Initial:
-                message = "Initial";
-                break;
-            case FFTSignalGeneratorState.InitializePending:
-                message = "Initializing...";
-                break;
-            case FFTSignalGeneratorState.InitializationComplete:
-                message = "Ready";
-                break;
-            case FFTSignalGeneratorState.InitializationFailed:
-                message = "Initialization Failed";
-                break;
-            case FFTSignalGeneratorState.ResetPending:
-                message = "Resetting...";
-                break;
-            case FFTSignalGeneratorState.ResetComplete:
-                message = "Ready";
-                break;
-            case FFTSignalGeneratorState.ResetFailed:
-                message = "Reset Failed";
-                break;
-            default:
-                message = "None";
-                break;
-        }
-
-        return message;
-    }
-
     /**
      * Formats the string representation of a decibel value.
      * @param value - Decibel value to format.
@@ -440,11 +403,7 @@ class FFTSignalGeneratorView extends Component<
                 args.newState === FFTSignalGeneratorState.ResetPending
         });
 
-        //const message: string = this.FormatStatusMessage(args.newState);
-
         console.log("SignalGenerator State: " + args.previousState + " => " + args.newState);
-
-        //this.setState({ statusMessage: message });
     }
 
     /**
