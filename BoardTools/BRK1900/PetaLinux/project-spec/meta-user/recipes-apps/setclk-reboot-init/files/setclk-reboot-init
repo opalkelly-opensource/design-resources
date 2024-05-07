@@ -12,9 +12,15 @@ if [ "$CONFIG_CHECK" != 0 ]; then
 	reboot
 else
 	echo "SATA controller pll has locked. Continuing boot";
-	echo "Reversing RX polarity on SATA lane";
-	devmem 0xFD409898 32 0x0080 #L2_TM_MISC1 - bit[7] Swap polarity for hsrx
-	echo "- - -" > /sys/class/scsi_host/host0/scan
+	
+	# *****************************************************************************
+	# IMPORTANT: Uncomment the following three lines ONLY if you have Rev A of the
+	# BRK1900 PCB to enable SATA. Lane polarity was corrected starting with Rev B.
+	# *****************************************************************************
+	# echo "Reversing RX polarity on SATA lane";
+	# devmem 0xFD409898 32 0x0080 #L2_TM_MISC1 - bit[7] Swap polarity for hsrx
+	# echo "- - -" > /sys/class/scsi_host/host0/scan
+	
 	echo "Enabling si5341 clock generator on ECM1900";
 	# MIO-44 = SI5341_OE_B. GPIO base is 334. 334 + 44 = 378. Export GPIO 378, output 0.
 	echo 378 > /sys/class/gpio/export
