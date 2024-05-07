@@ -207,9 +207,15 @@ export class FFTSignalGenerator {
             // Reset the real and imaginary components of each frequency bin. (2 registers per bin)
             const registerCount: number = this._FFTConfiguration.FFTLength;
 
+            const registerWriteOperations: Promise<void>[] = [];
+
             for (let registerIndex = 0; registerIndex < registerCount; registerIndex++) {
-                await this._FrontPanel.writeRegister(registerIndex, 0x00);
+                const operation = this._FrontPanel.writeRegister(registerIndex, 0x00);
+
+                registerWriteOperations.push(operation);
             }
+
+            await Promise.all(registerWriteOperations);
 
             await this.SubmitBins(); // Submits the Bin data to the IFFT
 
@@ -269,11 +275,17 @@ export class FFTSignalGenerator {
      * @param binNumbers - Array of bin numbers to clear
      */
     protected async ClearBinRegisters(binNumbers: BinNumber[]): Promise<void> {
+        const registerWriteOperations: Promise<void>[] = [];
+
         for (let binIndex = 0; binIndex < binNumbers.length; binIndex++) {
             const address = binNumbers[binIndex] * 2;
 
-            await this._FrontPanel.writeRegister(address, 0x00);
+            const operation = this._FrontPanel.writeRegister(address, 0x00);
+
+            registerWriteOperations.push(operation);
         }
+
+        await Promise.all(registerWriteOperations);
     }
 
     /**
@@ -286,6 +298,8 @@ export class FFTSignalGenerator {
         bins: FrequencyBin[],
         amplitudeScaleFactor: number
     ): Promise<void> {
+        const registerWriteOperations: Promise<void>[] = [];
+
         for (let binIndex = 0; binIndex < bins.length; binIndex++) {
             const address = bins[binIndex].number * 2;
             const value = Math.floor(
@@ -294,8 +308,12 @@ export class FFTSignalGenerator {
                     amplitudeScaleFactor
             );
 
-            await this._FrontPanel.writeRegister(address, value);
+            const operation = this._FrontPanel.writeRegister(address, value);
+
+            registerWriteOperations.push(operation);
         }
+
+        await Promise.all(registerWriteOperations);
     }
 
     /**
