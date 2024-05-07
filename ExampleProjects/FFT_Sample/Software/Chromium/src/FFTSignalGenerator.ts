@@ -93,7 +93,10 @@ export class FFTSignalGenerator {
         this._RetryCount = retryCount;
     }
 
-    // Operations
+    /**
+     * Initializes the Signal Generator.
+     * @returns Promise that resolves to true when the Signal Generator has been initialized, otherwise false.
+     */
     public async Initialize(): Promise<boolean> {
         let retval: boolean;
 
@@ -134,6 +137,10 @@ export class FFTSignalGenerator {
         return retval;
     }
 
+    /**
+     * Resets the Signal Generator and clears all of the IFFT bins.
+     * @returns Promise that resolves to true when the Signal Generator has been reset, otherwise false.
+     */
     public async Reset(): Promise<boolean> {
         let retval: boolean;
 
@@ -147,7 +154,8 @@ export class FFTSignalGenerator {
             this.UpdateState(FFTSignalGeneratorState.ResetPending);
 
             // Reset IFFT
-            await this.ClearAllBins();
+            await this.ClearAllBinRegisters();
+            await this.SubmitBins();
 
             // Reset DAC
             await this._FrontPanel.setWireInValue(0x00, 0x00000002, 0xffffffff);
@@ -211,18 +219,7 @@ export class FFTSignalGenerator {
         let retval: boolean;
 
         if (this._State === FFTSignalGeneratorState.ResetComplete) {
-            // Reset the real and imaginary components of each frequency bin. (2 registers per bin)
-            const registerCount: number = this._FFTConfiguration.FFTLength;
-
-            const registerWriteOperations: Promise<void>[] = [];
-
-            for (let registerIndex = 0; registerIndex < registerCount; registerIndex++) {
-                const operation = this._FrontPanel.writeRegister(registerIndex, 0x00);
-
-                registerWriteOperations.push(operation);
-            }
-
-            await Promise.all(registerWriteOperations);
+            await this.ClearAllBinRegisters();
 
             await this.SubmitBins(); // Submits the Bin data to the IFFT
 
@@ -278,8 +275,28 @@ export class FFTSignalGenerator {
     }
 
     /**
+     * Clears register values for all of the bins.
+     * @returns Promise that resolves to true when all the bins are cleared, otherwise false.
+     */
+    protected async ClearAllBinRegisters(): Promise<void> {
+        // Reset the real and imaginary components of each frequency bin. (2 registers per bin)
+        const registerCount: number = this._FFTConfiguration.FFTLength;
+
+        const registerWriteOperations: Promise<void>[] = [];
+
+        for (let registerIndex = 0; registerIndex < registerCount; registerIndex++) {
+            const operation = this._FrontPanel.writeRegister(registerIndex, 0x00);
+
+            registerWriteOperations.push(operation);
+        }
+
+        await Promise.all(registerWriteOperations);
+    }
+
+    /**
      * Clears register values for the specified bin numbers
      * @param binNumbers - Array of bin numbers to clear
+     * @returns Promise that resolves when the registers for all of the specified bins have been cleared.
      */
     protected async ClearBinRegisters(binNumbers: BinNumber[]): Promise<void> {
         const registerWriteOperations: Promise<void>[] = [];

@@ -219,7 +219,7 @@ class FFTSignalGeneratorView extends Component<
      */
     public async Reset(): Promise<void> {
         await this.WorkQueue.Post(async () => {
-            await this._SignalGenerator.Reset();
+            await this._SignalGeneratorAdapter.Reset();
         });
 
         // Reset the state of all the Frequency Vectors

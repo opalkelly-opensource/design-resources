@@ -49,6 +49,17 @@ export class FFTSignalGeneratorAdapter {
     }
 
     /**
+     * Resets the attached signal generator and clears all the frequency bins that were added to the adapter.
+     * @returns Promise that resolves when the signal generator has been reset.
+     */
+    public async Reset(): Promise<void> {
+        await this._SignalGenerator.Reset();
+
+        this._FrequencyBinMap.clear();
+        this._AmplitudeScaleFactor = 1.0;
+    }
+
+    /**
      * Add a Frequency Vector to be output by the signal generator. If a Fequency Vector with matching bin number already exists, then
      * the amplitude of the specified vector will be added to the amplitude of the existing vector.
      * @param vector Frequency Vector to add to the output of the signal generator.
