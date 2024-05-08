@@ -42,9 +42,7 @@ class EthernetPortView extends Component<EthernetPortViewProps> {
                         <FrontPanelPushButton
                             label="Update Speed"
                             tooltip="Update Speed"
-                            fpEndpoint={
-                                this.props.endpointConfiguration.settingsEndpoint.updateSpeed
-                            }
+                            fpEndpoint={this.props.configuration.settings.updateSpeed}
                         />
                         <FrontPanelSelectEntry.Root
                             label={{
@@ -54,9 +52,7 @@ class EthernetPortView extends Component<EthernetPortViewProps> {
                             }}
                             size={1}
                             tooltip="Speed Advertised"
-                            fpEndpoint={
-                                this.props.endpointConfiguration.settingsEndpoint.speedAdvertised
-                            }
+                            fpEndpoint={this.props.configuration.settings.speedAdvertised}
                             maximumValue={BigInt(2)}>
                             <FrontPanelSelectEntry.Trigger />
                             <FrontPanelSelectEntry.Content>
@@ -83,38 +79,27 @@ class EthernetPortView extends Component<EthernetPortViewProps> {
                         <FrontPanelToggleSwitch
                             label="Gen TX Data"
                             tooltip="Toggle Generate TX Data"
-                            fpEndpoint={
-                                this.props.endpointConfiguration.settingsEndpoint.generateTxData
-                            }
+                            fpEndpoint={this.props.configuration.settings.generateTxData}
                         />
                         <FrontPanelToggleSwitch
                             label="Check RX Data"
                             tooltip="Toggle Check RX Data"
-                            fpEndpoint={
-                                this.props.endpointConfiguration.settingsEndpoint.checkRxData
-                            }
+                            fpEndpoint={this.props.configuration.settings.checkRxData}
                         />
                         <FrontPanelToggleSwitch
                             label="PHY Loopback"
                             tooltip="Toggle PHY Loopback"
-                            fpEndpoint={
-                                this.props.endpointConfiguration.settingsEndpoint.phyLoopback
-                            }
+                            fpEndpoint={this.props.configuration.settings.phyLoopback}
                         />
                         <FrontPanelToggleSwitch
                             label="Enable HDL Loopback"
                             tooltip="Toggle Enable HDL Loopback"
-                            fpEndpoint={
-                                this.props.endpointConfiguration.settingsEndpoint.hdlLoopback
-                            }
+                            fpEndpoint={this.props.configuration.settings.hdlLoopback}
                         />
                         <FrontPanelToggleSwitch
                             label="HDL Loopback Address Swap"
                             tooltip="Toggle HDL Loopback Address Swap"
-                            fpEndpoint={
-                                this.props.endpointConfiguration.settingsEndpoint
-                                    .hdlLoopbackAddressSwap
-                            }
+                            fpEndpoint={this.props.configuration.settings.hdlLoopbackAddressSwap}
                         />
                     </div>
 
@@ -123,21 +108,17 @@ class EthernetPortView extends Component<EthernetPortViewProps> {
                         <FrontPanelPushButton
                             label="Reset Error"
                             tooltip="Reset Error"
-                            fpEndpoint={
-                                this.props.endpointConfiguration.settingsEndpoint.resetError
-                            }
+                            fpEndpoint={this.props.configuration.settings.resetError}
                         />
                         <FrontPanelPushButton
                             label="Inject Error"
                             tooltip="Inject Error"
-                            fpEndpoint={
-                                this.props.endpointConfiguration.settingsEndpoint.injectError
-                            }
+                            fpEndpoint={this.props.configuration.settings.injectError}
                         />
                         <FrontPanelIndicator
                             label="Error Occurred"
                             tooltip="Error Occurred"
-                            fpEndpoint={this.props.endpointConfiguration.statusEndpoint.error}
+                            fpEndpoint={this.props.configuration.status.error}
                         />
                     </div>
                 </div>
@@ -148,17 +129,17 @@ class EthernetPortView extends Component<EthernetPortViewProps> {
                         <FrontPanelIndicator
                             label="Link On"
                             tooltip="Link On"
-                            fpEndpoint={this.props.endpointConfiguration.statusEndpoint.link}
+                            fpEndpoint={this.props.configuration.status.link}
                         />
                         <FrontPanelIndicator
                             label="Duplex On"
                             tooltip="Duplex On"
-                            fpEndpoint={this.props.endpointConfiguration.statusEndpoint.duplex}
+                            fpEndpoint={this.props.configuration.status.duplex}
                         />
                         <FrontPanelIndicator
                             label="Rx Activity"
                             tooltip="Rx Activity"
-                            fpEndpoint={this.props.endpointConfiguration.statusEndpoint.rxActivity}
+                            fpEndpoint={this.props.configuration.status.rxActivity}
                         />
                     </div>
 
@@ -171,7 +152,7 @@ class EthernetPortView extends Component<EthernetPortViewProps> {
                                 horizontalPosition: "right"
                             }}
                             tooltip="PHY Neg Speed"
-                            fpEndpoint={this.props.endpointConfiguration.statusEndpoint.phyNegSpeed}
+                            fpEndpoint={this.props.configuration.status.phyNegSpeed}
                             maximumValue={BigInt(2)}
                             numeralSystem={NumeralSystem.Binary}
                         />
@@ -182,10 +163,7 @@ class EthernetPortView extends Component<EthernetPortViewProps> {
                                 horizontalPosition: "right"
                             }}
                             tooltip="Number of packets sent"
-                            fpEndpoint={
-                                this.props.endpointConfiguration.packetStatisticsEndpoint
-                                    .packetsSent
-                            }
+                            fpEndpoint={this.props.configuration.packetStatistics.packetsSent}
                             maximumValue={BigInt(0xffffffff)}
                             numeralSystem={NumeralSystem.Decimal}
                         />
@@ -196,17 +174,14 @@ class EthernetPortView extends Component<EthernetPortViewProps> {
                                 horizontalPosition: "right"
                             }}
                             tooltip="Number of packets received"
-                            fpEndpoint={
-                                this.props.endpointConfiguration.packetStatisticsEndpoint
-                                    .packetsReceived
-                            }
+                            fpEndpoint={this.props.configuration.packetStatistics.packetsReceived}
                             maximumValue={BigInt(0xffffffff)}
                             numeralSystem={NumeralSystem.Decimal}
                         />
                         <FrontPanelPushButton
                             label="Rst Counters"
                             tooltip="Reset Counters"
-                            fpEndpoint={this.props.endpointConfiguration.resetEndpoint.counters}
+                            fpEndpoint={this.props.configuration.reset.counters}
                         />
                     </div>
                 </div>
@@ -217,8 +192,8 @@ class EthernetPortView extends Component<EthernetPortViewProps> {
                         <MACAddressView
                             label="Unique MAC address from EEPROM"
                             fpEndpoints={[
-                                this.props.endpointConfiguration.macAddressEndpoint.highOrder,
-                                this.props.endpointConfiguration.macAddressEndpoint.lowOrder
+                                this.props.configuration.macAddress.highOrder,
+                                this.props.configuration.macAddress.lowOrder
                             ]}
                             numeralSystem={NumeralSystem.Hexadecimal}
                         />
@@ -226,10 +201,8 @@ class EthernetPortView extends Component<EthernetPortViewProps> {
                             label="Current destination MAC address"
                             description="(used for generation/check)"
                             fpEndpoints={[
-                                this.props.endpointConfiguration
-                                    .destinationGenCheckMACAddressEndpoint.highOrder,
-                                this.props.endpointConfiguration
-                                    .destinationGenCheckMACAddressEndpoint.lowOrder
+                                this.props.configuration.destinationGenCheckMACAddress.highOrder,
+                                this.props.configuration.destinationGenCheckMACAddress.lowOrder
                             ]}
                             numeralSystem={NumeralSystem.Hexadecimal}
                         />
@@ -237,10 +210,8 @@ class EthernetPortView extends Component<EthernetPortViewProps> {
                             label="Current source MAC address"
                             description="(used for generation/check)"
                             fpEndpoints={[
-                                this.props.endpointConfiguration.sourceGenCheckMACAddressEndpoint
-                                    .highOrder,
-                                this.props.endpointConfiguration.sourceGenCheckMACAddressEndpoint
-                                    .lowOrder
+                                this.props.configuration.sourceGenCheckMACAddress.highOrder,
+                                this.props.configuration.sourceGenCheckMACAddress.lowOrder
                             ]}
                             numeralSystem={NumeralSystem.Hexadecimal}
                         />
@@ -251,18 +222,16 @@ class EthernetPortView extends Component<EthernetPortViewProps> {
                         <MACAddressEntry
                             label="Destination MAC address to set"
                             fpEndpoints={[
-                                this.props.endpointConfiguration.destinationMACAddressEndpoint
-                                    .highOrder,
-                                this.props.endpointConfiguration.destinationMACAddressEndpoint
-                                    .lowOrder
+                                this.props.configuration.destinationMACAddress.highOrder,
+                                this.props.configuration.destinationMACAddress.lowOrder
                             ]}
                             numeralSystem={NumeralSystem.Hexadecimal}
                         />
                         <MACAddressEntry
                             label="Source Mac Address to set"
                             fpEndpoints={[
-                                this.props.endpointConfiguration.sourceMACAddressEndpoint.highOrder,
-                                this.props.endpointConfiguration.sourceMACAddressEndpoint.lowOrder
+                                this.props.configuration.sourceMACAddress.highOrder,
+                                this.props.configuration.sourceMACAddress.lowOrder
                             ]}
                             numeralSystem={NumeralSystem.Hexadecimal}
                         />
@@ -274,12 +243,12 @@ class EthernetPortView extends Component<EthernetPortViewProps> {
                     <FrontPanelPushButton
                         label="Set Port"
                         tooltip="Set Port"
-                        fpEndpoint={this.props.endpointConfiguration.settingsEndpoint.setPort}
+                        fpEndpoint={this.props.configuration.settings.setPort}
                     />
                     <FrontPanelPushButton
                         label="Reset Port"
                         tooltip="Reset Port"
-                        fpEndpoint={this.props.endpointConfiguration.resetEndpoint.port}
+                        fpEndpoint={this.props.configuration.reset.port}
                     />
                 </div>
             </div>
