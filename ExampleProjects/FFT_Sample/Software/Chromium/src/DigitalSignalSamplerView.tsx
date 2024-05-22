@@ -143,12 +143,14 @@ class DigitalSignalSamplerView extends Component<
                 {
                     label: "Channel 1",
                     data: channels[0],
+                    pointRadius: 0,
                     borderColor: "rgb(255, 99, 132)",
                     backgroundColor: "rgba(255, 99, 132, 0.5)"
                 },
                 {
                     label: "Channel 2",
                     data: channels[1],
+                    pointRadius: 0,
                     borderColor: "rgb(53, 162, 235)",
                     backgroundColor: "rgba(53, 162, 235, 0.5)"
                 }
