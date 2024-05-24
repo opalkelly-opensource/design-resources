@@ -108,6 +108,17 @@ szgSmartVIOConfig svio = {
 			0,    // range_count
 			{ {0, 0}, {0,0}, {0,0}, {0,0} } // ranges
 		}, {
+			0x36, // i2c_addr
+			0,    // present
+			1,    // group
+			0,    // req_ver_major
+			0,    // req_ver_minor
+			0x00, // attr
+			SZG_ATTR_TXR4, // port_attr
+			1,    // doublewide_mate
+			0,    // range_count
+			{ {0, 0}, {0,0}, {0,0}, {0,0} } // ranges
+		}, {
 			// Group 3(SUPPLY_67)(svio3)
 			0x00, // i2c_addr
 			1,    // present
@@ -877,7 +888,7 @@ void printHelp (char *progname)
 	printf("\n");
 	printf("  Exactly one of the following options must be specified:\n");
 	printf("    -r - run smartVIO, queries attached MCU's and sets voltages accordingly\n");
-	printf("    -s - set VIO voltages to the values provided by -1, -2, -3, -4 options (Can only set one at a time)\n");
+	printf("    -s - set VCCO voltages to the values provided by -1, -2, -3, -4 options (Can only set one at a time)\n");
 	printf("    -j - print out a JSON object with DNA and SmartVIO information\n");
 	printf("    -h - print this help text\n");
 	printf("    -w <filename> - write a binary DNA to a peripheral, takes the DNA filename\n");
@@ -886,17 +897,17 @@ void printHelp (char *progname)
 	printf("                    DNA filename as an argument\n");
 	printf("\n");
 	printf("  The following options may be used in conjunction with the above options:\n");
-	printf("    -1 <vio1> - Sets the voltage for VIO1(VCCO_87_88)\n");
-	printf("    -2 <vio2> - Sets the voltage for VIO2(VCCO_68)\n");
-	printf("    -3 <vio3> - Sets the voltage for VIO3(VCCO_67)\n");
-	printf("    -4 <vio4> - Sets the voltage for VIO4(VCCO_28)\n");
-	printf("                  *<vioX> must be specified as numbers in 10's of mV\n");
+	printf("    -1 <voltage in mV> - Sets the voltage for VCCO_87_88\n");
+	printf("    -2 <voltage in mV> - Sets the voltage for VCCO_68\n");
+	printf("    -3 <voltage in mV> - Sets the voltage for VCCO_67\n");
+	printf("    -4 <voltage in mV> - Sets the voltage for VCCO_28\n");
+	printf("                  *<voltage in mV> must be specified as numbers in 10's of mV\n");
 	printf("                  *You may only set one voltage at a time\n");
 	printf("                  *The valid discrete voltage supplies provided by the power supply on the ECM1900 are:\n");
-	printf("                  VIO1: 120,  125,  150,  180,  250, 330 (Limited by HD bank range 1.2V to 3.3V)\n");
-	printf("                  VIO2: 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
-	printf("                  VIO3: 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
-	printf("                  VIO4: 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
+	printf("                  VCCO_87_88: 120,  125,  150,  180,  250, 330 (Limited by HD bank range 1.2V to 3.3V)\n");
+	printf("                  VCCO_68: 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
+	printf("                  VCCO_67: 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
+	printf("                  VCCO_28: 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
 	printf("    -p <number> - Specifies the peripheral number for the -w or -d options\n");
 	printf("\n");
 	printf("  Examples:\n");
@@ -904,7 +915,7 @@ void printHelp (char *progname)
 	printf("      %s -r /dev/i2c-0\n", progname);
 	printf("    Dump DNA from the MCU on Port 1:\n");
 	printf("      %s -d dna_file.bin -p 1 /dev/i2c-0\n", progname);
-	printf("    Set VIO1 to 3.3V:\n");
+	printf("    Set VCCO_87_88 to 3.3V:\n");
 	printf("      %s -s -1 330 /dev/i2c-0\n", progname);
 }
 
@@ -931,7 +942,7 @@ int main (int argc, char *argv[])
 	int periph_num = 0;
 	int curr_opt;
 	json json_handler;
-	uint16_t peripheral_address[] = {0x30, 0x31, 0x32, 0x33, 0x34, 0x35};
+	uint16_t peripheral_address[] = {0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36};
 	bool takeOne = true;
 	int rail;
 	int voltage;
