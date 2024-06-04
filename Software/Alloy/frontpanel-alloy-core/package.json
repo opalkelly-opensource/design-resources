@@ -1,13 +1,13 @@
 {
-  "name": "@opalkelly/frontpanel-chromium-core",
+  "name": "@opalkelly/frontpanel-alloy-core",
   "type": "module",
   "version": "0.1.0",
-  "description": "Core Library for OpalKelly FrontPanel Chromium",
+  "description": "Core Library for OpalKelly FrontPanel Alloy",
   "keywords": [
     "FPGA",
     "FrontPanel",
     "OpalKelly",
-    "Chromium"
+    "Alloy"
   ],
   "author": "Opal Kelly <support@opalkelly.com>",
   "license": "MIT",
