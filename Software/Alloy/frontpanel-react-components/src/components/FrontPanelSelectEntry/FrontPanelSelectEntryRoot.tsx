@@ -15,7 +15,7 @@ import { FrontPanelContext } from "../../contexts";
 
 import { CalculateBitLength } from "../../core";
 
-import { IFrontPanel, WIREIN_ADDRESS_RANGE } from "@opalkellytech/frontpanel-chromium-core";
+import { IFrontPanel, WIREIN_ADDRESS_RANGE } from "@opalkelly/frontpanel-alloy-core";
 
 interface FrontPanelSelectEntryRootCombinedProps
     extends React.ComponentPropsWithoutRef<typeof SelectEntry.Root>,

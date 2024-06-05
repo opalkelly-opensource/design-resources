@@ -11,7 +11,7 @@ import type { Decorator } from "@storybook/react";
 
 import { FrontPanel } from "../../components";
 
-import { MockFrontPanel, ByteCount } from "@opalkellytech/frontpanel-chromium-core";
+import { MockFrontPanel, ByteCount } from "@opalkelly/frontpanel-alloy-core";
 
 const mockDevice: MockFrontPanel = new MockFrontPanel(32, 32);
 

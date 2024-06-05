@@ -7,7 +7,7 @@
 
 import React from "react";
 
-import { IFrontPanel, WireValue } from "@opalkellytech/frontpanel-chromium-core";
+import { IFrontPanel, WireValue } from "@opalkelly/frontpanel-alloy-core";
 
 import { ToggleState } from "../../core";
 

@@ -7,7 +7,7 @@
 
 import React from "react";
 
-import { FrontPanelPeriodicUpdateTimer, WorkQueue } from "@opalkellytech/frontpanel-chromium-core";
+import { FrontPanelPeriodicUpdateTimer, WorkQueue } from "@opalkelly/frontpanel-alloy-core";
 
 import { FrontPanelProps } from "./FrontPanel.props";
 

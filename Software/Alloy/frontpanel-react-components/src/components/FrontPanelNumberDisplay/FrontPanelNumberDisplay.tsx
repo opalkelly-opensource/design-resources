@@ -17,7 +17,7 @@ import { FrontPanelContext } from "../../contexts";
 
 import { CalculateBitLength } from "../../core";
 
-import { IFrontPanel, WIREOUT_ADDRESS_RANGE } from "@opalkellytech/frontpanel-chromium-core";
+import { IFrontPanel, WIREOUT_ADDRESS_RANGE } from "@opalkelly/frontpanel-alloy-core";
 
 type FrontPanelNumberDisplayElement = React.ElementRef<typeof NumberDisplay>;
 

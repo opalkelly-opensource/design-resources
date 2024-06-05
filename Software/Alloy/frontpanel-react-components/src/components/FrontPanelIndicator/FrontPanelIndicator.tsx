@@ -13,7 +13,7 @@ import FrontPanelIndicatorProps from "./FrontPanelIndicator.props";
 
 import { FrontPanelContext } from "../../contexts";
 
-import { IFrontPanel } from "@opalkellytech/frontpanel-chromium-core";
+import { IFrontPanel } from "@opalkelly/frontpanel-alloy-core";
 
 type FrontPanelIndicatorElement = React.ElementRef<typeof Indicator>;
 

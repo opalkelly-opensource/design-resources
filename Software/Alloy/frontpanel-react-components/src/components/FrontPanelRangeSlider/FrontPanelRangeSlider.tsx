@@ -15,7 +15,7 @@ import { FrontPanelContext } from "../../contexts";
 
 import { CalculateBitLength } from "../../core";
 
-import { IFrontPanel } from "@opalkellytech/frontpanel-chromium-core";
+import { IFrontPanel } from "@opalkelly/frontpanel-alloy-core";
 
 type FrontPanelRangeSliderElement = React.ElementRef<typeof RangeSlider>;
 

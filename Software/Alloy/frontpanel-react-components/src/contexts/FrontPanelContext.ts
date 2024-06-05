@@ -7,11 +7,7 @@
 
 import React from "react";
 
-import {
-    IFrontPanel,
-    IFrontPanelEventSource,
-    WorkQueue
-} from "@opalkellytech/frontpanel-chromium-core";
+import { IFrontPanel, IFrontPanelEventSource, WorkQueue } from "@opalkelly/frontpanel-alloy-core";
 
 export type FrontPanelContextValue = {
     device: IFrontPanel;

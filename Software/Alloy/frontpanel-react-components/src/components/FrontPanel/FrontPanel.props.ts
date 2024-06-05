@@ -5,11 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {
-    IFrontPanel,
-    IFrontPanelEventSource,
-    WorkQueue
-} from "@opalkellytech/frontpanel-chromium-core";
+import { IFrontPanel, IFrontPanelEventSource, WorkQueue } from "@opalkelly/frontpanel-alloy-core";
 
 interface FrontPanelProps extends React.PropsWithChildren<NonNullable<unknown>> {
     /**

@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { BitCount } from "@opalkellytech/frontpanel-chromium-core";
+import { BitCount } from "@opalkelly/frontpanel-alloy-core";
 
 export interface EndpointAddressProps {
     epAddress: number;

@@ -16,7 +16,7 @@ import FrontPanelSelectEntry from "./FrontPanelSelectEntry";
 
 import { FrontPanelContext } from "../../contexts";
 
-import { WireValue } from "@opalkellytech/frontpanel-chromium-core";
+import { WireValue } from "@opalkelly/frontpanel-alloy-core";
 
 // Configure Story metadata
 const meta = {

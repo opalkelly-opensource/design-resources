@@ -6,7 +6,7 @@
     "FPGA",
     "FrontPanel",
     "OpalKelly",
-    "Chromium",
+    "Alloy",
     "React",
     "Component",
     "Library"
@@ -53,7 +53,7 @@
     "typescript": "^5.3.3"
   },
   "peerDependencies": {
-    "@opalkelly/frontpanel-chromium-core": "^0.1.0",
+    "@opalkelly/frontpanel-alloy-core": "^0.1.0",
     "@radix-ui/react-scroll-area": "^1.0.5",
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slider": "^1.1.2",

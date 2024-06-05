@@ -17,7 +17,7 @@ import { FrontPanelContext } from "../../contexts";
 
 import { CalculateBitLength } from "../../core";
 
-import { IFrontPanel, WIREIN_ADDRESS_RANGE } from "@opalkellytech/frontpanel-chromium-core";
+import { IFrontPanel, WIREIN_ADDRESS_RANGE } from "@opalkelly/frontpanel-alloy-core";
 
 type FrontPanelNumberEntryElement = React.ElementRef<typeof NumberEntry>;
 
