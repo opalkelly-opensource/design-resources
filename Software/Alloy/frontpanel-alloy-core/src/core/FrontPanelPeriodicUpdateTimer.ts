@@ -42,12 +42,22 @@ class FrontPanelPeriodicUpdateTimer implements IFrontPanelEventSource {
     /**
      * The period in milliseconds between updates.
      */
-    private _UpdatePeriodMilliseconds;
+    private _UpdatePeriodMilliseconds: number;
+
+    /**
+     * Flag indicating whether the timer loop is currently running.
+     */
+    private _IsRunning: boolean = false;
 
     /**
      * Flag indicating that the timer loop should exit on the next iteration.
      */
-    private _IsStopPending = false;
+    private _IsStopPending: boolean = false;
+
+    /**
+     * Function that cancels the timeout used to wait for the next update period.
+     */
+    private _CancelTimeout?: () => void;
 
     /**
      * Event that notifies subscribers when WireOut values change.
@@ -78,13 +88,19 @@ class FrontPanelPeriodicUpdateTimer implements IFrontPanelEventSource {
      * Starts the update timer loop if it is not already running.
      * @returns true if the timer loop was successfully started; false if the timer loop was already started.
      */
-    public Start(): boolean {
+    public async Start(): Promise<boolean> {
         let retval: boolean;
 
-        if (this._UpdateTimer === null) {
+        // Wait for the timer to stop if stop is pending
+        if (this._IsStopPending) {
+            await this._UpdateTimer;
+        }
+
+        // Start the timer loop if it is currently stopped
+        if (!this._IsRunning) {
             this._UpdateTimer = this.UpdateTimerLoop();
 
-            retval = true;
+            retval = this._IsRunning;
         } else {
             retval = false; //ERROR: Timer already started
         }
@@ -100,10 +116,17 @@ class FrontPanelPeriodicUpdateTimer implements IFrontPanelEventSource {
         if (!this._IsStopPending) {
             this._IsStopPending = true;
 
-            await this._UpdateTimer;
+            if (this._CancelTimeout) {
+                this._CancelTimeout();
+            }
+
+            if (this._UpdateTimer !== null) {
+                await this._UpdateTimer;
+
+                this._UpdateTimer = null;
+            }
 
             this._IsStopPending = false;
-            this._UpdateTimer = null;
         }
     }
 
@@ -113,22 +136,37 @@ class FrontPanelPeriodicUpdateTimer implements IFrontPanelEventSource {
      * @returns A promise that resolves when the timer loop has exited.
      */
     private async UpdateTimerLoop(): Promise<void> {
+        this._IsRunning = true;
+
         while (!this._IsStopPending) {
             const start: number = performance.now();
 
             // Update WireOuts and TriggerOuts and dispatch events
-            await this.UpdateWireOuts();
-            await this.UpdateTriggerOuts();
+            const wireOutUpdate = this.UpdateWireOuts();
+            const triggerOutUpdate = this.UpdateTriggerOuts();
+
+            await Promise.all([wireOutUpdate, triggerOutUpdate]);
 
             const elapsed: number = performance.now() - start;
 
-            // Wait until the update period has elapsed
-            const delay: number = this._UpdatePeriodMilliseconds - elapsed;
+            // NOTE: Stop pending can change while waiting for the update promises to
+            // resolve so we check it again before waiting for the next update period.
+            if (!this._IsStopPending) {
+                // Wait until the update period has elapsed
+                const delay: number = this._UpdatePeriodMilliseconds - elapsed;
 
-            await new Promise((resolve) => {
-                setTimeout(resolve, delay);
-            });
+                await new Promise<void>((resolve) => {
+                    const timeoutId = setTimeout(resolve, delay);
+
+                    this._CancelTimeout = () => {
+                        clearTimeout(timeoutId);
+                        resolve();
+                    };
+                });
+            }
         }
+
+        this._IsRunning = false;
     }
 
     /**
