@@ -1,0 +1,94 @@
+/**
+ * Copyright (c) 2024 Opal Kelly Incorporated
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+.okSelectEntryContent {
+    /* Layout */
+    width: var(--radix-select-trigger-width);
+    max-height: var(--radix-select-content-available-height);
+    display: flex;
+    padding: 10px 18px;
+    flex-direction: column;
+    overflow: hidden;
+    justify-content: center;
+    align-items: stretch;
+
+    /* Style */
+    border-radius: 4px;
+    border: 1px solid var(--Gray-2, #d0d7df);
+    background: var(--Light, #fff);
+    box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.24);
+
+    .okSelectEntryContentInner {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* ScrollArea Root Style */
+    .okScrollArea {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* ScrollArea Viewport Style */
+    .okScrollAreaViewport {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        gap: 10px;
+
+        /* Stop Chrome back/forward two-finger swipe */
+        overscroll-behavior-x: contain;
+
+        &:where(:focus-visible) + :where(.rt-ScrollAreaViewportFocusRing) {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            outline: 2px solid var(--focus-8);
+            outline-offset: -2px;
+        }
+    }
+
+    /* ScrollArea Scrollbar Style */
+    .okScrollAreaScrollbar {
+        display: flex;
+        /* Ensures no selection */
+        user-select: none;
+        /* Disable browser handling of all panning and zooming gestures on touch devices */
+        touch-action: none;
+
+        &:where([data-orientation="vertical"]) {
+            flex-direction: column;
+            width: 4px;
+        }
+        &:where([data-orientation="horizontal"]) {
+            flex-direction: row;
+            height: 4px;
+        }
+    }
+
+    /* ScrollArea Thumb Style */
+    .okScrollAreaThumb {
+        position: relative;
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            min-width: var(--space-4);
+            min-height: var(--space-4);
+        }
+    }
+}

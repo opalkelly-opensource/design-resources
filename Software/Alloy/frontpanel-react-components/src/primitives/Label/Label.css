@@ -1,0 +1,49 @@
+/**
+ * Copyright (c) 2024 Opal Kelly Incorporated
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+.okLabel {
+    /* Layout */
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+
+    /* Text Style */
+    .okLabelText {
+        /* Typography */
+        color: var(--Dark, #343434);
+        font-family: Inter, "Nunito Sans", sans-serif, ui-sans-serif;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 12px; /* 100% */
+    }
+
+    /* Label Position Left Top*/
+    &:where(.ok-pos-left-top) {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    /* Label Position Left Bottom*/
+    &:where(.ok-pos-left-bottom) {
+        flex-direction: column-reverse;
+        align-items: flex-start;
+    }
+
+    /* Label Position Right Top*/
+    &:where(.ok-pos-right-top) {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    /* Label Position Right Bottom*/
+    &:where(.ok-pos-right-bottom) {
+        flex-direction: column-reverse;
+        align-items: flex-end;
+    }
+}

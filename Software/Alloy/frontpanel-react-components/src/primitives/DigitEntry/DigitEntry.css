@@ -1,0 +1,120 @@
+/**
+ * Copyright (c) 2024 Opal Kelly Incorporated
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+.okDigitEntry {
+    /* Layout */
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1px;
+
+    /* Content Style */
+    .okDigitEntryContent {
+        /* Layout */
+        display: flex;
+        padding: var(--spacing-xxs, 2px);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        /* Style */
+        border-radius: 1px;
+
+        /* Typography */
+        color: var(--Dark, #343434);
+        text-align: center;
+        font-family: Monaco;
+        font-size: var(--digit-font-size, 12px);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--digit-line-height, 12px); /* 200% */
+        letter-spacing: 1.26px;
+        text-transform: uppercase;
+    }
+
+    /* Increment Indicator Style */
+    .okDigitEntryIncrementIndicator {
+        visibility: hidden;
+    }
+
+    /* Decrement Indicator Style */
+    .okDigitEntryDecrementIndicator {
+        visibility: hidden;
+    }
+
+    /* Size 1 */
+    &:where(.ok-r-size-1) {
+        --digit-font-size: 12px;
+        --digit-line-height: 12px;
+    }
+
+    /* Sizes 2 */
+    &:where(.ok-r-size-2) {
+        --digit-font-size: 14px;
+        --digit-line-height: 14px;
+    }
+
+    /* Sizes 3 */
+    &:where(.ok-r-size-3) {
+        --digit-font-size: 20px;
+        --digit-line-height: 20px;
+    }
+}
+
+div.okDigitEntry:focus {
+    /* Layout */
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1px;
+
+    /* Style */
+    outline: none;
+    overscroll-behavior: none;
+
+    /* Content Style */
+    .okDigitEntryContent {
+        /* Layout */
+        display: flex;
+        padding: var(--spacing-xxs, 2px);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        /* Style */
+        border-radius: 1px;
+        background: var(--brand-12, #44bd84);
+
+        /* Typography */
+        color: var(--Light, #fff);
+        text-align: center;
+        font-family: Monaco;
+        font-size: var(--digit-font-size, 12px);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--digit-line-height, 12px); /* 200% */
+        letter-spacing: 1.26px;
+    }
+
+    .okDigitEntryIncrementIndicator {
+        visibility: visible;
+    }
+
+    .okDigitEntryDecrementIndicator {
+        visibility: visible;
+    }
+
+    .okDigitEntryIncrementIndicator[data-enabled="false"] {
+        opacity: 0.25;
+    }
+
+    .okDigitEntryDecrementIndicator[data-enabled="false"] {
+        opacity: 0.25;
+    }
+}

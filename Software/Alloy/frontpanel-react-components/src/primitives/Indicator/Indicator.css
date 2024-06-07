@@ -1,0 +1,66 @@
+/**
+ * Copyright (c) 2024 Opal Kelly Incorporated
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+.okIndicator {
+    /* Layout */
+    display: inline-flex;
+    padding: var(--indicator-padding, 6px 12px);
+    justify-content: flex-start;
+    align-items: baseline;
+    gap: 4px;
+
+    /* Style */
+    border-radius: 4px;
+    border: 1px solid var(--Gray-2, #d0d7df);
+    background: var(--Light, #fff);
+
+    /* Indicator Icon Style */
+    svg.okIndicatorIcon {
+        width: var(--indicator-icon-width, 9px);
+        height: var(--indicator-icon-height, 9px);
+    }
+
+    /* Label Style */
+    .okIndicatorLabel {
+        /* Typography */
+        color: var(--Dark, #343434);
+        text-align: center;
+        /* TODO: Determine how to get Inter font */
+        font-family: Inter, "Nunito Sans", sans-serif, ui-sans-serif;
+        font-size: var(--indicator-font-size, 12px);
+        font-style: normal;
+        font-weight: 500;
+        line-height: var(--indicator-line-height, 12px); /* 100% */
+    }
+
+    /* Size 1 */
+    &:where(.ok-r-size-1) {
+        --indicator-padding: 6px 12px;
+        --indicator-font-size: 12px;
+        --indicator-line-height: 12px;
+        --indicator-icon-width: 9px;
+        --indicator-icon-height: 9px;
+    }
+
+    /* Sizes 2 */
+    &:where(.ok-r-size-2) {
+        --indicator-padding: 10px 18px;
+        --indicator-font-size: 14px;
+        --indicator-line-height: 14px;
+        --indicator-icon-width: 10px;
+        --indicator-icon-height: 10px;
+    }
+
+    /* Sizes 3 */
+    &:where(.ok-r-size-3) {
+        --indicator-padding: 18px 22px;
+        --indicator-font-size: 20px;
+        --indicator-line-height: 20px;
+        --indicator-icon-width: 15px;
+        --indicator-icon-height: 15px;
+    }
+}

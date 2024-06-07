@@ -1,0 +1,60 @@
+/**
+ * Copyright (c) 2024 Opal Kelly Incorporated
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+.okButton {
+    /* Layout */
+    display: inline-flex;
+    padding: var(--button-padding, 6px 12px);
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
+    /* Style */
+    border-width: 0px;
+    border-radius: 4px;
+    background: var(--brand-12, #44bd84);
+
+    /* Typography */
+    color: var(--Base-White, #fff);
+    text-align: center;
+    font-family: Inter, "Nunito Sans", sans-serif, ui-sans-serif;
+    font-size: var(--button-font-size, 12px);
+    font-style: normal;
+    font-weight: 600;
+    line-height: var(--button-line-height, 12px); /* 100% */
+
+    /* State Pressed */
+    &:is(:active) {
+        background: #329466;
+    }
+
+    /* State Disabled */
+    &:is(:disabled) {
+        background: var(--Gray-2, #d0d7df);
+    }
+
+    /* Size 1 */
+    &:where(.ok-r-size-1) {
+        --button-padding: 6px 12px;
+        --button-font-size: 12px;
+        --button-line-height: 12px;
+    }
+
+    /* Sizes 2*/
+    &:where(.ok-r-size-2) {
+        --button-padding: 10px 18px;
+        --button-font-size: 14px;
+        --button-line-height: 14px;
+    }
+
+    /* Sizes 3*/
+    &:where(.ok-r-size-3) {
+        --button-padding: 18px 22px;
+        --button-font-size: 20px;
+        --button-line-height: 20px;
+    }
+}

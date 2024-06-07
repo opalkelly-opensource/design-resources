@@ -1,0 +1,71 @@
+/**
+ * Copyright (c) 2024 Opal Kelly Incorporated
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+.okNumberEntry {
+    /* Layout */
+    display: flex;
+    padding: var(--number-entry-padding, 6px);
+    justify-content: flex-end;
+    align-items: center;
+
+    /* Style */
+    border-radius: 4px;
+    border: 1px solid var(--brand-12, #44bd84);
+    background: var(--Light, #fff);
+
+    /* Content Style */
+    .okNumberEntryContent {
+        display: flex;
+        height: auto; /*32px;*/
+        justify-content: flex-end;
+        align-items: center;
+        gap: var(--spacing-0, 0px);
+        align-self: stretch;
+    }
+
+    /* Text Style */
+    .okNumberEntryText {
+        /* Typography */
+        color: var(--Dark, #343434);
+        text-align: center;
+        font-family: Monaco;
+        font-size: var(--number-entry-font-size, 12px);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--number-entry-line-height, 12px); /* 100% */
+        letter-spacing: 1.26px;
+    }
+
+    /* Size 1 */
+    &:where(.ok-r-size-1) {
+        --number-entry-padding: 1px 6px;
+        --number-entry-font-size: 12px;
+        --number-entry-line-height: 12px;
+    }
+
+    /* Sizes 2 */
+    &:where(.ok-r-size-2) {
+        --number-entry-padding: 1px 10px;
+        --number-entry-font-size: 14px;
+        --number-entry-line-height: 14px;
+    }
+
+    /* Sizes 3 */
+    &:where(.ok-r-size-3) {
+        --number-entry-padding: 1px 18px;
+        --number-entry-font-size: 20px;
+        --number-entry-line-height: 20px;
+    }
+}
+
+.okNumberEntry[data-disabled="true"] {
+    border: 1px solid var(--Gray-2, #d0d7df);
+    opacity: 0.5;
+    background: var(--Gray-3, #e7ebef);
+
+    pointer-events: none;
+}

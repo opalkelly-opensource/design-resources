@@ -1,0 +1,81 @@
+{
+  "name": "@opalkelly/frontpanel-react-components",
+  "version": "0.1.0",
+  "description": "React Component Library for OpalKelly FrontPanel",
+  "keywords": [
+    "FPGA",
+    "FrontPanel",
+    "OpalKelly",
+    "Alloy",
+    "React",
+    "Component",
+    "Library"
+  ],
+  "author": "Opal Kelly <support@opalkelly.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/opalkelly-opensource/design-resources.git"
+  },
+  "homepage": "https://opalkelly.com/",
+  "bugs": {
+    "url": "https://forums.opalkelly.com/"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-eslint": "^9.0.5",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.5",
+    "@storybook/addon-essentials": "^7.6.6",
+    "@storybook/addon-interactions": "^7.6.6",
+    "@storybook/addon-links": "^7.6.6",
+    "@storybook/blocks": "^7.6.6",
+    "@storybook/manager-api": "^8.0.8",
+    "@storybook/react": "^7.6.6",
+    "@storybook/react-webpack5": "^7.6.6",
+    "@storybook/test": "^7.6.6",
+    "@storybook/theming": "^8.0.8",
+    "@types/react": "^18.2.45",
+    "@typescript-eslint/eslint-plugin": "^7.1.1",
+    "@typescript-eslint/parser": "^7.1.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.0",
+    "prettier": "^3.2.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "rollup": "^4.9.1",
+    "rollup-plugin-dts": "^6.1.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
+    "storybook": "^7.6.6",
+    "tslib": "^2.6.2",
+    "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "@opalkelly/frontpanel-alloy-core": "^0.1.0",
+    "@radix-ui/react-scroll-area": "^1.0.5",
+    "@radix-ui/react-select": "^2.0.0",
+    "@radix-ui/react-slider": "^1.1.2",
+    "@radix-ui/react-tooltip": "^1.0.7",
+    "classnames": "^2.3.2",
+    "react": "^18.2.0"
+  },
+  "scripts": {
+    "rollup": "rollup -c",
+    "format-check": "prettier --check ./src/**",
+    "lint": "eslint ./src/**/*.{ts,tsx}",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "storybook-docs": "storybook dev --docs",
+    "build-storybook-docs": "storybook build --docs"
+  },
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "types": "dist/index.d.ts"
+}
