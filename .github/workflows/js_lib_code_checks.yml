@@ -6,22 +6,22 @@ on:
     branches:
       - main
     paths:
-      - 'Software/Chromium/frontpanel-chromium-core/.prettierrc'
-      - 'Software/Chromium/frontpanel-chromium-core/.eslintrc.json'
-      - 'Software/Chromium/frontpanel-chromium-core/src/**'
-      - 'Software/Chromium/frontpanel-react-components/.prettierrc'
-      - 'Software/Chromium/frontpanel-react-components/.eslintrc.json'
-      - 'Software/Chromium/frontpanel-react-components/src/**'
+      - 'Software/Alloy/frontpanel-alloy-core/.prettierrc'
+      - 'Software/Alloy/frontpanel-alloy-core/.eslintrc.json'
+      - 'Software/Alloy/frontpanel-alloy-core/src/**'
+      - 'Software/Alloy/frontpanel-react-components/.prettierrc'
+      - 'Software/Alloy/frontpanel-react-components/.eslintrc.json'
+      - 'Software/Alloy/frontpanel-react-components/src/**'
   pull_request:
     branches:
       - main
     paths:
-      - 'Software/Chromium/frontpanel-chromium-core/.prettierrc'
-      - 'Software/Chromium/frontpanel-chromium-core/.eslintrc.json'
-      - 'Software/Chromium/frontpanel-chromium-core/src/**'
-      - 'Software/Chromium/frontpanel-react-components/.prettierrc'
-      - 'Software/Chromium/frontpanel-react-components/.eslintrc.json'
-      - 'Software/Chromium/frontpanel-react-components/src/**'
+      - 'Software/Alloy/frontpanel-alloy-core/.prettierrc'
+      - 'Software/Alloy/frontpanel-alloy-core/.eslintrc.json'
+      - 'Software/Alloy/frontpanel-alloy-core/src/**'
+      - 'Software/Alloy/frontpanel-react-components/.prettierrc'
+      - 'Software/Alloy/frontpanel-react-components/.eslintrc.json'
+      - 'Software/Alloy/frontpanel-react-components/src/**'
 
 permissions:
   contents: read
@@ -44,8 +44,8 @@ jobs:
         run: npm install -g prettier
 
       - name: Format check
-        working-directory: Software/Chromium
-        run: npx prettier --check './frontpanel-chromium-core/src/**' './frontpanel-react-components/src/**'
+        working-directory: Software/Alloy
+        run: npx prettier --check './frontpanel-alloy-core/src/**' './frontpanel-react-components/src/**'
 
   lint-check-core:
     runs-on: ubuntu-latest
@@ -61,14 +61,13 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        working-directory: Software/Chromium/frontpanel-chromium-core
+        working-directory: Software/Alloy/frontpanel-alloy-core
         run: npm ci --include=dev
 
       - name: Lint check
-        working-directory: Software/Chromium/frontpanel-chromium-core
+        working-directory: Software/Alloy/frontpanel-alloy-core
         run: npm run lint
 
-  # This job is commented out until a method to install the frontpanel-chromium core dependency is found
   lint-check-react-components:
     runs-on: ubuntu-latest
     name: Lint Check React Components
@@ -83,9 +82,9 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        working-directory: Software/Chromium/frontpanel-react-components
+        working-directory: Software/Alloy/frontpanel-react-components
         run: npm ci --include=dev
 
       - name: Lint check
-        working-directory: Software/Chromium/frontpanel-react-components
+        working-directory: Software/Alloy/frontpanel-react-components
         run: npm run lint

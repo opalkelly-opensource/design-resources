@@ -6,18 +6,18 @@ on:
     branches:
       - main
     paths:
-      - 'ExampleProjects/EthernetExampleDesign/Software/Chromium/.prettierrc'
-      - 'ExampleProjects/EthernetExampleDesign/Software/Chromium/src/**'
-      - 'ExampleProjects/FFT_Sample/Software/Chromium/.prettierrc'
-      - 'ExampleProjects/FFT_Sample/Software/Chromium/src/**'
+      - 'ExampleProjects/EthernetExampleDesign/Software/Alloy/.prettierrc'
+      - 'ExampleProjects/EthernetExampleDesign/Software/Alloy/src/**'
+      - 'ExampleProjects/FFT_Sample/Software/Alloy/.prettierrc'
+      - 'ExampleProjects/FFT_Sample/Software/Alloy/src/**'
   pull_request:
     branches:
       - main
     paths:
-      - 'ExampleProjects/EthernetExampleDesign/Software/Chromium/.prettierrc'
-      - 'ExampleProjects/EthernetExampleDesign/Software/Chromium/src/**'
-      - 'ExampleProjects/FFT_Sample/Software/Chromium/.prettierrc'
-      - 'ExampleProjects/FFT_Sample/Software/Chromium/src/**'
+      - 'ExampleProjects/EthernetExampleDesign/Software/Alloy/.prettierrc'
+      - 'ExampleProjects/EthernetExampleDesign/Software/Alloy/src/**'
+      - 'ExampleProjects/FFT_Sample/Software/Alloy/.prettierrc'
+      - 'ExampleProjects/FFT_Sample/Software/Alloy/src/**'
 
 permissions:
   contents: read
@@ -40,9 +40,9 @@ jobs:
         run: npm install -g prettier
 
       - name: Format check - Ethernet React App
-        working-directory: ExampleProjects/EthernetExampleDesign/Software/Chromium
+        working-directory: ExampleProjects/EthernetExampleDesign/Software/Alloy
         run: npx prettier --check './src/**'
 
       - name: Format check - FFT React App
-        working-directory: ExampleProjects/FFT_Sample/Software/Chromium
+        working-directory: ExampleProjects/FFT_Sample/Software/Alloy
         run: npx prettier --check './src/**'
