@@ -1,0 +1,90 @@
+# This workflow does some quick checks.
+name: Javascript Library Code Checks
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Software/Alloy/frontpanel-alloy-core/.prettierrc'
+      - 'Software/Alloy/frontpanel-alloy-core/.eslintrc.json'
+      - 'Software/Alloy/frontpanel-alloy-core/src/**'
+      - 'Software/Alloy/frontpanel-react-components/.prettierrc'
+      - 'Software/Alloy/frontpanel-react-components/.eslintrc.json'
+      - 'Software/Alloy/frontpanel-react-components/src/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'Software/Alloy/frontpanel-alloy-core/.prettierrc'
+      - 'Software/Alloy/frontpanel-alloy-core/.eslintrc.json'
+      - 'Software/Alloy/frontpanel-alloy-core/src/**'
+      - 'Software/Alloy/frontpanel-react-components/.prettierrc'
+      - 'Software/Alloy/frontpanel-react-components/.eslintrc.json'
+      - 'Software/Alloy/frontpanel-react-components/src/**'
+
+permissions:
+  contents: read
+
+jobs:
+  format-check:
+    runs-on: ubuntu-latest
+    name: Format Check
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: npm install -g prettier
+
+      - name: Format check
+        working-directory: Software/Alloy
+        run: npx prettier --check './frontpanel-alloy-core/src/**' './frontpanel-react-components/src/**'
+
+  lint-check-core:
+    runs-on: ubuntu-latest
+    name: Lint Check Core Library
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: Software/Alloy/frontpanel-alloy-core
+        run: npm ci --include=dev
+
+      - name: Lint check
+        working-directory: Software/Alloy/frontpanel-alloy-core
+        run: npm run lint
+
+  lint-check-react-components:
+    runs-on: ubuntu-latest
+    name: Lint Check React Components
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: Software/Alloy/frontpanel-react-components
+        run: npm ci --include=dev
+
+      - name: Lint check
+        working-directory: Software/Alloy/frontpanel-react-components
+        run: npm run lint

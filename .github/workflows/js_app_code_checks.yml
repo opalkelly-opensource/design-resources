@@ -1,0 +1,48 @@
+# This workflow does some quick checks.
+name: Javascript Application Code Checks
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'ExampleProjects/EthernetExampleDesign/Software/Alloy/.prettierrc'
+      - 'ExampleProjects/EthernetExampleDesign/Software/Alloy/src/**'
+      - 'ExampleProjects/FFT_Sample/Software/Alloy/.prettierrc'
+      - 'ExampleProjects/FFT_Sample/Software/Alloy/src/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'ExampleProjects/EthernetExampleDesign/Software/Alloy/.prettierrc'
+      - 'ExampleProjects/EthernetExampleDesign/Software/Alloy/src/**'
+      - 'ExampleProjects/FFT_Sample/Software/Alloy/.prettierrc'
+      - 'ExampleProjects/FFT_Sample/Software/Alloy/src/**'
+
+permissions:
+  contents: read
+
+jobs:
+  format-check:
+    runs-on: ubuntu-latest
+    name: Format Check
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: npm install -g prettier
+
+      - name: Format check - Ethernet React App
+        working-directory: ExampleProjects/EthernetExampleDesign/Software/Alloy
+        run: npx prettier --check './src/**'
+
+      - name: Format check - FFT React App
+        working-directory: ExampleProjects/FFT_Sample/Software/Alloy
+        run: npx prettier --check './src/**'
