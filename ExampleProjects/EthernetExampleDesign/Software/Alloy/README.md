@@ -1,4 +1,4 @@
-# FrontPanel Chromium Ethernet Example
+# FrontPanel Alloy Ethernet Example
 
 ## Prerequisites
 

@@ -1,6 +1,6 @@
 {
-  "short_name": "Ethernet FPCr App",
-  "name": "FrontPanel Chromium Ethernet Example",
+  "short_name": "Ethernet FP-Alloy App",
+  "name": "FrontPanel Alloy Ethernet Example",
   "icons": [
     {
       "src": "favicon.ico",
