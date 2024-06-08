@@ -2,7 +2,7 @@ import React from "react";
 
 import "./App.css";
 
-import { Application } from "@opalkellytech/frontpanel-react-components";
+import { Application } from "@opalkelly/frontpanel-react-components";
 
 import FrontPanel from "./FrontPanel";
 

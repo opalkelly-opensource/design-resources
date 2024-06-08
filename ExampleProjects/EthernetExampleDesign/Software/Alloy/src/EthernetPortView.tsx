@@ -14,7 +14,7 @@ import {
     FrontPanelIndicator,
     FrontPanelPushButton,
     FrontPanelToggleSwitch
-} from "@opalkellytech/frontpanel-react-components";
+} from "@opalkelly/frontpanel-react-components";
 
 import MACAddressView from "./MACAddressView";
 import MACAddressEntry from "./MACAddressEntry";

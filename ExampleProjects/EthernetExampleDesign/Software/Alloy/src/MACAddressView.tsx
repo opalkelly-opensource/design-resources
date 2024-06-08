@@ -11,7 +11,7 @@ import {
     EndpointAddressProps,
     FrontPanelNumberDisplay,
     NumeralSystem
-} from "@opalkellytech/frontpanel-react-components";
+} from "@opalkelly/frontpanel-react-components";
 
 /**
  * MAC Address View Component Properties

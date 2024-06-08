@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { EndpointAddressProps } from "@opalkellytech/frontpanel-react-components";
+import { EndpointAddressProps } from "@opalkelly/frontpanel-react-components";
 
 /**
  * Ethernet Port Reset Configuration.

@@ -10,9 +10,9 @@ import React, { Component } from "react";
 import {
     IFrontPanel,
     FrontPanelPeriodicUpdateTimer
-} from "@opalkellytech/frontpanel-chromium-core";
+} from "@opalkelly/frontpanel-alloy-core";
 
-import { FrontPanel as FrontPanelContext } from "@opalkellytech/frontpanel-react-components";
+import { FrontPanel as FrontPanelContext } from "@opalkelly/frontpanel-react-components";
 
 import EthernetPortView from "./EthernetPortView";
 
