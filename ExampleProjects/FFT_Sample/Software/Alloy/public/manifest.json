@@ -1,6 +1,6 @@
 {
-  "short_name": "FFT FPCr App",
-  "name": "FrontPanel Chromium FFT Example",
+  "short_name": "FFT FP-Alloy App",
+  "name": "FrontPanel Alloy FFT Example",
   "icons": [
     {
       "src": "favicon.ico",

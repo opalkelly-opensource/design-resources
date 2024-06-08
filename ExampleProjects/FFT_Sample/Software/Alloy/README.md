@@ -1,4 +1,4 @@
-# FrontPanel Chromium FFT Example
+# FrontPanel Alloy FFT Example
 
 ## Prerequisites
 
