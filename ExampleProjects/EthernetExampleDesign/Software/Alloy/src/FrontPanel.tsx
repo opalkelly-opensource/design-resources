@@ -7,10 +7,7 @@
 
 import React, { Component } from "react";
 
-import {
-    IFrontPanel,
-    FrontPanelPeriodicUpdateTimer
-} from "@opalkelly/frontpanel-alloy-core";
+import { IFrontPanel, FrontPanelPeriodicUpdateTimer } from "@opalkelly/frontpanel-alloy-core";
 
 import { FrontPanel as FrontPanelContext } from "@opalkelly/frontpanel-react-components";
 
