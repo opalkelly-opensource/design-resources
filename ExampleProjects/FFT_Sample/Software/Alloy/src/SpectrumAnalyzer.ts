@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { IFrontPanel, ByteCount } from "@opalkellytech/frontpanel-chromium-core";
+import { IFrontPanel, ByteCount } from "@opalkelly/frontpanel-alloy-core";
 
 /**
  * Spectrum Analyzer

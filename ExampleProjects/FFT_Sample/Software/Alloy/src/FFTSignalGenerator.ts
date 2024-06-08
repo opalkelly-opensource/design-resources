@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { IFrontPanel } from "@opalkellytech/frontpanel-chromium-core";
+import { IFrontPanel } from "@opalkelly/frontpanel-alloy-core";
 
 import { SubEvent } from "sub-events/dist/src/event";
 

@@ -23,9 +23,9 @@ import { FFTSignalGeneratorAdapter, FrequencyVector } from "./FFTSignalGenerator
 
 import ListItemComponent from "./ListItemComponent";
 
-import { IFrontPanel, WorkQueue } from "@opalkellytech/frontpanel-chromium-core";
+import { IFrontPanel, WorkQueue } from "@opalkelly/frontpanel-alloy-core";
 
-import { Button, ToggleState, ToggleSwitch } from "@opalkellytech/frontpanel-react-components";
+import { Button, ToggleState, ToggleSwitch } from "@opalkelly/frontpanel-react-components";
 
 import { Subscription } from "sub-events";
 

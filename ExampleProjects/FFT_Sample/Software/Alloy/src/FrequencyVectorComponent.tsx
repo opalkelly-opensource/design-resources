@@ -12,7 +12,7 @@ import {
     NumberEntry,
     NumeralSystem,
     RangeSlider
-} from "@opalkellytech/frontpanel-react-components";
+} from "@opalkelly/frontpanel-react-components";
 
 import { Hertz } from "./FFTConfiguration";
 

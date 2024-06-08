@@ -7,7 +7,7 @@
 
 import React, { Component } from "react";
 
-import { IFrontPanel, WorkQueue } from "@opalkellytech/frontpanel-chromium-core";
+import { IFrontPanel, WorkQueue } from "@opalkelly/frontpanel-alloy-core";
 
 import "./FrontPanel.css";
 

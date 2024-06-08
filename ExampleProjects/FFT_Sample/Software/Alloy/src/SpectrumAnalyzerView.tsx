@@ -23,7 +23,7 @@ import { Line } from "react-chartjs-2";
 
 import { SpectrumAnalyzer } from "./SpectrumAnalyzer";
 
-import { IFrontPanel, WorkQueue, ByteCount } from "@opalkellytech/frontpanel-chromium-core";
+import { IFrontPanel, WorkQueue, ByteCount } from "@opalkelly/frontpanel-alloy-core";
 
 import FFTConfiguration, { Hertz } from "./FFTConfiguration";
 

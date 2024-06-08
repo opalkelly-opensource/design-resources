@@ -31,9 +31,9 @@ import {
 
 import { Vector2D } from "./Vector";
 
-import { WorkQueue, ByteCount, IFrontPanel } from "@opalkellytech/frontpanel-chromium-core";
+import { WorkQueue, ByteCount, IFrontPanel } from "@opalkelly/frontpanel-alloy-core";
 
-import { Button, ToggleSwitch, ToggleState } from "@opalkellytech/frontpanel-react-components";
+import { Button, ToggleSwitch, ToggleState } from "@opalkelly/frontpanel-react-components";
 
 /**
  * Event handler for the SampleChannelsUpdate event.

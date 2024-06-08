@@ -11,7 +11,7 @@ import classNames from "classnames";
 
 import "./ListItemComponent.css";
 
-import { Button, ToggleState, ToggleSwitch } from "@opalkellytech/frontpanel-react-components";
+import { Button, ToggleState, ToggleSwitch } from "@opalkelly/frontpanel-react-components";
 
 /**
  * Event handler for handling changes to the isEnabled state of a list item.
