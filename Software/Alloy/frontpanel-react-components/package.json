@@ -1,7 +1,7 @@
 {
   "name": "@opalkelly/frontpanel-react-components",
   "version": "0.1.0",
-  "description": "React Component Library for OpalKelly FrontPanel",
+  "description": "React Component Library for OpalKelly FrontPanel Alloy",
   "keywords": [
     "FPGA",
     "FrontPanel",
