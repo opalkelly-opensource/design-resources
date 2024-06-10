@@ -1,7 +1,9 @@
 FrontPanel Alloy Core Library
 ==============================
 
-This Library provides the definitions for the FrontPanel JavaScript API intended for FrontPanel Alloy application development. It also provides utilities for implementing FrontPanel events as well as a Mock implementation of the FrontPanel JavaScript API that may be used for testing.
+This Library provides definitions for the FrontPanel Alloy JavaScript API as well as some utilities to assist in the development of FrontPanel Alloy applications.
+
+Getting Started tutorials, How-To guides, Technical References, and Discussion documentation pieces are available at: [FrontPanel Alloy documentation](https://docs.opalkelly.com/fpsdk/frontpanel-alloy-introduction/)
 
 Prerequisites
 -------
@@ -22,10 +24,3 @@ Installation is done using the
 ```bash
 $ npm install @opalkelly/frontpanel-alloy-core
 ```
-
-Docs
--------
-
-[FrontPanel Alloy documentation](https://docs.opalkelly.com/fpsdk/frontpanel-alloy-introduction/)
-
-[Core Library reference](https://library.opalkelly.com/FrontPanelAlloyCore/)
