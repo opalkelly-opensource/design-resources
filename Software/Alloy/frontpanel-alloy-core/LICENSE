@@ -1,19 +1,45 @@
-Copyright (c) 2024 Opal Kelly Incorporated
+FrontPanel® License Agreement
+Copyright © 2005-2024 Opal Kelly Incorporated
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+IMPORTANT -- The product, including the software, firmware, and other electronic data contained within the product, is licensed, not sold, and available for use only under the terms of this license agreement.  By clicking the "I Agree" button below and continuing with the installation, you are consenting to be bound by this license agreement.  If you do not agree to the terms of the license agreement, click the "CANCEL" button.  If you do not agree to the terms of this license agreement, and wish to return this product, please contact us at support@opalkelly.com.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+DEFINITIONS.
+(1) “Agreement” shall mean this license agreement, covering Software and Firmware owned by Opal Kelly.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+(2) “Opal Kelly” shall refer to Opal Kelly Incorporated, an Illinois corporation, with business address 13500 SW 72nd Ave, STE 100, Portland, OR, 97223.  Opal Kelly is the exclusive owner and licensor of both Software and Firmware.
+
+(3) “Firmware” shall mean the device firmware included on the hardware device and provided as binary EEPROM contents.  The firmware includes, but is not limited to, its object code, scripted code, the full or partial EEPROM contents, the Licensee manuals and all accompanying materials, including any and all revisions and versions regardless of name.  Firmware also includes any upgrades provided to users, no matter when provided or how it is acquired.
+
+(4) “Software” shall mean the FrontPanel application software and FrontPanel programmer’s interface, as well as any modifications or derivations to the application or interface.  The software includes, but is not limited to, its object code, scripted code, the Licensee manuals and all accompanying materials, including any and all revisions and versions regardless of name.  Software also includes any upgrades provided to users, no matter when provided or how it is acquired.
+
+(5) “Licensee” shall refer to the licensee of Software and Firmware.  The Licensee shall not abuse the intended purpose under this Agreement.
+
+OWNERSHIP.  Opal Kelly owns all proprietary rights, including all patent, copyright, trade secret, trademark, trade name and other proprietary rights in and to the Software and Firmware.  Licensee acknowledges that the license granted under this Agreement does not provide Licensee with title to nor ownership of the Software or Firmware, nor to any error corrections, enhancements, updates or other modifications or derivations to the Software or Firmware, whether made by Opal Kelly or any third party.  Licensee acknowledges that the license granted under this Agreement only provides the Licensee a right of limited use under the terms and conditions of this Agreement.  Licensee shall keep the Software and Firmware free and clear of all claims, liens and encumbrances.
+
+SOFTWARE. Opal Kelly hereby grants to the Licensee a temporary, non-exclusive license to install and use Software.  Licensee shall not modify, distribute, resell or otherwise transfer Software for any purpose, commercial or non-commercial.  Licensee may integrate and sub-license Software for distribution but Software must only be used in conjunction with Opal Kelly devices or devices incorporating Firmware.
+
+FIRMWARE. Opal Kelly hereby grants to the Licensee a temporary, non-exclusive license to use Firmware.  Licensee shall not distribute, resell or otherwise transfer Firmware for any purpose, commercial or non-commercial.  Licensee shall not duplicate, disassemble, reverse engineer, modify, decompile, or otherwise abuse the intended purpose of the Firmware.  Licensee may integrate and sub-license Firmware for distribution but Firmware must only be used in conjunction with Software.
+
+NO WARRANTY. Software and Firmware are provided to the Licensee in "AS IS-" Condition.  Opal Kelly assumes no risk if Software or Firmware does not function properly or operate error-free.  Opal Kelly makes no warranties, either expressed or implied, with respect to Software, Firmware, and/or associated materials provided to the Licensee.  OPAL KELLY EXPRESSLY DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING THE WARRANTY OF MERCHANTABILITY AND THE WARRANTY OF FITNESS FOR A PARTICULAR PURPOSE.  OPAL KELLY SHALL NOT BE LIABLE FOR ANY CLAIMS OR DAMAGES WHATSOEVER, INCLUDING PROPERTY DAMAGE, PERSONAL INJURY, INTELLECTUAL PROPERTY INFRINGEMENT, LOSS OF PROFITS, OR INTERRUPTION OF BUSINESS, OR FOR ANY SPECIAL, CONSEQUENTIAL OR INCIDENTAL DAMAGES, HOWEVER CAUSED, WHETHER ARISING OUT OF BREACH OF WARRANTY, CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY, OR OTHERWISE.
+
+RESTRICTIVE COVENANT.  Licensee shall not make his/her license for Software and/or Firmware available to any competitor of Opal Kelly in the specific field of FPGA development modules or FPGA integration modules.
+
+TECHNICAL SUPPORT.  Technical support for Opal Kelly products is provided at the Opal Kelly web site (http://www.opalkelly.com) in the form of a searchable electronic forum.  Email support is provided as a courtesy and at the discretion of Opal Kelly.  No technical support will be provided over the telephone.  Technical support is only available to Licensee, not to any sub-licensees.
+
+TERMINATION.  Any licenses granted herein are terminated immediately upon material breach of this Agreement by Licensor, or immediately upon use of the Software or Firmware in violation of applicable law.  Additionally, Opal Kelly shall have the right to terminate this Agreement and the license granted herein upon the occurrence of any of the following events:
+(1) in the event the Licensee fails to comply with any of the terms and conditions of this Agreement and such a default has not been cured within (15) days after written notice; or
+(2) in the event the Licensee 
+	a. terminates or suspends its business, 
+	b. becomes subject to any bankruptcy or insolvency proceeding under Federal or state statute, 
+	c. becomes insolvent or subject to direct control by a trustee, receiver or similar authority, or 
+	d. has wound up or liquidated, voluntarily or otherwise.
+
+Opal Kelly retains the right to terminate the Agreement with Licensee without cause, after providing written notice to the Licensee.  The termination shall be effective thirty (30) days after date of said notice.  All such notices shall be delivered to the Licensor's last known mailing address and/or email address.
+
+LEGAL NOTICE.  THIS CONTRACT SHALL BE GOVERNED AND CONSTRUED IN ACCORDANCE WITH THE LAWS OF THE STATE OF OREGON.  ANY CLAIM, ACTION, OR SUIT BETWEEN LICENSEE AND OPAL KELLY THAT ARISES OUT OF OR RELATES TO PERFORMANCE OF THIS CONTRACT SHALL BE BROUGHT AND CONDUCTED SOLELY AND EXCLUSIVELY WITHIN THE CIRCUIT COURT FOR WASHINGTON COUNTY, OREGON.  PROVIDED, HOWEVER, THAT IF ANY SUCH CLAIM, ACTION OR SUIT MAY BE BROUGHT ONLY IN A FEDERAL FORUM, IT SHALL BE BROUGHT AND CONDUCTED SOLELY AND EXCLUSIVELY WITHIN THE UNITED STATES DISTRICT COURT OF OREGON.  If any provision of this Agreement shall be unlawful, void, or for any reason unenforceable, then that provision shall be deemed severed from this Agreement and shall not affect the validity or enforceability of the remaining provisions of this Agreement.  This Agreement is the complete statement of the agreement and supersedes any proposal or prior communications between Opal Kelly and the Licensee relating to the subject matter of this Agreement.  If you have any questions regarding this Agreement, please contact:
+
+	Opal Kelly Incorporated
+	13500 SW 72nd Ave, STE 100
+	Portland, OR  97223
+	support@opalkelly.com
+	
