@@ -7,6 +7,8 @@
 
 import type { Meta, StoryObj } from "@storybook/react";
 
+import { fn } from "@storybook/test";
+
 import withApplication from "../../stories/decorators/Application.decorator";
 
 import Button from "./Button";
@@ -19,6 +21,7 @@ const meta = {
         layout: "centered" // Center the component in the Canvas
     },
     tags: ["autodocs"], // Automatically generate documentation
+    args: { onButtonClick: fn(), onButtonDown: fn(), onButtonUp: fn() },
     argTypes: {
         size: {
             control: { type: "range", min: 1, max: 3, step: 1 }

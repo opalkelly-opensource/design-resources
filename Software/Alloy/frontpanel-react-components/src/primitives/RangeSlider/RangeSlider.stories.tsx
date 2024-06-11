@@ -9,6 +9,8 @@ import React from "react";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
+import { fn } from "@storybook/test";
+
 import withApplication from "../../stories/decorators/Application.decorator";
 
 import RangeSlider from "./RangeSlider";
@@ -21,6 +23,7 @@ const meta = {
         layout: "centered" // Center the component in the Canvas
     },
     tags: ["autodocs"], // Automatically generate documentation
+    args: { onValueChange: fn(), onValueCommit: fn() },
     argTypes: {
         defaultValue: {
             control: { type: "number", step: 1 }

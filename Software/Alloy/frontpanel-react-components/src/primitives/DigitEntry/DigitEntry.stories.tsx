@@ -9,6 +9,8 @@ import React from "react";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
+import { fn } from "@storybook/test";
+
 import { useArgs } from "@storybook/preview-api";
 
 import DigitEntry from "./DigitEntry";
@@ -23,6 +25,7 @@ const meta = {
         layout: "centered" // Center the component in the Canvas
     },
     tags: ["autodocs"], // Automatically generate documentation
+    args: { onValueChanged: fn() },
     argTypes: {
         variant: {
             control: "radio",
