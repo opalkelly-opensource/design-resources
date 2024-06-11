@@ -25,7 +25,6 @@ const meta = {
         layout: "centered" // Center the component in the Canvas
     },
     tags: ["autodocs"], // Automatically generate documentation
-    args: { onValueChange: fn(), onOpenChange: fn() },
     argTypes: {
         size: {
             control: { type: "range", min: 1, max: 3, step: 1 }
@@ -84,6 +83,8 @@ export const Primary: Story = {
             horizontalPosition: "left"
         },
         size: 1,
-        tooltip: "Select an item from the list"
+        tooltip: "Select an item from the list",
+        onValueChange: fn(),
+        onOpenChange: fn()
     }
 };

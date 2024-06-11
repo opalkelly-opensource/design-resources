@@ -25,7 +25,6 @@ const meta = {
         layout: "centered" // Center the component in the Canvas
     },
     tags: ["autodocs"], // Automatically generate documentation
-    args: { onValueChanged: fn() },
     argTypes: {
         variant: {
             control: "radio",
@@ -79,9 +78,10 @@ export const Primary: Story = {
         value: 8,
         // Optional Properties
         size: 1,
-        numeralSystem: NumeralSystem.Decimal,
         variant: "standard",
+        numeralSystem: NumeralSystem.Decimal,
         maximum: undefined,
-        minimum: undefined
+        minimum: undefined,
+        onValueChanged: fn()
     }
 };

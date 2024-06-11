@@ -23,7 +23,6 @@ const meta = {
         layout: "centered" // Center the component in the Canvas
     },
     tags: ["autodocs"], // Automatically generate documentation
-    args: { onValueChange: fn(), onValueCommit: fn() },
     argTypes: {
         defaultValue: {
             control: { type: "number", step: 1 }
@@ -74,6 +73,8 @@ export const Primary: Story = {
         showThumbLabel: true,
         disabled: false,
         label: { text: "RangeSlider" },
-        tooltip: "Set value within range"
+        tooltip: "Set value within range",
+        onValueChange: fn(),
+        onValueCommit: fn()
     }
 };

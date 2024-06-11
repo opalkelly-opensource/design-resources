@@ -21,7 +21,6 @@ const meta = {
         layout: "centered" // Center the component in the Canvas
     },
     tags: ["autodocs"], // Automatically generate documentation
-    args: { onButtonClick: fn(), onButtonDown: fn(), onButtonUp: fn() },
     argTypes: {
         size: {
             control: { type: "range", min: 1, max: 3, step: 1 }
@@ -52,6 +51,9 @@ export const Primary: Story = {
         // Optional Properties
         size: 1,
         disabled: false,
-        tooltip: "Button tooltip"
+        tooltip: "Button tooltip",
+        onButtonClick: fn(),
+        onButtonDown: fn(),
+        onButtonUp: fn()
     }
 };

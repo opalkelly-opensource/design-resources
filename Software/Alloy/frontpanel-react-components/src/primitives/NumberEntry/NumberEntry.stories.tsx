@@ -27,7 +27,6 @@ const meta = {
         layout: "centered" // Center the component in the Canvas
     },
     tags: ["autodocs"], // Automatically generate documentation
-    args: { onValueChange: fn() },
     argTypes: {
         variant: {
             control: "radio",
@@ -105,7 +104,8 @@ const ComponentTemplate: Story = {
         decimalScale: 3,
         valueString: "8000",
         maximumValueString: "1000000",
-        minimumValueString: "-1000000"
+        minimumValueString: "-1000000",
+        onValueChange: fn()
     }
 };
 

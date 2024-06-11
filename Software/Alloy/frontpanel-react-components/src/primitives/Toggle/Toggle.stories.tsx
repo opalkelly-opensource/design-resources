@@ -23,7 +23,6 @@ const meta = {
         layout: "centered" // Center the component in the Canvas
     },
     tags: ["autodocs"], // Automatically generate documentation
-    args: { onToggleStateChanged: fn() },
     argTypes: {
         size: {
             control: { type: "range", min: 1, max: 3, step: 1 }
@@ -59,6 +58,8 @@ export const Primary: Story = {
         state: ToggleState.Off,
         // Optional Properties
         disabled: false,
-        size: 1
+        size: 1,
+        tooltip: "Toggle tooltip",
+        onToggleStateChanged: fn()
     }
 };

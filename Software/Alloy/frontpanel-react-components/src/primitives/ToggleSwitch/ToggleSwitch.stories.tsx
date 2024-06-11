@@ -27,7 +27,6 @@ const meta = {
         layout: "centered" // Center the component in the Canvas
     },
     tags: ["autodocs"], // Automatically generate documentation
-    args: { onToggleStateChanged: fn() },
     argTypes: {
         size: {
             control: { type: "range", min: 1, max: 3, step: 1 }
@@ -70,7 +69,8 @@ const ComponentTemplate: Story = {
         // Optional Properties
         disabled: false,
         size: 1,
-        tooltip: "Toggle switch tooltip"
+        tooltip: "Toggle switch tooltip",
+        onToggleStateChanged: fn()
     }
 };
 
