@@ -1,0 +1,24 @@
+.App {
+    text-align: center;
+}
+
+.App-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-shrink: true;
+    flex-direction: column;
+
+    font-size: calc(14px);
+    color: white;
+}
+
+.RootPanel {
+    margin: 20px;
+}
+
+.Panel {
+    color: black;
+    flex: 1 1 200px;
+    height: 100%;
+}
