@@ -9,6 +9,8 @@ import React from "react";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
+import { fn } from "@storybook/test";
+
 import { useArgs } from "@storybook/preview-api";
 
 import withApplication from "../../stories/decorators/Application.decorator";
@@ -67,7 +69,8 @@ const ComponentTemplate: Story = {
         // Optional Properties
         disabled: false,
         size: 1,
-        tooltip: "Toggle switch tooltip"
+        tooltip: "Toggle switch tooltip",
+        onToggleStateChanged: fn()
     }
 };
 

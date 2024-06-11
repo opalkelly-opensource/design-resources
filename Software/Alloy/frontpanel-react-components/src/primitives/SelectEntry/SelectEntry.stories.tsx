@@ -9,6 +9,8 @@ import React from "react";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
+import { fn } from "@storybook/test";
+
 import { useArgs } from "@storybook/preview-api";
 
 import withApplication from "../../stories/decorators/Application.decorator";
@@ -81,6 +83,8 @@ export const Primary: Story = {
             horizontalPosition: "left"
         },
         size: 1,
-        tooltip: "Select an item from the list"
+        tooltip: "Select an item from the list",
+        onValueChange: fn(),
+        onOpenChange: fn()
     }
 };

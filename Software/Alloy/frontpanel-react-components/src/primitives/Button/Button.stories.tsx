@@ -7,6 +7,8 @@
 
 import type { Meta, StoryObj } from "@storybook/react";
 
+import { fn } from "@storybook/test";
+
 import withApplication from "../../stories/decorators/Application.decorator";
 
 import Button from "./Button";
@@ -49,6 +51,9 @@ export const Primary: Story = {
         // Optional Properties
         size: 1,
         disabled: false,
-        tooltip: "Button tooltip"
+        tooltip: "Button tooltip",
+        onButtonClick: fn(),
+        onButtonDown: fn(),
+        onButtonUp: fn()
     }
 };

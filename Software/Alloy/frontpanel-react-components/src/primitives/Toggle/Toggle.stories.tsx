@@ -9,6 +9,8 @@ import React from "react";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
+import { fn } from "@storybook/test";
+
 import Toggle from "./Toggle";
 
 import { ToggleState } from "../../core";
@@ -56,6 +58,8 @@ export const Primary: Story = {
         state: ToggleState.Off,
         // Optional Properties
         disabled: false,
-        size: 1
+        size: 1,
+        tooltip: "Toggle tooltip",
+        onToggleStateChanged: fn()
     }
 };

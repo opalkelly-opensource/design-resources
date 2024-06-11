@@ -9,6 +9,8 @@ import React from "react";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
+import { fn } from "@storybook/test";
+
 import { useArgs } from "@storybook/preview-api";
 
 import DigitEntry from "./DigitEntry";
@@ -76,9 +78,10 @@ export const Primary: Story = {
         value: 8,
         // Optional Properties
         size: 1,
-        numeralSystem: NumeralSystem.Decimal,
         variant: "standard",
+        numeralSystem: NumeralSystem.Decimal,
         maximum: undefined,
-        minimum: undefined
+        minimum: undefined,
+        onValueChanged: fn()
     }
 };

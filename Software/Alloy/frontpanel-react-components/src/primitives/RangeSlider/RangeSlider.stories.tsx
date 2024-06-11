@@ -9,6 +9,8 @@ import React from "react";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
+import { fn } from "@storybook/test";
+
 import withApplication from "../../stories/decorators/Application.decorator";
 
 import RangeSlider from "./RangeSlider";
@@ -71,6 +73,8 @@ export const Primary: Story = {
         showThumbLabel: true,
         disabled: false,
         label: { text: "RangeSlider" },
-        tooltip: "Set value within range"
+        tooltip: "Set value within range",
+        onValueChange: fn(),
+        onValueCommit: fn()
     }
 };
