@@ -370,7 +370,7 @@ int disable_supply (int fd, int rail_index)
 	return 0;
 }
 
-int set_supply (int fd, int rail_index, uint8_t vs0, uint8_t vs1, uint8_t vs2)
+int set_supply(int fd, int rail_index, uint8_t vselect)
 {
 	uint8_t temp_reg;
 	uint8_t pcal_port = 0;
@@ -407,7 +407,10 @@ int set_supply (int fd, int rail_index, uint8_t vs0, uint8_t vs1, uint8_t vs2)
 	} else {
 		temp_reg = (temp_reg & (0xF << 0));
 	}
-	temp_reg = temp_reg | (((vs0 << 1) | (vs1 << 2) | (vs2 << 3)) << vs_offset);
+	// Place vselect bits in the VS pins positoin
+	// Skip the enable bit at postion 0
+	temp_reg = temp_reg | (vselect << (vs_offset + 1));
+
 	i2c_write(fd, PCAL_OUTPUT_PORT0_REG + pcal_port, temp_reg);
 	
 	return 0;
@@ -589,189 +592,78 @@ int readDNA (int i2c_file, uint32_t *svio1, uint32_t *svio2, uint32_t *svio3, ui
 	return 0;
 }
 
-
-// Apply SmartVIO settings to power IC
-int applyVIO (int i2c_file, uint32_t svio1, uint32_t svio2, uint32_t svio3, uint32_t svio4)
+// Apply SmartVIO settings to power IC individually
+int applyVIO(int i2c_fd, uint32_t rail, uint32_t voltage)
 {
-	//uint8_t temp_data[2];
-	uint8_t vs0;
-	uint8_t vs1;
-	uint8_t vs2;
-	//The vio index is matched with the bank index, this is for use in the for loop below
-	uint32_t svio_array[4];
-	svio_array[0] = svio1;
-	svio_array[1] = svio2;
-	svio_array[2] = svio3;
-	svio_array[3] = svio4;
-	uint32_t bank_array[4];
-	bank_array[0] = SUPPLY_87_88;
-	bank_array[1] = SUPPLY_68;
-	bank_array[2] = SUPPLY_67;
-	bank_array[3] = SUPPLY_28;
-	// Bounds check to be sure that everything is good to go
-	if ((svio1 != 120) && (svio1 != 150) && (svio1 != 180) && (svio1 != 330) && (svio1 != 250) && (svio1 != 125)) {
-		printf("Invalid SmartVIO1 solution. Valid solutions are:\n");
-		printf("   VIO1: 120,  125,  150,  180,  250, 330 (Limited by HD bank range 1.2V to 3.3V)\n");
-		exit(EXIT_FAILURE);
-	}
-	if ((svio2 != 120) && (svio2 != 125) && (svio2 != 150) && (svio2 != 180)) {
-		printf("Invalid SmartVIO2 solution. Valid solutions are:\n");
-		printf("   VIO2: 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
-		exit(EXIT_FAILURE);
-	}
-	if ((svio3 != 120) && (svio3 != 125) && (svio3 != 150) && (svio3 != 180)) {
-		printf("Invalid SmartVIO3 solution. Valid solutions are:\n");
-		printf("   VIO3: 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
-		exit(EXIT_FAILURE);
-	}
-	if ((svio4 != 120) && (svio4 != 125) && (svio4 != 150) && (svio4 != 180)) {
-		printf("Invalid SmartVIO4 solution. Valid solutions are:\n");
-		printf("   VIO4: 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
-		exit(EXIT_FAILURE);
-	}
-	for(int i = 0; i < 4; i++){
-		if (svio_array[i] == 330) {
-			vs0 = 0;
-			vs1 = 0;
-			vs2 = 0;
-		} else if (svio_array[i] == 250) {
-			vs0 = 1;
-			vs1 = 0;
-			vs2 = 0;
-		} else if (svio_array[i] == 180) {
-			vs0 = 0;
-			vs1 = 1;
-			vs2 = 0;
-		} else if (svio_array[i] == 150) {
-			vs0 = 1;
-			vs1 = 1;
-			vs2 = 0;
-		} else if (svio_array[i] == 125) {
-			vs0 = 0;
-			vs1 = 0;
-			vs2 = 1;
-		} else if (svio_array[i] == 120) {
-			vs0 = 1;
-			vs1 = 0;
-			vs2 = 1;
-		} else {
-			printf("Voltage setting not supported, options are:\n");
-			printf("   VIO1: 120,  125,  150,  180,  250, 330 (Limited by HD bank range 1.2V to 3.3V)\n");
-			printf("   VIO2: 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
-			printf("   VIO3: 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
-			printf("   VIO4: 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
+	uint8_t vselect;
+	int vmax, vmin;
+
+	// Final bounds check for VIO rails
+	// rail 1: VCCO_87_88 is an HD bank with limits 1.2 to 3.3V
+	// rail 2: VCCO_68 is an HP bank with limits 1.0 to 1.8V
+	// rail 3: VCCO_67 is an HP bank with limits 1.0 to 1.8V
+	// rail 4: VCCO_28 is an HP bank with limits 1.0 to 1.8V
+	switch (rail) {
+		case SUPPLY_87_88:
+			vmax = 330;
+			vmin = 120;
+			break;
+		case SUPPLY_68:
+		case SUPPLY_67:
+		case SUPPLY_28:
+			vmax = 180;
+			vmin = 120;
+			break;
+		default:
+			printf("Error: unrecognized supply rail, options are:\n");
+			printf("   1 (VCCO_87_88)\n");
+			printf("   2 (VCCO_68\n");
+			printf("   3 (VCCO_67\n");
+			printf("   4 (VCCO_28)\n");
 			return -1;
-		}
-
-		if(disable_supply(i2c_file, bank_array[i]) != 0){
-			printf("Problem disabling bank - %d", bank_array[i]);
-			return -1;
-		}
-		if(set_supply(i2c_file, bank_array[i], vs0, vs1, vs2) != 0){
-			printf("Problem setting supply to bank - %d", bank_array[i]);
-			return -1;
-		}
-		if(enable_supply(i2c_file, bank_array[i]) != 0){
-			printf("Problem enabling bank - %d", bank_array[i]);
-			return -1;
-		}
-		
-		printf("Set VIO%d to %d (10's of mV)\n", bank_array[i], svio_array[i]);
 	}
-	
 
-	
-	
-	return 0;
-}
+	// Configure the vselect bits based on the requested voltage
+	switch (voltage) {
+		case 330:
+			vselect = 0x00;
+			break;
+		case 250:
+			vselect = 0x01;
+			break;
+		case 180:
+			vselect = 0x02;
+			break;
+		case 150:
+			vselect = 0x03;
+			break;
+		case 125:
+			vselect = 0x04;
+			break;
+		case 120:
+			vselect = 0x05;
+			break;
+		default:
+			vselect = 0xFF;
+			break;
+	}
 
-// Apply SmartVIO settings to power IC individually. 
-int applyVIOIndividual (int i2c_fd, uint32_t svio, uint32_t voltage)
-{
-	int error = 0;
-	uint8_t vs0, vs1, vs2;
-	int i;
-
-
-
-	if (ioctl(i2c_fd, I2C_SLAVE, PCAL_ADDR) < 0) {
-		printf("Error during I2C address set\n");
+	// Voltage set error checks for range and value
+	if (vselect == 0xFF || (voltage < vmin) || (voltage > vmax)) {
+		printf("Voltage setting not supported, options are (in 10's of mV):\n");
+		printf("   1 (VCCO_87_88): 120,  125,  150,  180,  250, 330 (Limited by HD bank range 1.2V to 3.3V)\n");
+		printf("   2 (VCCO_68):    120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
+		printf("   3 (VCCO_67):    120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
+		printf("   4 (VCCO_28):    120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
 		return -1;
 	}
 
-	if (voltage == 330) {
-		vs0 = 0;
-		vs1 = 0;
-		vs2 = 0;
-	} else if (voltage == 250) {
-		vs0 = 1;
-		vs1 = 0;
-		vs2 = 0;
-	} else if (voltage == 180) {
-		vs0 = 0;
-		vs1 = 1;
-		vs2 = 0;
-	} else if (voltage == 150) {
-		vs0 = 1;
-		vs1 = 1;
-		vs2 = 0;
-	} else if (voltage == 125) {
-		vs0 = 0;
-		vs1 = 0;
-		vs2 = 1;
-	} else if (voltage == 120) {
-		vs0 = 1;
-		vs1 = 0;
-		vs2 = 1;
-	} else {
-		printf("Voltage setting not supported, options are:\n");
-		printf("   VIO1: 120,  125,  150,  180,  250, 330 (Limited by HD bank range 1.2V to 3.3V)\n");
-		printf("   VIO2: 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
-		printf("   VIO3: 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
-		printf("   VIO4: 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
-		return -1;
-	}
+	// // Write the vselect bits to the regulators control pins
+	disable_supply(i2c_fd, rail);
+	set_supply(i2c_fd, rail, vselect);
+	enable_supply(i2c_fd, rail);
 
-	if (svio == 4) {
-		if (vs2 == 0 && vs1 == 0) {
-			printf("Voltage not supported on this rail\n");
-			printf("   VIO4: 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
-			return -1;
-		}
-		disable_supply(i2c_fd, SUPPLY_28);
-		set_supply(i2c_fd, SUPPLY_28, vs0, vs1, vs2);
-		enable_supply(i2c_fd, SUPPLY_28);
-	} else if (svio == 3) {
-		if (vs2 == 0 && vs1 == 0) {
-			printf("Voltage not supported on this rail\n");
-			printf("   VIO3: 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
-			return -1;
-		}
-		disable_supply(i2c_fd, SUPPLY_67);
-		set_supply(i2c_fd, SUPPLY_67, vs0, vs1, vs2);
-		enable_supply(i2c_fd, SUPPLY_67);
-	} else if (svio == 2) {
-		if (vs2 == 0 && vs1 == 0) {
-			printf("Voltage not supported on this rail\n");
-			printf("   VIO2: 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
-			return -1;
-		}
-		disable_supply(i2c_fd, SUPPLY_68);
-		set_supply(i2c_fd, SUPPLY_68, vs0, vs1, vs2);
-		enable_supply(i2c_fd, SUPPLY_68);
-	} else if (svio == 1) {
-		disable_supply(i2c_fd, SUPPLY_87_88);
-		set_supply(i2c_fd, SUPPLY_87_88, vs0, vs1, vs2);
-		enable_supply(i2c_fd, SUPPLY_87_88);
-	} else {
-		printf("Error: unrecognized supply rail, options are:\n");
-		printf("   1 (VCCO_87_88)\n");
-		printf("   2 (VCCO_68\n");
-		printf("   3 (VCCO_67\n");
-		printf("   4 (VCCO_28)\n");
-		return -1;
-	}
-	printf("Set VIO%d to %d (10's of mV)\n", svio, voltage);
+	printf("Set SmartVIO rail %d to %d (10's of mV)\n", rail, voltage);
 	return 0;
 }
 
@@ -905,9 +797,9 @@ void printHelp (char *progname)
 	printf("                  *You may only set one voltage at a time\n");
 	printf("                  *The valid discrete voltage supplies provided by the power supply on the ECM1900 are:\n");
 	printf("                  VCCO_87_88: 120,  125,  150,  180,  250, 330 (Limited by HD bank range 1.2V to 3.3V)\n");
-	printf("                  VCCO_68: 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
-	printf("                  VCCO_67: 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
-	printf("                  VCCO_28: 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
+	printf("                  VCCO_68:    120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
+	printf("                  VCCO_67:    120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
+	printf("                  VCCO_28:    120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
 	printf("    -p <number> - Specifies the peripheral number for the -w or -d options\n");
 	printf("\n");
 	printf("  Examples:\n");
@@ -1102,7 +994,10 @@ int main (int argc, char *argv[])
 			exit(EXIT_FAILURE);
 		}
 
-		if (applyVIO(i2c_file, svio1, svio2, svio3, svio4) != 0) {
+		if (applyVIO(i2c_file, SUPPLY_87_88, svio1) != 0 ||
+			applyVIO(i2c_file, SUPPLY_68, svio2) != 0 ||
+			applyVIO(i2c_file, SUPPLY_67, svio3) != 0 ||
+			applyVIO(i2c_file, SUPPLY_28, svio4) != 0) {
 			printf("Error applying SmartVIO settings to power supplies\n");
 			exit(EXIT_FAILURE);
 		}
@@ -1112,7 +1007,7 @@ int main (int argc, char *argv[])
 			exit(EXIT_FAILURE);
 		}
 	} else if (sflag == 1) { // Apply a user specified VIO
-		if (applyVIOIndividual(i2c_file, rail, voltage) != 0) {
+		if (applyVIO(i2c_file, rail, voltage) != 0) {
 			printf("Error applying Individual SmartVIO settings to power supplies\n");
 			exit(EXIT_FAILURE);
 		}
