@@ -1,7 +1,7 @@
 //Register map for use with AN428 (JumpStart)
 //http://www.silabs.com/clocks 
 //#BEGIN_HEADER
-//Date = Sunday, March 06, 2022 5:38 PM
+//Date = Monday, June 17, 2024 3:30 PM
 //File version = 3
 //Software Name = ClockBuilder Pro
 //Software version = 3.3.0.0
@@ -32,9 +32,15 @@
 // MultiSynth = 96  2/13  (96.1538)
 // R = 1
 //Output Clock 2
-// Output is off
+// Output Frequency (MHz) = 156.250000000
+// Mux Selection = IDn
+// MultiSynth = 16  (16.0000)
+// R = 1
 //Output Clock 3
-// Output is off
+// Output Frequency (MHz) = 156.250000000
+// Mux Selection = IDn
+// MultiSynth = 16  (16.0000)
+// R = 1
 //Driver 0
 // Enabled
 // Powered on
@@ -48,14 +54,14 @@
 // Output type = 1.8V LVDS
 // Output state when disabled = StopLow
 //Driver 2
-// Disabled
-// Powered off
+// Enabled
+// Powered on
 // Output voltage = 1.80
 // Output type = 1.8V LVDS
 // Output state when disabled = StopLow
 //Driver 3
-// Disabled
-// Powered off
+// Enabled
+// Powered on
 // Output voltage = 1.80
 // Output type = 1.8V LVDS
 // Output state when disabled = StopLow
@@ -117,13 +123,13 @@ Reg_Data const Reg_Store[NUM_REGS_MAX] = {
 { 30,0xB0,0xFF},
 { 31,0xC0,0xFF},
 { 32,0xC0,0xFF},
-{ 33,0xE3,0xFF},
-{ 34,0xE3,0xFF},
+{ 33,0xC0,0xFF},
+{ 34,0xC0,0xFF},
 { 35,0xAA,0xFF},
 { 36,0x06,0x1F},
 { 37,0x06,0x1F},
-{ 38,0x00,0x1F},
-{ 39,0x00,0x1F},
+{ 38,0x06,0x1F},
+{ 39,0x06,0x1F},
 { 40,0x84,0xFF},
 { 41,0x10,0x7F},
 { 42,0x24,0x3F},
@@ -160,23 +166,23 @@ Reg_Data const Reg_Store[NUM_REGS_MAX] = {
 { 73,0x00,0x3F},
 { 74,0x11,0xFF},
 { 75,0x00,0xFF},
-{ 76,0x00,0xFF},
+{ 76,0x06,0xFF},
 { 77,0x00,0xFF},
 { 78,0x00,0xFF},
 { 79,0x00,0xFF},
 { 80,0x00,0xFF},
-{ 81,0x00,0xFF},
+{ 81,0x01,0xFF},
 { 82,0x00,0xFF},
 { 83,0x00,0xFF},
 { 84,0x00,0x3F},
 { 85,0x11,0xFF},
 { 86,0x00,0xFF},
-{ 87,0x00,0xFF},
+{ 87,0x06,0xFF},
 { 88,0x00,0xFF},
 { 89,0x00,0xFF},
 { 90,0x00,0xFF},
 { 91,0x00,0xFF},
-{ 92,0x00,0xFF},
+{ 92,0x01,0xFF},
 { 93,0x00,0xFF},
 { 94,0x00,0xFF},
 { 95,0x00,0x3F},

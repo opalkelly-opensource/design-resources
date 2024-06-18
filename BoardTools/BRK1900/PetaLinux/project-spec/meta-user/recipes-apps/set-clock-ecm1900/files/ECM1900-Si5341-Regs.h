@@ -9,8 +9,8 @@
  * Part:		                                       Si5341 Rev D
  * Design ID:                                          TSTECM
  * Includes Pre/Post Download Control Register Writes: Yes
- * Created By:                                         ClockBuilder Pro v2.45 [2020-07-16]
- * Timestamp:                                          2020-10-21 16:31:58 GMT-07:00
+ * Created By:                                         ClockBuilder Pro v3.3 [2021-04-08]
+ * Timestamp:                                          2024-06-17 15:31:49 GMT-07:00
  *
  * A complete design report corresponding to this export is included at the end 
  * of this header file.
@@ -104,19 +104,19 @@ si5341_revd_register_t const si5341_revd_registers[SI5341_REVD_REG_CONFIG_NUM_RE
 	{ 0x0121, 0x02 },
 	{ 0x0122, 0x09 },
 	{ 0x0123, 0x33 },
-	{ 0x0124, 0x09 },
+	{ 0x0124, 0x0A },
 	{ 0x0126, 0x02 },
 	{ 0x0127, 0x09 },
 	{ 0x0128, 0x33 },
 	{ 0x0129, 0x08 },
-	{ 0x012B, 0x02 },
+	{ 0x012B, 0x06 },
 	{ 0x012C, 0x09 },
 	{ 0x012D, 0x33 },
-	{ 0x012E, 0x08 },
-	{ 0x0130, 0x02 },
+	{ 0x012E, 0x09 },
+	{ 0x0130, 0x06 },
 	{ 0x0131, 0x09 },
 	{ 0x0132, 0x33 },
-	{ 0x0133, 0x08 },
+	{ 0x0133, 0x09 },
 	{ 0x013A, 0x01 },
 	{ 0x013B, 0x09 },
 	{ 0x013C, 0x3B },
@@ -196,10 +196,10 @@ si5341_revd_register_t const si5341_revd_registers[SI5341_REVD_REG_CONFIG_NUM_RE
 	{ 0x025C, 0x03 },
 	{ 0x025D, 0x00 },
 	{ 0x025E, 0x00 },
-	{ 0x025F, 0x03 },
+	{ 0x025F, 0x00 },
 	{ 0x0260, 0x00 },
 	{ 0x0261, 0x00 },
-	{ 0x0262, 0x03 },
+	{ 0x0262, 0x00 },
 	{ 0x0263, 0x00 },
 	{ 0x0264, 0x00 },
 	{ 0x0268, 0x00 },
@@ -226,25 +226,25 @@ si5341_revd_register_t const si5341_revd_registers[SI5341_REVD_REG_CONFIG_NUM_RE
 	{ 0x030C, 0x00 },
 	{ 0x030D, 0x00 },
 	{ 0x030E, 0x00 },
-	{ 0x030F, 0xC0 },
-	{ 0x0310, 0x5C },
-	{ 0x0311, 0x15 },
+	{ 0x030F, 0x00 },
+	{ 0x0310, 0x00 },
+	{ 0x0311, 0x1C },
 	{ 0x0312, 0x00 },
 	{ 0x0313, 0x00 },
 	{ 0x0314, 0x00 },
-	{ 0x0315, 0x78 },
-	{ 0x0316, 0xEA },
+	{ 0x0315, 0x00 },
+	{ 0x0316, 0xA0 },
 	{ 0x0317, 0x00 },
 	{ 0x0318, 0x00 },
 	{ 0x0319, 0x00 },
-	{ 0x031A, 0x00 },
-	{ 0x031B, 0x00 },
-	{ 0x031C, 0x00 },
+	{ 0x031A, 0xC0 },
+	{ 0x031B, 0x5C },
+	{ 0x031C, 0x15 },
 	{ 0x031D, 0x00 },
 	{ 0x031E, 0x00 },
 	{ 0x031F, 0x00 },
-	{ 0x0320, 0x00 },
-	{ 0x0321, 0x00 },
+	{ 0x0320, 0x78 },
+	{ 0x0321, 0xEA },
 	{ 0x0322, 0x00 },
 	{ 0x0323, 0x00 },
 	{ 0x0324, 0x00 },
@@ -414,16 +414,16 @@ si5341_revd_register_t const si5341_revd_registers[SI5341_REVD_REG_CONFIG_NUM_RE
 	{ 0x094F, 0x02 },
 	{ 0x095E, 0x00 },
 	{ 0x0A02, 0x00 },
-	{ 0x0A03, 0x03 },
+	{ 0x0A03, 0x07 },
 	{ 0x0A04, 0x01 },
-	{ 0x0A05, 0x03 },
+	{ 0x0A05, 0x07 },
 	{ 0x0A14, 0x00 },
 	{ 0x0A1A, 0x00 },
 	{ 0x0A20, 0x00 },
 	{ 0x0A26, 0x00 },
 	{ 0x0A2C, 0x00 },
 	{ 0x0B44, 0x0F },
-	{ 0x0B4A, 0x1C },
+	{ 0x0B4A, 0x18 },
 	{ 0x0B57, 0x03 },
 	{ 0x0B58, 0x01 },
 	/* End configuration registers */
@@ -442,10 +442,10 @@ si5341_revd_register_t const si5341_revd_registers[SI5341_REVD_REG_CONFIG_NUM_RE
  * Overview
  * ========
  * Part:               Si5341AB Rev D
- * Project File:       C:\Users\Tom\Downloads\Si5341-RevD-TSTECM-Project.slabtimeproj
+ * Project File:       C:\work\design-resources\BoardTools\BRK1900\ClockConfig\Si5341-ECM1900.slabtimeproj
  * Design ID:          TSTECM
- * Created By:         ClockBuilder Pro v2.45 [2020-07-16]
- * Timestamp:          2020-10-21 16:31:58 GMT-07:00
+ * Created By:         ClockBuilder Pro v3.3 [2021-04-08]
+ * Timestamp:          2024-06-17 15:31:49 GMT-07:00
  * 
  * Design Rule Check
  * =================
@@ -466,7 +466,7 @@ si5341_revd_register_t const si5341_revd_registers[SI5341_REVD_REG_CONFIG_NUM_RE
  * 
  * Device Grade
  * ============
- * Maximum Output Frequency: 125 MHz
+ * Maximum Output Frequency: 156.25 MHz
  * Frequency Synthesis Mode: Fractional
  * Frequency Plan Grade:     B
  * Minimum Base OPN:         Si5341B*
@@ -515,9 +515,9 @@ si5341_revd_register_t const si5341_revd_registers[SI5341_REVD_REG_CONFIG_NUM_RE
  *          Enabled, LVDS 3.3 V
  *    OUT6: 125 MHz
  *          Enabled, LVDS 3.3 V
- *    OUT7: 125 MHz
+ *    OUT7: 156.25 MHz
  *          Enabled, LVDS 3.3 V
- *    OUT8: 125 MHz
+ *    OUT8: 156.25 MHz
  *          Enabled, LVDS 3.3 V
  *    OUT9: Unused
  * 
@@ -528,7 +528,8 @@ si5341_revd_register_t const si5341_revd_registers[SI5341_REVD_REG_CONFIG_NUM_RE
  * Fpfd = 50 MHz
  * Fvco = 14 GHz
  * Fms0 = 1 GHz
- * Fms1 = 600.24 MHz
+ * Fms1 = 312.5 MHz
+ * Fms2 = 600.24 MHz
  * 
  * P dividers:
  *    P0  = Unused
@@ -547,13 +548,13 @@ si5341_revd_register_t const si5341_revd_registers[SI5341_REVD_REG_CONFIG_NUM_RE
  *       OUT3: 100 MHz
  *       OUT4: 100 MHz
  *       OUT6: 125 MHz
- *       OUT7: 125 MHz
- *       OUT8: 125 MHz
  *    N1:
+ *       Value: 44.8
+ *       OUT7: 156.25 MHz [ 156 + 1/4 MHz ]
+ *       OUT8: 156.25 MHz [ 156 + 1/4 MHz ]
+ *    N2:
  *       Value: 23.3240037318405970... [ 23 + 2431/7503 ]
  *       OUT5: 100.04 MHz [ 100 + 1/25 MHz ]
- *    N2:
- *       Unused
  *    N3:
  *       Unused
  *    N4:
@@ -567,8 +568,8 @@ si5341_revd_register_t const si5341_revd_registers[SI5341_REVD_REG_CONFIG_NUM_RE
  *    R4 = 10
  *    R5 = 6
  *    R6 = 8
- *    R7 = 8
- *    R8 = 8
+ *    R7 = 2
+ *    R8 = 2
  *    R9 = Unused
  * 
  * Dividers listed above show effective values. These values are translated to register settings by ClockBuilder Pro. For the actual register values, see below. Refer to the Family Reference Manual for information on registers related to frequency plan.
@@ -593,16 +594,16 @@ si5341_revd_register_t const si5341_revd_registers[SI5341_REVD_REG_CONFIG_NUM_RE
  * 
  * Revision: D
  * VDD:      1.8 V
- * Ta:       25 째C
- * Theta-JA: 18.3 째C/W
+ * Ta:       25 캜
+ * Theta-JA: 18.3 캜/W
  * Airflow:  2 m/s
  * 
- * Total Power: 1.107 W, On Chip Power: 1.053 W, Tj: 44 째C
+ * Total Power: 1.148 W, On Chip Power: 1.093 W, Tj: 45 캜
  * 
  *          Frequency  Format   Voltage   Current     Power
  *         ----------  ------  --------  --------  --------
- * VDD                            1.8 V  149.1 mA    268 mW
- * VDDA                           3.3 V  114.4 mA    377 mW
+ * VDD                            1.8 V  168.0 mA    302 mW
+ * VDDA                           3.3 V  116.0 mA    383 mW
  * VDDO0      125 MHz  LVDS       3.3 V   15.6 mA     51 mW
  * VDDO1      125 MHz  LVDS       3.3 V   15.6 mA     51 mW
  * VDDO2      125 MHz  LVDS       3.3 V   15.6 mA     51 mW
@@ -610,15 +611,15 @@ si5341_revd_register_t const si5341_revd_registers[SI5341_REVD_REG_CONFIG_NUM_RE
  * VDDO4      100 MHz  LVDS       3.3 V   15.5 mA     51 mW
  * VDDO5   100.04 MHz  LVDS       3.3 V   15.5 mA     51 mW
  * VDDO6      125 MHz  LVDS       3.3 V   15.6 mA     51 mW
- * VDDO7      125 MHz  LVDS       3.3 V   15.6 mA     51 mW
- * VDDO8      125 MHz  LVDS       3.3 V   15.6 mA     51 mW
+ * VDDO7   156.25 MHz  LVDS       3.3 V   15.7 mA     52 mW
+ * VDDO8   156.25 MHz  LVDS       3.3 V   15.7 mA     52 mW
  * VDDO9       Unused                                      
  *                                       --------  --------
- *                                Total  403.3 mA   1.107 W
+ *                                Total  424.1 mA   1.148 W
  * 
  * Note:
  * 
- * -Tj is junction temperature. Tj must be less than 125 째C (on Si5341 Revision D) for device to comply with datasheet specifications. Tj = Ta + Theta_JA*On_Chip_Power.
+ * -Tj is junction temperature. Tj must be less than 125 캜 (on Si5341 Revision D) for device to comply with datasheet specifications. Tj = Ta + Theta_JA*On_Chip_Power.
  * -Overall power includes on-chip power dissipation and adds differential load power dissipation to estimate total power requirements.
  * -Above are estimates only: power and temperature should be measured on your PCB.
  * -Selection of appropriate Theta-JA is required for most accurate estimate. Ideally, select 'User Specified Theta-JA' and enter a Theta-JA value based on the thermal properties of your PCB.
@@ -735,7 +736,7 @@ si5341_revd_register_t const si5341_revd_registers[SI5341_REVD_REG_CONFIG_NUM_RE
  * 0x0122[7:6]   OUT5_CMOS_DRV        0                  0x0              
  * 0x0123[3:0]   OUT5_CM              3                  0x3              
  * 0x0123[6:4]   OUT5_AMPL            3                  0x3              
- * 0x0124[2:0]   OUT5_MUX_SEL         1                  0x1              
+ * 0x0124[2:0]   OUT5_MUX_SEL         2                  0x2              
  * 0x0124[5:4]   OUT5_VDD_SEL         0                  0x0              
  * 0x0124[3]     OUT5_VDD_SEL_EN      1                  0x1              
  * 0x0124[7:6]   OUT5_INV             0                  0x0              
@@ -754,27 +755,27 @@ si5341_revd_register_t const si5341_revd_registers[SI5341_REVD_REG_CONFIG_NUM_RE
  * 0x0129[7:6]   OUT6_INV             0                  0x0              
  * 0x012B[0]     OUT7_PDN             0                  0x0              
  * 0x012B[1]     OUT7_OE              1                  0x1              
- * 0x012B[2]     OUT7_RDIV_FORCE2     0                  0x0              
+ * 0x012B[2]     OUT7_RDIV_FORCE2     1                  0x1              
  * 0x012C[2:0]   OUT7_FORMAT          1                  0x1              
  * 0x012C[3]     OUT7_SYNC_EN         1                  0x1              
  * 0x012C[5:4]   OUT7_DIS_STATE       0                  0x0              
  * 0x012C[7:6]   OUT7_CMOS_DRV        0                  0x0              
  * 0x012D[3:0]   OUT7_CM              3                  0x3              
  * 0x012D[6:4]   OUT7_AMPL            3                  0x3              
- * 0x012E[2:0]   OUT7_MUX_SEL         0                  0x0              
+ * 0x012E[2:0]   OUT7_MUX_SEL         1                  0x1              
  * 0x012E[5:4]   OUT7_VDD_SEL         0                  0x0              
  * 0x012E[3]     OUT7_VDD_SEL_EN      1                  0x1              
  * 0x012E[7:6]   OUT7_INV             0                  0x0              
  * 0x0130[0]     OUT8_PDN             0                  0x0              
  * 0x0130[1]     OUT8_OE              1                  0x1              
- * 0x0130[2]     OUT8_RDIV_FORCE2     0                  0x0              
+ * 0x0130[2]     OUT8_RDIV_FORCE2     1                  0x1              
  * 0x0131[2:0]   OUT8_FORMAT          1                  0x1              
  * 0x0131[3]     OUT8_SYNC_EN         1                  0x1              
  * 0x0131[5:4]   OUT8_DIS_STATE       0                  0x0              
  * 0x0131[7:6]   OUT8_CMOS_DRV        0                  0x0              
  * 0x0132[3:0]   OUT8_CM              3                  0x3              
  * 0x0132[6:4]   OUT8_AMPL            3                  0x3              
- * 0x0133[2:0]   OUT8_MUX_SEL         0                  0x0              
+ * 0x0133[2:0]   OUT8_MUX_SEL         1                  0x1              
  * 0x0133[5:4]   OUT8_VDD_SEL         0                  0x0              
  * 0x0133[3]     OUT8_VDD_SEL_EN      1                  0x1              
  * 0x0133[7:6]   OUT8_INV             0                  0x0              
@@ -812,8 +813,8 @@ si5341_revd_register_t const si5341_revd_registers[SI5341_REVD_REG_CONFIG_NUM_RE
  * 0x0256[23:0]  R4_REG               4                  0x000004         
  * 0x0259[23:0]  R5_REG               2                  0x000002         
  * 0x025C[23:0]  R6_REG               3                  0x000003         
- * 0x025F[23:0]  R7_REG               3                  0x000003         
- * 0x0262[23:0]  R8_REG               3                  0x000003         
+ * 0x025F[23:0]  R7_REG               0                  0x000000         
+ * 0x0262[23:0]  R8_REG               0                  0x000000         
  * 0x0268[23:0]  R9_REG               0                  0x000000         
  * 0x026B[7:0]   DESIGN_ID0           84                 0x54             
  * 0x026C[7:0]   DESIGN_ID1           83                 0x53             
@@ -826,11 +827,11 @@ si5341_revd_register_t const si5341_revd_registers[SI5341_REVD_REG_CONFIG_NUM_RE
  * 0x0302[43:0]  N0_NUM               30064771072        0x00700000000    
  * 0x0308[31:0]  N0_DEN               2147483648         0x80000000       
  * 0x030C[0]     N0_UPDATE            0                  0x0              
- * 0x030D[43:0]  N1_NUM               91750400000        0x0155CC00000    
- * 0x0313[31:0]  N1_DEN               3933732864         0xEA780000       
+ * 0x030D[43:0]  N1_NUM               120259084288       0x01C00000000    
+ * 0x0313[31:0]  N1_DEN               2684354560         0xA0000000       
  * 0x0317[0]     N1_UPDATE            0                  0x0              
- * 0x0318[43:0]  N2_NUM               0                  0x00000000000    
- * 0x031E[31:0]  N2_DEN               0                  0x00000000       
+ * 0x0318[43:0]  N2_NUM               91750400000        0x0155CC00000    
+ * 0x031E[31:0]  N2_DEN               3933732864         0xEA780000       
  * 0x0322[0]     N2_UPDATE            0                  0x0              
  * 0x0323[43:0]  N3_NUM               0                  0x00000000000    
  * 0x0329[31:0]  N3_DEN               0                  0x00000000       
@@ -924,20 +925,19 @@ si5341_revd_register_t const si5341_revd_registers[SI5341_REVD_REG_CONFIG_NUM_RE
  * 0x094E[11:0]  REFCLK_HYS_SEL       585                0x249            
  * 0x095E[0]     M_INTEGER            0                  0x0              
  * 0x0A02[4:0]   N_ADD_0P5            0                  0x00             
- * 0x0A03[4:0]   N_CLK_TO_OUTX_EN     3                  0x03             
+ * 0x0A03[4:0]   N_CLK_TO_OUTX_EN     7                  0x07             
  * 0x0A04[4:0]   N_PIBYP              1                  0x01             
- * 0x0A05[4:0]   N_PDNB               3                  0x03             
+ * 0x0A05[4:0]   N_PDNB               7                  0x07             
  * 0x0A14[3]     N0_HIGH_FREQ         0                  0x0              
  * 0x0A1A[3]     N1_HIGH_FREQ         0                  0x0              
  * 0x0A20[3]     N2_HIGH_FREQ         0                  0x0              
  * 0x0A26[3]     N3_HIGH_FREQ         0                  0x0              
  * 0x0A2C[3]     N4_HIGH_FREQ         0                  0x0              
  * 0x0B44[3:0]   PDIV_ENB             15                 0xF              
- * 0x0B4A[4:0]   N_CLK_DIS            28                 0x1C             
+ * 0x0B4A[4:0]   N_CLK_DIS            24                 0x18             
  * 0x0B57[11:0]  VCO_RESET_CALCODE    259                0x103
  * 
  *
  */
 
 #endif
-
