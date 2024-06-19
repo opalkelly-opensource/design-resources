@@ -36,12 +36,10 @@ xlnx,eeprom = &eeprom;
 	ethernet_phy: ethernet-phy@0 {
 		reg = <0>;
 		device_type = "ethernet-phy";
-		reset-gpios = <&gpio 18 1>;
-		reset-assert-us = <200000>;
-		reset-deassert-us = <150>;
+		compatible = "ti,dp83867", "ethernet-phy-ieee802.3-c22";
+		ti,rx-internal-delay = <0x8>;
+		ti,tx-internal-delay = <0xa>;
+		ti,fifo-depth = <0x1>;
 	};
 };
-
-
-
 

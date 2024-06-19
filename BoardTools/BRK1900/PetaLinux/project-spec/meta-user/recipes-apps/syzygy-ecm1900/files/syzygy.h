@@ -47,7 +47,7 @@
 
 // Total number of SmartVIO ports in the system.
 // The FPGA side of a SYZYGY connection counts as a port here.
-#define SVIO_NUM_PORTS              (10)
+#define SVIO_NUM_PORTS              (11)
 
 // Maximum number of SmartVIO ranges definable in the DNA.
 #define SZG_ATTR_LVDS                       (0x0001)
