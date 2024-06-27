@@ -189,7 +189,7 @@ class DigitalSignalSamplerView extends Component<
             <div className="okDigitalSignalSampler">
                 <div className="okDigitalSignalSamplerControlPanel">
                     <ToggleSwitch
-                        label="Start"
+                        label="Enabled"
                         state={this.state.isUpdateTimerEnabled ? ToggleState.On : ToggleState.Off}
                         onToggleStateChanged={this.OnToggleChartDataUpdateTimer.bind(this)}
                         disabled={this.state.isOperationPending}
