@@ -104,7 +104,6 @@ class DigitalSignalSamplerView extends Component<
             animation: false,
             responsive: true,
             maintainAspectRatio: false,
-            //aspectRatio: 1.0,
             scales: {
                 x: {
                     type: "linear",
@@ -257,8 +256,6 @@ class DigitalSignalSamplerView extends Component<
         await this.UpdateChartData();
 
         const elapsed: number = performance.now() - start;
-
-        //console.log("UpdateChartData ElapsedTime=" + elapsed + "ms");
 
         if (this.state.isUpdateTimerEnabled) {
             const delay: number = this.props.updatePeriodMilliseconds - elapsed;

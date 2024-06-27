@@ -79,8 +79,6 @@ class FFTSignalGeneratorView extends Component<
         const fftLength = 1024; // 1024 bin FFT Length
         const sampleRate = 125000000; // 125MHz Sample Rate
         const maxAmplitudeValue = 0x1fffff;
-        //TODO: Check this value
-        //const maxAmplitudeValue = 0x7ffff;      // 19 bits
 
         const fftConfiguration = new FFTConfiguration(fftLength, sampleRate, maxAmplitudeValue);
         const retryCount = 100;

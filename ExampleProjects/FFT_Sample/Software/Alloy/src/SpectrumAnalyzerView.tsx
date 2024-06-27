@@ -69,7 +69,6 @@ class SpectrumAnalyzerView extends Component<SpectrumAnalyzerViewProps> {
         const fftLength = 1024; // 1024 bin FFT Length
         const sampleRate: Hertz = 125000000; // 125MHz Sample Rate
         const maxAmplitudeValue = 0x1fffff;
-        //const maxAmplitudeValue = 0x7ffff;      // 19 bits
 
         this._FFTConfiguration = new FFTConfiguration(fftLength, sampleRate, maxAmplitudeValue);
 
@@ -94,7 +93,6 @@ class SpectrumAnalyzerView extends Component<SpectrumAnalyzerViewProps> {
             animation: false,
             responsive: true,
             maintainAspectRatio: false,
-            //aspectRatio: 1.0,
             scales: {
                 x: {
                     type: "linear",
