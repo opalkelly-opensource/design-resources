@@ -1,0 +1,69 @@
+/**
+ * Copyright (c) 2024 Opal Kelly Incorporated
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+.TitleText {
+    /* Typography */
+    font-family: Inter, "Nunito Sans", sans-serif, ui-sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px; /* 150% */
+
+    /* Style */
+    color: black;
+}
+
+.LabelText {
+    /* Typography */
+    font-family: Inter, "Nunito Sans", sans-serif, ui-sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px; /* 150% */
+
+    /* Style */
+    color: black;
+}
+
+.Panel {
+    /* Layout */
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 4px;
+    padding: 6px;
+
+    /* Style */
+    border-radius: 8px;
+    border: 1px solid var(--Gray-3, #e7ebef);
+    background: var(--base-white, #fff);
+}
+
+.SpeedSettingsPanel {
+    display: flex;
+}
+
+.ToggleOptionsPanel {
+    display: flex;
+    align-items: flex-start;
+}
+
+.ErrorPanel {
+    display: flex;
+}
+
+.StatusIndicatorPanel {
+    display: flex;
+}
+
+.MACAddressStatusPanel {
+    display: flex;
+}
+
+.MACAddressSettingsPanel {
+    display: flex;
+}
