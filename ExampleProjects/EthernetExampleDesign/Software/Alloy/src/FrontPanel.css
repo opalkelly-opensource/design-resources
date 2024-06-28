@@ -1,0 +1,30 @@
+/**
+ * Copyright (c) 2024 Opal Kelly Incorporated
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+.okFrontPanel {
+    /* Layout */
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    padding: 10px;
+    align-items: flex-start;
+}
+
+.okControlPanel {
+    /* Layout */
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-content: stretch;
+    gap: 8px;
+
+    /* Style */
+    background-color: rgb(255, 255, 255);
+    padding: 6px;
+    margin: 6px;
+    border-radius: 8px;
+}
