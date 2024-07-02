@@ -1,5 +1,6 @@
 {
   "name": "@opalkelly/frontpanel-react-components",
+  "type": "module",
   "version": "0.1.1",
   "description": "React Component Library for OpalKelly FrontPanel Alloy",
   "keywords": [
