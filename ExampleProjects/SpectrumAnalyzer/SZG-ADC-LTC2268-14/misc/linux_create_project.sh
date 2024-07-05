@@ -8,6 +8,9 @@ if [ $# -eq 0 ]
       exit 1
 fi
 
-vitis_hls ifft/build_ifft_vitis.tcl
-vitis_hls fft/build_fft_vitis.tcl
-vivado -source misc/create_project_vivado.tcl -tclargs $1
+cd ifft
+vitis_hls build_ifft_vitis.tcl
+cd ../fft
+vitis_hls build_fft_vitis.tcl
+cd ..
+vivado -source create_project_vivado.tcl -tclargs $1
