@@ -12,7 +12,7 @@ lappend ip_paths \
 [list ./ifft/vitis/solution1/impl/ip]
 
 start_gui
-create_project dac_adc_tester ./Vivado -part xcau25p-ffvb676-2-e
+create_project adc_dac_alloy ./Vivado -part xcau25p-ffvb676-2-e
 set_property board_part opalkelly.com:xem8320-au25p:part0:1.2 [current_project]
 set_property ip_repo_paths $ip_paths [current_project]
 update_ip_catalog
