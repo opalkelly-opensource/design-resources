@@ -8,16 +8,16 @@ on:
     paths:
       - 'ExampleProjects/EthernetExampleDesign/Software/Alloy/.prettierrc'
       - 'ExampleProjects/EthernetExampleDesign/Software/Alloy/src/**'
-      - 'ExampleProjects/FFT_Sample/Software/Alloy/.prettierrc'
-      - 'ExampleProjects/FFT_Sample/Software/Alloy/src/**'
+      - 'ExampleProjects/DAC-ADC/Software/Alloy/.prettierrc'
+      - 'ExampleProjects/DAC-ADC/Software/Alloy/src/**'
   pull_request:
     branches:
       - main
     paths:
       - 'ExampleProjects/EthernetExampleDesign/Software/Alloy/.prettierrc'
       - 'ExampleProjects/EthernetExampleDesign/Software/Alloy/src/**'
-      - 'ExampleProjects/FFT_Sample/Software/Alloy/.prettierrc'
-      - 'ExampleProjects/FFT_Sample/Software/Alloy/src/**'
+      - 'ExampleProjects/DAC-ADC/Software/Alloy/.prettierrc'
+      - 'ExampleProjects/DAC-ADC/Software/Alloy/src/**'
 
 permissions:
   contents: read
@@ -43,6 +43,6 @@ jobs:
         working-directory: ExampleProjects/EthernetExampleDesign/Software/Alloy
         run: npx prettier --check './src/**'
 
-      - name: Format check - FFT React App
-        working-directory: ExampleProjects/FFT_Sample/Software/Alloy
+      - name: Format check - DAC-ADC React App
+        working-directory: ExampleProjects/DAC-ADC/Software/Alloy
         run: npx prettier --check './src/**'
