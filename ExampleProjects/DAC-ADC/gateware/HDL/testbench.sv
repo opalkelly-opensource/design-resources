@@ -20,7 +20,7 @@ wire          dac_sdio_0;
 wire          dac_sclk_0;
 wire  [11:0]  dac_data_o_0;
 // Change to your top level module
-adc_dac_tester wrapper
+adc_dac_example wrapper
    (
     .adc_cs_n_0(),
     .adc_dco_n_0(),
@@ -147,7 +147,8 @@ initial begin
     WriteRegister(10'd0, 32'h0000_0000); // dc component
     WriteRegister(10'd1, 32'h0000_0000); // dc component
 
-    WriteRegister(10'd488, 32'h0003_FFFF); // bin 488 real component
+    WriteRegister(10'd488, 32'h0001_FFFF); // bin 488 real component
+    WriteRegister(10'd4, 32'h0001_FFFF); // bin 4 real component
 
     #200 
     ActivateTriggerIn(8'h40, 1); // send new bin data to IFFT core and DAC
