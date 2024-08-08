@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" InitialTargets="CheckWXSetup" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(WXWIN)\build\msw\wx_setup.props" Condition="Exists('$(WXWIN)\build\msw\wx_setup.props')" />
+    <Import Project="$(WXWIN)\build\msw\wx_local.props" Condition="Exists('$(WXWIN)\build\msw\wx_local.props')" />
+  </ImportGroup>
+
+  <PropertyGroup Label="UserMacros">
+    <!--
+      We have several possible choices for the compiler prefix:
+
+      - Default one is "vc", we want to use this to allow building this project
+        when wx was built from source with the default options.
+      - Version-specific prefix of the form "vcNNN", which is used in some other
+        projects.
+      - Version-specific but ABI-compatible prefix which differs from the
+        previous value in that it's the same "vc14x" for MSVS 2015/2017/2019/2022
+        which are ABI-compatible with each other. This is used by official wx
+        binaries, so we want to check this one too.
+      -->
+    <wxToolsetVersion Condition="'$(VisualStudioVersion)' == '10.0'">100</wxToolsetVersion>
+    <wxToolsetVersion Condition="'$(VisualStudioVersion)' == '11.0'">110</wxToolsetVersion>
+    <wxToolsetVersion Condition="'$(VisualStudioVersion)' == '12.0'">120</wxToolsetVersion>
+    <wxToolsetVersion Condition="'$(VisualStudioVersion)' == '14.0'">140</wxToolsetVersion>
+    <wxToolsetVersion Condition="'$(VisualStudioVersion)' == '15.0'">141</wxToolsetVersion>
+    <wxToolsetVersion Condition="'$(VisualStudioVersion)' == '16.0'">142</wxToolsetVersion>
+    <wxToolsetVersion Condition="'$(VisualStudioVersion)' == '17.0'">143</wxToolsetVersion>
+
+    <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '10.0'">100</wxToolsetVerABICompat>
+    <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '11.0'">110</wxToolsetVerABICompat>
+    <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '12.0'">120</wxToolsetVerABICompat>
+    <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '14.0'">14x</wxToolsetVerABICompat>
+    <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '15.0'">14x</wxToolsetVerABICompat>
+    <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '16.0'">14x</wxToolsetVerABICompat>
+    <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '17.0'">14x</wxToolsetVerABICompat>
+  </PropertyGroup>
+
+  <!--
+    Try to find some existing wxWidgets libraries.
+
+    Note that we use wxBaseLibNamePrefix for both static libs and DLL cases,
+    it's simpler than constructing the DLL name and still works as we must have
+    the import library with this name in the DLL directory too.
+    -->
+  <Choose>
+    <When Condition="Exists('$(WXWIN)\lib\vc$(wxToolsetVerABICompat)$(wxArchSuffix)_dll$(wxCfg)\$(wxBaseLibNamePrefix).lib')">
+      <PropertyGroup Label="UserMacros">
+        <wxUsingVersionABICompat>1</wxUsingVersionABICompat>
+        <wxUsingDll>1</wxUsingDll>
+        <wxLibOrDllDir>$(WXWIN)\lib\vc$(wxToolsetVerABICompat)$(wxArchSuffix)_dll$(wxCfg)</wxLibOrDllDir>
+      </PropertyGroup>
+    </When>
+
+    <When Condition="Exists('$(WXWIN)\lib\vc$(wxToolsetVerABICompat)$(wxArchSuffix)_lib$(wxCfg)\$(wxBaseLibNamePrefix).lib')">
+      <PropertyGroup Label="UserMacros">
+        <wxUsingVersionABICompat>1</wxUsingVersionABICompat>
+        <wxUsingLib>1</wxUsingLib>
+        <wxLibOrDllDir>$(WXWIN)\lib\vc$(wxToolsetVerABICompat)$(wxArchSuffix)_lib$(wxCfg)</wxLibOrDllDir>
+      </PropertyGroup>
+    </When>
+
+    <When Condition="Exists('$(WXWIN)\lib\vc$(wxToolsetVersion)$(wxArchSuffix)_dll$(wxCfg)\$(wxBaseLibNamePrefix).lib')">
+      <PropertyGroup Label="UserMacros">
+        <wxUsingVersion>1</wxUsingVersion>
+        <wxUsingDll>1</wxUsingDll>
+        <wxLibOrDllDir>$(WXWIN)\lib\vc$(wxToolsetVersion)$(wxArchSuffix)_dll$(wxCfg)</wxLibOrDllDir>
+      </PropertyGroup>
+    </When>
+
+    <When Condition="Exists('$(WXWIN)\lib\vc$(wxToolsetVersion)$(wxArchSuffix)_lib$(wxCfg)\$(wxBaseLibNamePrefix).lib')">
+      <PropertyGroup Label="UserMacros">
+        <wxUsingVersion>1</wxUsingVersion>
+        <wxUsingLib>1</wxUsingLib>
+        <wxLibOrDllDir>$(WXWIN)\lib\vc$(wxToolsetVersion)$(wxArchSuffix)_lib$(wxCfg)</wxLibOrDllDir>
+      </PropertyGroup>
+    </When>
+
+    <When Condition="Exists('$(WXWIN)\lib\vc$(wxArchSuffix)_dll$(wxCfg)\$(wxBaseLibNamePrefix).lib')">
+      <PropertyGroup Label="UserMacros">
+        <wxUsingDll>1</wxUsingDll>
+        <wxLibOrDllDir>$(WXWIN)\lib\vc$(wxArchSuffix)_dll$(wxCfg)</wxLibOrDllDir>
+      </PropertyGroup>
+    </When>
+
+    <When Condition="Exists('$(WXWIN)\lib\vc$(wxArchSuffix)_lib$(wxCfg)\$(wxBaseLibNamePrefix).lib')">
+      <PropertyGroup Label="UserMacros">
+        <wxUsingLib>1</wxUsingLib>
+        <wxLibOrDllDir>$(WXWIN)\lib\vc$(wxArchSuffix)_lib$(wxCfg)</wxLibOrDllDir>
+      </PropertyGroup>
+    </When>
+  </Choose>
+
+  <PropertyGroup Label="UserMacros" Condition="$(wxUsingVersionABICompat) != ''">
+    <wxVersionDefine>wxMSVC_VERSION_AUTO;wxMSVC_VERSION_ABI_COMPAT</wxVersionDefine>
+  </PropertyGroup>
+
+  <PropertyGroup Label="UserMacros" Condition="$(wxUsingVersion) != ''">
+    <wxVersionDefine>wxMSVC_VERSION_AUTO</wxVersionDefine>
+  </PropertyGroup>
+
+  <PropertyGroup Label="UserMacros" Condition="$(wxUsingDll) != ''">
+    <wxUsingDllDefine>WXUSINGDLL</wxUsingDllDefine>
+  </PropertyGroup>
+
+  <Target Name="CheckWXSetup">
+    <Error
+      Condition="'$(WXWIN)' == ''"
+      Text="WXWIN environment variable must be defined, please set it." />
+
+    <Error
+      Condition="!Exists('$(WXWIN)')"
+      Text="WXWIN directory ($(WXWIN)) doesn't exist." />
+
+    <Error
+      Condition="!Exists('$(WXWIN)\build\msw\wx_setup.props')"
+      Text="WXWIN directory ($(WXWIN)) doesn't seem to contain wxWidgets." />
+
+    <Error
+      Condition="'$(wxUsingDll)$(wxUsingLib)' == ''"
+      Text="wxWidgets libraries not found under &quot;$(WXWIN)\lib&quot;." />
+  </Target>
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions>__WXMSW__;$(wxUsingDllDefine);$(wxVersionDefine);wxNO_AUI_LIB;wxNO_MEDIA_LIB;wxNO_NET_LIB;wxNO_QA_LIB;wxNO_PROPGRID_LIB;wxNO_RIBBON_LIB;wxNO_RICHTEXT_LIB;wxNO_STC_LIB;wxNO_WEBVIEW_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(WXWIN)\include\msvc;$(WXWIN)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>__WXMSW__;$(wxUsingDllDefine);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(wxLibOrDllDir)\$(wxToolkitPrefix)$(wxSuffix);$(WXWIN)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(wxLibOrDllDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+
+  <!--
+    Copy the DLLs we need to the program directory to make it possible to run
+    it without copying the DLLs to some directory on the PATH manually.
+
+    Note that we use wildcard at the end because we don't know the "vendor"
+    part of the DLL names here, it could be "custom" (by default) or empty
+    (for the official DLLs).
+   -->
+  <ItemGroup Condition="$(wxUsingDll) != ''">
+    <ReferenceCopyLocalPaths Include="$(wxLibOrDllDir)\$(wxBaseDllNamePrefix)_$(wxCompilerPrefix)$(wxArchSuffix)*.dll" />
+    <ReferenceCopyLocalPaths Include="$(wxLibOrDllDir)\$(wxToolkitDllNamePrefix)core_$(wxCompilerPrefix)$(wxArchSuffix)*.dll" />
+    <ReferenceCopyLocalPaths Include="$(wxLibOrDllDir)\$(wxToolkitDllNamePrefix)gl_$(wxCompilerPrefix)$(wxArchSuffix)*.dll" />
+    <ReferenceCopyLocalPaths Include="$(wxLibOrDllDir)\$(wxToolkitDllNamePrefix)xrc_$(wxCompilerPrefix)$(wxArchSuffix)*.dll" />
+    <ReferenceCopyLocalPaths Include="$(wxLibOrDllDir)\$(wxToolkitDllNamePrefix)html_$(wxCompilerPrefix)$(wxArchSuffix)*.dll" />
+    <ReferenceCopyLocalPaths Include="$(wxLibOrDllDir)\$(wxBaseDllNamePrefix)_xml_$(wxCompilerPrefix)$(wxArchSuffix)*.dll" />
+  </ItemGroup>
+</Project>

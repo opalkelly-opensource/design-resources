@@ -1,0 +1,46 @@
+// MEDIA
+//
+// Media element from Bootstrap
+
+.media {
+  display: flex;
+  margin-top: $spacing-type;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.media-object {
+  display: block;
+}
+
+.media-body {
+  flex: 1;
+
+  p {
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+//
+// Alignment
+//
+
+.media-left {
+  padding-right: $grid-gutter;
+}
+
+.media-right {
+  padding-left: $grid-gutter;
+}
+
+.media-middle {
+  align-self: center;
+}
+
+.media-bottom {
+  align-self: flex-end;
+}

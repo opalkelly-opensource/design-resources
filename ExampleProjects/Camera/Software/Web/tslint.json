@@ -1,0 +1,18 @@
+{
+  "extends": ["tslint:latest", "tslint-config-prettier", "tslint-immutable"],
+  "defaultSeverity": "error",
+  "jsRules": {},
+  "rules": {
+    "no-bitwise": false,
+    "object-literal-sort-keys": false,
+    "variable-name": {
+      "options": [
+        "ban-keywords",
+        "check-format",
+        "allow-leading-underscore",
+        "allow-pascal-case"
+      ]
+    }
+  },
+  "rulesDirectory": []
+}

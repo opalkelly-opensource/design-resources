@@ -1,0 +1,563 @@
+// MUSTRA FORMS
+//
+// Based on Bootstrap Forms - basic and custom styling form elements
+
+
+//
+// Label
+//
+
+.form-control-label {
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
+//
+// Textual form controls
+//
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: $input-padding-y $input-padding-x;
+  font-size: $input-font-size;
+  line-height: $input-line-height;
+  color: $input-color;
+  background-color: $input-bg;
+  // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214.
+  background-image: none;
+  background-clip: padding-box;
+  border: $input-border-width solid $input-border-color;
+  border-radius: $input-border-radius;
+  transition: $input-transition;
+
+  // Unstyle the caret on `<select>`s in IE10+.
+  &::-ms-expand {
+    background-color: transparent;
+    border: 0;
+  }
+
+  // Customize the `:focus` state to imitate native WebKit styles.
+  @include form-control-focus();
+
+  // Placeholder
+  &::placeholder {
+    color: $input-color-placeholder;
+    opacity: 1; // Override Firefox's unusual default opacity; see https://github.com/twbs/bootstrap/pull/11526.
+    transition: $input-placeholder-transition; // Used for "slide-out" effect
+  }
+
+  // Disabled and read-only inputs
+  //
+  // HTML5 says that controls under a fieldset > legend:first-child won't be
+  // disabled if the fieldset is disabled. Due to implementation difficulty, we
+  // don't honor that edge case; we style them as disabled anyway.
+  &:disabled,
+  &[readonly] {
+    background-color: $input-bg-disabled;
+    opacity: 1; // iOS fix for unreadable disabled content; see https://github.com/twbs/bootstrap/issues/11655.
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+// HACK!!!
+
+input[type="text"].form-control,
+input[type="email"].form-control,
+input[type="password"].form-control,
+input[type="number"].form-control {
+  padding-top: 5px;
+  padding-bottom: 6px;
+}
+
+// !!! END HACK
+
+select.form-control {
+  padding-right: $spacing-md;
+
+  // Custom arrows
+  background: $input-bg url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAASCAYAAABit09LAAABG2lUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS41LjAiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIi8+CiA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgo8P3hwYWNrZXQgZW5kPSJyIj8+Gkqr6gAAAYZpQ0NQc1JHQiBJRUM2MTk2Ni0yLjEAACiRdZG/S0JRFMc/apH9kIYcGhocoiE0yiJqKyX6QYiYQVaLvvwRaD3eUyIaG1odHPpBSxEtzbVF/0AQBNUUQWs0FLSEvM5VwYg8l3vv537vOefeey7Yl7JazmwahNxG3ohMBzxLsWVPywtOHLTiwxXXTH0yHJ6noX09YFPzvU/lauz3r7WvJU0NbE7hCU038sIzwqGtvK54X9itZeJrwhfCXkMuKPyk9ESV3xSnK2xXOd1GNBIUdgt70r848Yu1jJETHhHuzWULWu0+6iUdyY3FBaVL78EkwjQBPMwyRZBRhhiXcVSq42dAVjSI91fiQ2xKrCajzjYG66TJkMcrakGyJ2VOiZ6UlhUPMfUHf2trpob91RM65qD51bI++6HlCMp7lvV9YlnlU3BIXW5K9fjNEoy9i16sa73H0LkLl9d1LXEGV0XoftbjRrwiOaTbUyn4OAdXDLruoG2lWrfaPqePEN2B+Vs4OIQ+8e9c/QHd32covXOu2QAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAIFJREFUKJHd0sENgkAUhOEvkQK0CRqBarQemrABD9IIF0vQAjjggbfJgrh4dpK5vPdnszs7fOqC88Z8oRZjuP0G1XhhCj9jttAJQwYlD7EDFfoNKPkejK4AJXd7j/tf/RxPZQ51N3DKX3hcX6E2F6FYiqS8Zk2+OKzAR5x0wzVfvAEJVD4iKx65TAAAAABJRU5ErkJggg==") no-repeat right $input-padding-x center;
+  // Use vendor prefixes as `appearance` isn't part of the CSS spec.
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+
+  &:focus::-ms-value {
+    // Suppress the nested default white text on blue background highlight given to
+    // the selected option text when the (still closed) <select> receives focus
+    // in IE and (under certain conditions) Edge, as it looks bad and cannot be made to
+    // match the appearance of the native widget.
+    // See https://github.com/twbs/bootstrap/issues/19398.
+    color: $input-color;
+    background-color: $input-bg;
+  }
+}
+
+// Set select elemenet styles
+
+// Make file inputs better match text inputs by forcing them to new lines.
+.form-control-file {
+  display: block;
+}
+
+// Limit resize on textarea
+
+textarea {
+  resize: vertical;
+}
+
+// Progress bars
+
+.progress-bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.progress-bar-min,
+.progress-bar-max {
+  flex-grow: 0;
+}
+
+.progress-bar-track {
+  display: flex;
+  flex-grow: 1;
+  height: 1em;
+  margin-left: $spacing-xs;
+  margin-right: $spacing-xs;
+  border-radius: 2em;
+  background: $color-shaded;
+  box-shadow: inset 0 0 1px rgba(0,0,0,.15);
+}
+
+.progress-bar-value {
+  border-radius: 2em;
+  background: $color-gradient;
+  position: relative;
+}
+
+.progress-bar-value-output {
+  font-weight: 700;
+}
+
+// Range sliders
+//
+// https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
+
+// Reset
+
+input[type=range] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 100%; /* Specific width is required for Firefox. */
+  background: transparent; /* Otherwise white in Chrome */
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+input[type=range]:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+input[type=range]::-ms-track {
+  width: 100%;
+  cursor: pointer;
+
+  /* Hides the slider so custom styles can be added */
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+// Style the thumb
+
+/* Special styling for WebKit/Blink */
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  border: 2px solid darken($color-primary, 10%);
+  background: $color-primary;
+  cursor: pointer;
+  margin-top: -.45em; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+}
+
+/* All the same stuff for Firefox */
+input[type=range]::-moz-range-thumb {
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  background: $color-primary;
+  border: 2px solid darken($color-primary, 10%);
+  cursor: pointer;
+}
+
+/* All the same stuff for IE */
+input[type=range]::-ms-thumb {
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  background: $color-primary;
+  border: 2px solid darken($color-primary, 10%);
+  cursor: pointer;
+}
+
+// Style the track
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 3px;
+  cursor: pointer;
+  background: $color-shaded;
+  border-radius: 1px;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: $color-primary;
+}
+
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 3px;
+  cursor: pointer;
+  background: $color-shaded;
+  border-radius: 1px;
+}
+
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 3px;
+  cursor: pointer;
+  background: $color-shaded;
+  border-radius: 1px;
+}
+input[type=range]::-ms-fill-lower {
+  background: $color-shaded;
+}
+input[type=range]:focus::-ms-fill-lower {
+  background: $color-primary;
+}
+input[type=range]::-ms-fill-upper {
+  background: $color-shaded;
+}
+input[type=range]:focus::-ms-fill-upper {
+  background: $color-primary;
+}
+
+.range-with-values {
+  display: flex;
+  width: 100%;
+  align-items: center;
+
+  .range-slider {
+    flex-grow: 1;
+  }
+
+  .range-min {
+    padding-right: $spacing-sm;
+  }
+
+  .range-max {
+    padding-left: $spacing-sm;
+  }
+
+}
+
+// Static form control text
+//
+// Apply class to an element to make any string of text align with labels in a
+// horizontal form layout.
+
+.form-control-static {
+  padding-top: $input-padding-y;
+  padding-bottom: $input-padding-y;
+  margin-bottom: 0; // match inputs if this class comes on inputs with default margins
+  line-height: $input-line-height;
+  border: solid transparent;
+  border-width: $input-btn-border-width 0;
+
+  &.form-control-sm,
+  &.form-control-lg {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+
+// Form control sizing
+//
+// Build on `.form-control` with modifier classes to decrease or increase the
+// height and font-size of form controls.
+//
+// The `.form-group-* form-control` variations are sadly duplicated to avoid the
+// issue documented in https://github.com/twbs/bootstrap/issues/15074.
+
+.form-control-sm {
+  padding: $input-padding-y-sm $input-padding-x-sm;
+  font-size: $font-size-xs;
+}
+
+.form-control-lg {
+  font-size: $font-size-md;
+}
+
+// Form groups
+//
+// Designed to help with the organization and spacing of vertical forms. For
+// horizontal forms, use the predefined grid classes.
+
+.form-group {
+  margin-top: $form-group-margin-top;
+  margin-bottom: $form-group-margin-bottom;
+}
+
+.form-text {
+  display: inline-block;
+  margin-top: $form-text-margin-top;
+  font-size: $form-text-font-size;
+  color: $form-text-color;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+// Checkboxes and radios
+//
+// Indent the labels to position radios/checkboxes as hanging controls.
+
+.form-check {
+  align-items: center;
+  margin-bottom: $form-check-margin-bottom;
+
+  &.is-disabled {
+    .form-check-label {
+      color: $form-check-disabled-color;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.form-check-label {
+  margin-bottom: 0; // Override default `<label>` bottom margin
+  cursor: pointer;
+  display: flex;
+  align-items: baseline;
+}
+
+.form-check-input {
+  flex: none;
+  margin-right: $spacing-sm;
+}
+
+// Radios and checkboxes on same line
+.form-check-inline {
+  display: inline-block;
+
+  + .form-check-inline {
+    margin-left: $form-check-inline-margin-x;
+  }
+
+  .form-check-label {
+    align-items: baseline;
+  }
+
+}
+
+// Horizontal forms
+//
+// Make forms appear inline by adding the `.form-horizontal` class and use grid system
+// for defining columns.
+//
+// Requires wrapping inputs and labels with `.form-group` for proper display of
+// default HTML form controls and our custom form controls (e.g., input groups).
+
+.form-horizontal {
+  @media (min-width: $screen-sm) {
+    // Fix label alignment
+    .form-control-label {
+      margin-top: $input-padding-y + $input-border-width;
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Inline forms
+//
+// Make forms appear inline(-block) by adding the `.form-inline` class. Inline
+// forms begin stacked on extra small (mobile) devices and then go inline when
+// viewports reach <768px.
+//
+// Requires wrapping inputs and labels with `.form-group` for proper display of
+// default HTML form controls and our custom form controls (e.g., input groups).
+
+.form-inline {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center; // Prevent shorter elements from growing to same height as others (e.g., small buttons growing to normal sized button height)
+
+  // Because we use flex, the initial sizing of checkboxes is collapsed and
+  // doesn't occupy the full-width (which is what we want for xs grid tier),
+  // so we force that here.
+  .form-check {
+    width: 100%;
+  }
+
+  // Kick in the inline
+  @media (min-width: $screen-sm) {
+    label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0;
+    }
+
+    // Inline-block all the things for "inline"
+    .form-group {
+      display: flex;
+      flex: 0 0 auto;
+      flex-flow: row wrap;
+      align-items: center;
+      margin-bottom: 0;
+    }
+
+    // Allow folks to *not* use `.form-group`
+    .form-control {
+      display: inline-block;
+      width: auto; // Prevent labels from stacking above inputs in `.form-group`
+      vertical-align: middle;
+    }
+
+    // Make static controls behave like regular ones
+    .form-control-static {
+      display: inline-block;
+    }
+
+    // .input-group {
+    //   width: auto;
+    // }
+
+    .form-control-label {
+      margin-bottom: 0;
+      vertical-align: middle;
+    }
+
+    // Remove default margin on radios/checkboxes that were used for stacking, and
+    // then undo the floating of radios and checkboxes to match.
+    .form-check {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: auto;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    .form-check-label {
+      padding-left: 0;
+    }
+
+    .form-check-input {
+      position: relative;
+      margin-left: 0;
+    }
+
+    // Re-override the feedback icon.
+    .has-feedback .form-control-feedback {
+      top: 0;
+    }
+  }
+}
+
+// Form control feedback states
+//
+// Apply contextual and semantic states to individual form controls.
+
+.form-control-feedback {
+  margin-top: $form-feedback-margin-top;
+  font-size: $form-text-font-size;
+}
+
+// Form validation states
+.has-success {
+  @include form-control-validation($input-color-success);
+}
+
+.has-warning {
+  @include form-control-validation($input-color-warning);
+}
+
+.has-danger {
+  @include form-control-validation($input-color-danger);
+}
+
+// Toggle switches
+
+.form-toggle {
+  display: flex;
+  line-height: $line-height-tight;
+  align-self: center;
+}
+
+.toggle-label {
+  margin-left: $spacing-sm;
+  margin-top: -.2em;
+}
+
+.toggle-bg {
+  background: #222;
+  display: block;
+  height: $font-size-base;
+  position: relative;
+  width: $font-size-base * 2;
+  border-radius: $font-size-base / 2;
+  background-color: $color-shaded;
+
+  input {
+    height: $font-size-base;
+    left: 0;
+    margin: 0;
+    opacity: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    width: $font-size-base * 2;
+    z-index: 2;
+    cursor: pointer;
+  }
+
+}
+
+.switch {
+  display: block;
+  float: left;
+  height: $font-size-base;
+  left: -1px;
+  top: 0px;
+  position: relative;
+  width: $font-size-base;
+  z-index: 1;
+  border-radius: $font-size-base / 2;
+  transition: left .2s ease;
+  background-color: $color-quiet;
+}
+
+.toggle-bg input:checked~.switch {
+  left: 0;
+}
+
+.toggle-bg input~:checked~.switch {
+  left: $font-size-base;
+  background-color: $color-primary;
+}
+
+.toggle-bg input:checked {
+  z-index: 0;
+}

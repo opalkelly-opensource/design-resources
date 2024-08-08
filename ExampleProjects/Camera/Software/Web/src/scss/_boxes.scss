@@ -1,0 +1,121 @@
+// MUSTRA BOXES
+//
+// Container elements with backgrounds and optional padding.
+// In terms of Bootstrap, these would be wells.
+
+.box {
+  @include clearfix;
+  padding: $grid-gutter;
+  border: 2px solid transparent;
+  border-radius: $border-radius-base;
+
+  // Make sure that the boxes don't stick to each other if stacked
+  + .box {
+    margin-top: $spacing-type;
+  }
+
+  > :last-child {
+    margin-bottom: 0;
+  }
+
+  &.box-shadowed {
+    box-shadow: 0 10px 42px rgba(0,0,0,.15);
+  }
+
+}
+
+//
+// Flavors
+//
+
+.box-default {
+  background-color: $color-shaded;
+
+  &.box-bordered {
+    border-color: darken($color-shaded, 10%);
+  }
+
+}
+
+.box-primary {
+  background-color: $color-primary;
+  color: #fff;
+
+  &.box-bordered {
+    border-color: darken($color-primary, 15%);
+  }
+
+}
+
+.box-warning {
+  background-color: $color-warning;
+
+  &.box-bordered {
+    border-color: darken($color-warning, 10%);
+  }
+
+}
+
+.box-success {
+  background-color: $color-success;
+
+  &.box-bordered {
+    border-color: darken($color-success, 7%);
+  }
+
+}
+
+.box-danger {
+  background-color: $color-danger;
+
+  &.box-bordered {
+    border-color: darken($color-danger, 20%);
+  }
+
+}
+
+.box-light {
+  background-color: $color-light;
+
+  &.box-bordered {
+    border-color: darken($color-light, 20%);
+  }
+
+}
+
+//
+// Sizes
+//
+
+.box-nopadding {
+  padding: 0;
+}
+
+.box-sm {
+  padding: $spacing-base;
+}
+
+.box-lg {
+  padding: $spacing-lg;
+}
+
+//
+// Misc
+//
+
+.box-hr-full {
+  margin-left: -$grid-gutter;
+  margin-right: -$grid-gutter;
+  border-radius: 0;
+}
+
+.box-outset {
+  margin-left: -$grid-gutter;
+  margin-right: -$grid-gutter;
+
+  @media (max-width: $screen-sm-max) {
+    margin-left: -$grid-gutter/2;
+    margin-right: -$grid-gutter/2;
+  }
+
+}

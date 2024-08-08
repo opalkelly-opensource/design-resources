@@ -1,0 +1,63 @@
+// ==========
+//  MUSTRA MESSAGES
+//
+// Basic message styles in various flavors.
+
+.message {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: $spacing-base;
+
+  &.animated {
+    cursor: pointer;
+  }
+}
+
+.camera-message {
+  position: relative;
+  height: 0px;
+  z-index: 399;
+
+  &.animated {
+    cursor: pointer;
+  }
+}
+
+//
+// Elements
+//
+
+.message-content {}
+
+.camera-message-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  padding: $spacing-base;
+}
+
+//
+// Flavors
+//
+
+.message-default {
+  background-color: #fff;
+}
+
+.message-success {
+  background-color: $color-success;
+  color: #fff;
+}
+
+.message-danger {
+  background-color: $color-danger;
+  color: #fff;
+}
+
+.message-warning {
+  background-color: $color-warning;
+}

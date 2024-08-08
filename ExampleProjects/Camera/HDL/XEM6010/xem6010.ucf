@@ -1,0 +1,204 @@
+#-------------------------------------------------------------------------
+# XEM6010 - Xilinx constraints file
+#
+# Pin mappings for the XEM6010.  Use this as a template and comment out 
+# the pins that are not used in your design.  (By default, map will fail
+# if this file contains constraints for signals not in your design).
+#
+# Copyright (c) 2004-2010 Opal Kelly Incorporated
+# $Rev$ $Date$
+#-------------------------------------------------------------------------
+CONFIG VCCAUX = "3.3"; //Required for Spartan-6
+
+############################################################################
+## FrontPanel Host Interface pins
+############################################################################
+NET "hi_in<0>"      LOC="Y12"  | IOSTANDARD="LVCMOS33";
+NET "hi_in<1>"      LOC="AB20" | IOSTANDARD="LVCMOS33";
+NET "hi_in<2>"      LOC="AB7"  | IOSTANDARD="LVCMOS33";
+NET "hi_in<3>"      LOC="AB8"  | IOSTANDARD="LVCMOS33";
+NET "hi_in<4>"      LOC="AA4"  | IOSTANDARD="LVCMOS33";
+NET "hi_in<5>"      LOC="AB4"  | IOSTANDARD="LVCMOS33";
+NET "hi_in<6>"      LOC="Y3"   | IOSTANDARD="LVCMOS33";
+NET "hi_in<7>"      LOC="AB3"  | IOSTANDARD="LVCMOS33";
+NET "hi_out<0>"     LOC="Y19"  | IOSTANDARD="LVCMOS33";
+NET "hi_out<1>"     LOC="AA8"  | IOSTANDARD="LVCMOS33";
+NET "hi_inout<0>"   LOC="AB12" | IOSTANDARD="LVCMOS33";
+NET "hi_inout<1>"   LOC="AA12" | IOSTANDARD="LVCMOS33";
+NET "hi_inout<2>"   LOC="Y13"  | IOSTANDARD="LVCMOS33";
+NET "hi_inout<3>"   LOC="AB18" | IOSTANDARD="LVCMOS33";
+NET "hi_inout<4>"   LOC="AA18" | IOSTANDARD="LVCMOS33";
+NET "hi_inout<5>"   LOC="V15"  | IOSTANDARD="LVCMOS33";
+NET "hi_inout<6>"   LOC="AB2"  | IOSTANDARD="LVCMOS33";
+NET "hi_inout<7>"   LOC="AA2"  | IOSTANDARD="LVCMOS33";
+NET "hi_inout<8>"   LOC="Y7"   | IOSTANDARD="LVCMOS33";
+NET "hi_inout<9>"   LOC="Y4"   | IOSTANDARD="LVCMOS33";
+NET "hi_inout<10>"  LOC="W4"   | IOSTANDARD="LVCMOS33";
+NET "hi_inout<11>"  LOC="AB6"  | IOSTANDARD="LVCMOS33";
+NET "hi_inout<12>"  LOC="AA6"  | IOSTANDARD="LVCMOS33";
+NET "hi_inout<13>"  LOC="U13"  | IOSTANDARD="LVCMOS33";
+NET "hi_inout<14>"  LOC="U14"  | IOSTANDARD="LVCMOS33";
+NET "hi_inout<15>"  LOC="AA20" | IOSTANDARD="LVCMOS33";
+NET "hi_aa"         LOC="W11"  | IOSTANDARD="LVCMOS33";
+
+NET "hi_muxsel"     LOC = "AA22" | IOSTANDARD="LVCMOS33";
+NET "i2c_sda"       LOC = "AB9"  | IOSTANDARD="LVCMOS33" | PULLUP;
+NET "i2c_scl"       LOC = "Y9"   | IOSTANDARD="LVCMOS33" | PULLUP;
+
+NET "hi_in<0>" TNM_NET = "okHostClk";
+TIMESPEC "TS_okHostClk" = PERIOD "okHostClk" 20.83 ns HIGH 50%;  # 48 MHz
+NET "hi_inout[*]" TNM = "okHostINOUT_grp";
+TIMEGRP "okHostINOUT_grp" OFFSET = IN 9.83 ns VALID 9.83 ns BEFORE "hi_in<0>" RISING;
+TIMEGRP "okHostINOUT_grp" OFFSET = OUT 11.63 ns AFTER "hi_in<0>" RISING;
+NET "hi_out<0>" OFFSET = OUT 11.93 ns AFTER "hi_in<0>" RISING;
+NET "hi_out<1>" OFFSET = OUT 11.93 ns AFTER "hi_in<0>" RISING;
+NET "hi_in<1>" OFFSET = IN 14.13 ns VALID 20.83 ns BEFORE "hi_in<0>" RISING;
+NET "hi_in<2>" OFFSET = IN 14.13 ns VALID 20.83 ns BEFORE "hi_in<0>" RISING;
+NET "hi_in<3>" OFFSET = IN 14.13 ns VALID 20.83 ns BEFORE "hi_in<0>" RISING;
+NET "hi_in<4>" OFFSET = IN 13.33 ns VALID 20.83 ns BEFORE "hi_in<0>" RISING;
+NET "hi_in<5>" OFFSET = IN 13.33 ns VALID 20.83 ns BEFORE "hi_in<0>" RISING;
+NET "hi_in<6>" OFFSET = IN 13.33 ns VALID 20.83 ns BEFORE "hi_in<0>" RISING;
+NET "hi_in<7>" OFFSET = IN 13.33 ns VALID 20.83 ns BEFORE "hi_in<0>" RISING;
+
+
+
+############################################################################
+## System Clocks
+############################################################################
+NET "sys_clk"   LOC="AB13"  | IOSTANDARD="LVCMOS33";
+NET "sys_clk" TNM_NET = "TNM_sys_clk";
+TIMESPEC "TS_sys_clk" = PERIOD "TNM_sys_clk" 10 ns HIGH 50%;  # 100 MHz
+
+
+############################################################################
+## Peripherals
+############################################################################
+
+# LEDs ###############################################################
+NET "led[0]"     LOC="Y17"    | IOSTANDARD=LVCMOS33;
+NET "led[1]"     LOC="AB17"   | IOSTANDARD=LVCMOS33;
+NET "led[2]"     LOC="AA14"   | IOSTANDARD=LVCMOS33;
+NET "led[3]"     LOC="AB14"   | IOSTANDARD=LVCMOS33;
+NET "led[4]"     LOC="AA16"   | IOSTANDARD=LVCMOS33;
+NET "led[5]"     LOC="AB16"   | IOSTANDARD=LVCMOS33;
+NET "led[6]"     LOC="AA10"   | IOSTANDARD=LVCMOS33;
+NET "led[7]"     LOC="AB10"   | IOSTANDARD=LVCMOS33;
+
+# EVB1005 Constraints ################################################
+NET "pix_clk"       LOC=C11  | IOSTANDARD=LVCMOS33; #JP2-77
+
+#--------------------------------------------------------------------------
+# 96 MHz constraints apply to the maximum rate of the sensor.
+#NET "pix_clk" TNM_NET = "TNM_pix_clk";
+#TIMESPEC "TS_pix_clk" = PERIOD "TNM_pix_clk" 10.4166 ns HIGH 50%;
+#NET "pix_data[*]" TNM = "pix_data_grp";
+#TIMEGRP "pix_data_grp" OFFSET = IN 6.5 ns VALID 5.7 ns BEFORE "pix_clk" RISING;
+#NET "pix_lv" OFFSET = IN 4.5 VALID 6.7ns BEFORE "pix_clk" RISING;
+#NET "pix_fv" OFFSET = IN 4.5 VALID 6.9ns BEFORE "pix_clk" RISING;
+
+#--------------------------------------------------------------------------
+# 72 MHz constraints apply to the optimized rate of the sensor.  Applying
+# Aptina's technical note TN-09-148, the output is setup to 72 MHz while 
+# the internal sensor still runs at 96 MHz for high frame rates.
+#NET "pix_clk" TNM_NET = "TNM_pix_clk";
+#TIMESPEC "TS_pix_clk" = PERIOD "TNM_pix_clk" 13.8 ns HIGH 50%;
+#NET "pix_data[*]" TNM = "pix_data_grp";
+#TIMEGRP "pix_data_grp" OFFSET = IN 9.9 ns VALID 9.1 ns BEFORE "pix_clk" RISING;
+#NET "pix_lv" OFFSET = IN 7.9 VALID 10.1ns BEFORE "pix_clk" RISING;
+#NET "pix_fv" OFFSET = IN 7.9 VALID 10.3ns BEFORE "pix_clk" RISING;
+
+#--------------------------------------------------------------------------
+# The constraints below are for a pixel clock of 72 MHz with input capture
+# being performed on the falling edge of PIX_CLK.
+NET "pix_clk" TNM_NET = "TNM_pix_clk";
+TIMESPEC "TS_pix_clk" = PERIOD "TNM_pix_clk" 13.8 ns LOW 50%;
+NET "pix_data[*]" TNM = "pix_data_grp";
+TIMEGRP "pix_data_grp" OFFSET = IN 3.0 ns VALID 9.1 ns BEFORE "pix_clk" FALLING;
+NET "pix_lv" OFFSET = IN 1.0 ns VALID 10.1 ns BEFORE "pix_clk" FALLING;
+NET "pix_fv" OFFSET = IN 1.0 ns VALID 10.3 ns BEFORE "pix_clk" FALLING;
+
+NET "pix_reset"     LOC=A15  | IOSTANDARD=LVCMOS33; #JP2-69
+NET "pix_sdata"     LOC=C13  | IOSTANDARD=LVCMOS33; #JP2-63
+NET "pix_sclk"      LOC=A13  | IOSTANDARD=LVCMOS33; #JP2-65
+NET "pix_trigger"   LOC=C15  | IOSTANDARD=LVCMOS33; #JP2-67
+NET "pix_extclk"    LOC=A11  | IOSTANDARD=LVCMOS33; #JP2-79
+NET "pix_strobe"    LOC=A7   | IOSTANDARD=LVCMOS33; #JP2-58
+NET "pix_lv"        LOC=A6   | IOSTANDARD=LVCMOS33; #JP2-52
+NET "pix_fv"        LOC=C7   | IOSTANDARD=LVCMOS33; #JP2-54
+NET "pix_data[11]"  LOC=C9   | IOSTANDARD=LVCMOS33; #JP2-60
+NET "pix_data[10]"  LOC=A9   | IOSTANDARD=LVCMOS33; #JP2-62
+NET "pix_data[9]"   LOC=B12  | IOSTANDARD=LVCMOS33; #JP2-64
+NET "pix_data[8]"   LOC=A12  | IOSTANDARD=LVCMOS33; #JP2-66
+NET "pix_data[7]"   LOC=B14  | IOSTANDARD=LVCMOS33; #JP2-68
+NET "pix_data[6]"   LOC=A14  | IOSTANDARD=LVCMOS33; #JP2-70
+NET "pix_data[5]"   LOC=B16  | IOSTANDARD=LVCMOS33; #JP2-72
+NET "pix_data[4]"   LOC=A16  | IOSTANDARD=LVCMOS33; #JP2-74
+NET "pix_data[3]"   LOC=B18  | IOSTANDARD=LVCMOS33; #JP2-76
+NET "pix_data[2]"   LOC=C17  | IOSTANDARD=LVCMOS33; #JP2-71
+NET "pix_data[1]"   LOC=A17  | IOSTANDARD=LVCMOS33; #JP2-73
+NET "pix_data[0]"   LOC=A18  | IOSTANDARD=LVCMOS33; #JP2-75
+
+
+##################################################################################
+# Timing Ignore constraints for paths crossing the clock domain
+##################################################################################
+CONFIG MCB_PERFORMANCE= STANDARD;
+NET "memif0/memc?_wrapper_inst/mcb_ui_top_inst/mcb_raw_wrapper_inst/selfrefresh_mcb_mode" TIG;
+NET "memif0/memc?_wrapper_inst/mcb_ui_top_inst/mcb_raw_wrapper_inst/gen_term_calib.mcb_soft_calibration_top_inst/mcb_soft_calibration_inst/CKE_Train" TIG; ##This path exists for DDR2 only
+NET "pll_lock" TIG;
+NET "memif0/memc3_wrapper_inst/mcb_ui_top_inst/mcb_raw_wrapper_inst/gen_term_calib.mcb_soft_calibration_top_inst/mcb_soft_calibration_inst/DONE_SOFTANDHARD_CAL" TIG;
+
+############################################################################
+## Clock constraints
+############################################################################
+NET "clkinst0/sys_clk_ibufg" TNM_NET = "SYS_CLK3";
+TIMESPEC "TS_SYS_CLK3" = PERIOD "SYS_CLK3"  10  ns HIGH 50 %;
+
+NET  "ddr2_a[0]"       LOC="H2" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_a[1]"       LOC="H1" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_a[2]"       LOC="H5" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_a[3]"       LOC="K6" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_a[4]"       LOC="F3" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_a[5]"       LOC="K3" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_a[6]"       LOC="J4" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_a[7]"       LOC="H6" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_a[8]"       LOC="E3" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_a[9]"       LOC="E1" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_a[10]"      LOC="G4" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_a[11]"      LOC="C1" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_a[12]"      LOC="D1" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_ba[0]"      LOC="G3" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_ba[1]"      LOC="G1" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_ba[2]"      LOC="F1" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_dq[0]"      LOC="N3" | IOSTANDARD=SSTL18_II      | IN_TERM = NONE;
+NET  "ddr2_dq[1]"      LOC="N1" | IOSTANDARD=SSTL18_II      | IN_TERM = NONE;
+NET  "ddr2_dq[2]"      LOC="M2" | IOSTANDARD=SSTL18_II      | IN_TERM = NONE;
+NET  "ddr2_dq[3]"      LOC="M1" | IOSTANDARD=SSTL18_II      | IN_TERM = NONE;
+NET  "ddr2_dq[4]"      LOC="J3" | IOSTANDARD=SSTL18_II      | IN_TERM = NONE;
+NET  "ddr2_dq[5]"      LOC="J1" | IOSTANDARD=SSTL18_II      | IN_TERM = NONE;
+NET  "ddr2_dq[6]"      LOC="K2" | IOSTANDARD=SSTL18_II      | IN_TERM = NONE;
+NET  "ddr2_dq[7]"      LOC="K1" | IOSTANDARD=SSTL18_II      | IN_TERM = NONE;
+NET  "ddr2_dq[8]"      LOC="P2" | IOSTANDARD=SSTL18_II      | IN_TERM = NONE;
+NET  "ddr2_dq[9]"      LOC="P1" | IOSTANDARD=SSTL18_II      | IN_TERM = NONE;
+NET  "ddr2_dq[10]"     LOC="R3" | IOSTANDARD=SSTL18_II      | IN_TERM = NONE;
+NET  "ddr2_dq[11]"     LOC="R1" | IOSTANDARD=SSTL18_II      | IN_TERM = NONE;
+NET  "ddr2_dq[12]"     LOC="U3" | IOSTANDARD=SSTL18_II      | IN_TERM = NONE;
+NET  "ddr2_dq[13]"     LOC="U1" | IOSTANDARD=SSTL18_II      | IN_TERM = NONE;
+NET  "ddr2_dq[14]"     LOC="V2" | IOSTANDARD=SSTL18_II      | IN_TERM = NONE;
+NET  "ddr2_dq[15]"     LOC="V1" | IOSTANDARD=SSTL18_II      | IN_TERM = NONE;
+NET  "ddr2_ck"         LOC="H4" | IOSTANDARD=DIFF_SSTL18_II;
+NET  "ddr2_ck_n"       LOC="H3" | IOSTANDARD=DIFF_SSTL18_II;
+NET  "ddr2_cke"        LOC="D2" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_cs_n"       LOC="C3" | IOSTANDARD=LVCMOS18;
+NET  "ddr2_we_n"       LOC="F2" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_odt"        LOC="J6" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_cas_n"      LOC="K4" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_ras_n"      LOC="K5" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_dm"         LOC="L4" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_udm"        LOC="M3" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_dqs"        LOC="L3" | IOSTANDARD=DIFF_SSTL18_II | IN_TERM = NONE;
+NET  "ddr2_dqs_n"      LOC="L1" | IOSTANDARD=DIFF_SSTL18_II | IN_TERM = NONE;
+NET  "ddr2_udqs"       LOC="T2" | IOSTANDARD=DIFF_SSTL18_II | IN_TERM = NONE;
+NET  "ddr2_udqs_n"     LOC="T1" | IOSTANDARD=DIFF_SSTL18_II | IN_TERM = NONE;
+NET  "ddr2_rzq"        LOC="K7" | IOSTANDARD=SSTL18_II;
+NET  "ddr2_zio"        LOC="Y2" | IOSTANDARD=SSTL18_II;

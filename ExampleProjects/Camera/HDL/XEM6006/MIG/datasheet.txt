@@ -1,0 +1,71 @@
+
+
+CORE Generator Options:
+   Target Device              : xc6slx16-ftg256
+   Speed Grade                : -2
+   HDL                        : verilog
+   Synthesis Tool             : Foundation_ISE
+
+MIG Output Options:
+   Component Name             : ddr2
+   No of Controllers          : 1
+   Hardware Test Bench           : disabled
+
+    
+/*******************************************************/
+/*                  Controller 1                       */
+/*******************************************************/
+Controller Options : 
+   Memory                  : DDR2_SDRAM
+   Design Clock Frequency  : 3200 ps (312.50 MHz)
+   Memory Type             : Components
+   Memory Part             : MT47H64M16XX-3
+   Equivalent Part(s)      : MT47H64M16HR-3
+   Row Address             : 13
+   Column Address          : 10
+   Bank Address            : 3
+   Data Mask               : enabled
+
+Memory Options :
+   Burst Length                       : 4(010)
+   CAS Latency                        : 5
+   DQS# Enable                        : Enable
+   DLL Enable                         : Enable-Normal
+   OCD Operation                      : OCD Exit
+   Output Drive Strength              : Fullstrength
+   Outputs                            : Enable
+   Additive Latency (AL)              : 0
+   RDQS Enable                        : Disable
+   RTT (nominal) - ODT                : 50ohms       
+   High Temparature Self Refresh Rate : Disable
+
+User Interface Parameters :
+   Configuration Type     : Two 64-bit bi-directional ports
+   Ports Selected         : Port0, Port1
+   Memory Address Mapping : ROW_BANK_COLUMN
+
+   Arbitration Algorithm  : Round Robin
+
+   Arbitration            : 
+      Time Slot0 : 01
+      Time Slot1 : 10
+      Time Slot2 : 01
+      Time Slot3 : 10
+      Time Slot4 : 01
+      Time Slot5 : 10
+      Time Slot6 : 01
+      Time Slot7 : 10
+      Time Slot8 : 01
+      Time Slot9 : 10
+      Time Slot10: 01
+      Time Slot11: 10
+
+FPGA Options :
+   Class for Address and Control       : II
+   Class for Data                      : II
+   Memory Interface Pin Termination    : CALIB_TERM
+   DQ/DQS                              : 25 Ohms
+   Bypass Calibration                  : enabled
+   Debug Signals for Memory Controller : Disable
+   Input Clock Type                    : Single-Ended 
+    

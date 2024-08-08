@@ -1,0 +1,581 @@
+<?xml version="1.0"?>
+<resource version="2.5.3.0" xmlns="http://www.wxwidgets.org/wxxrc">
+    <object class="wxFrame" name="frame_main">
+        <title>Opal Kelly - okCameraApp</title>
+        <object class="wxBoxSizer">
+            <orient>wxHORIZONTAL</orient>
+            <object class="sizeritem">
+                <flag>wxEXPAND</flag>
+                <!-- Scrolled window with the controls -->
+                <object class="wxScrolledWindow" name="scrolled_sidebar">
+                    <scrollrate>0,10</scrollrate>
+                    <object class="wxBoxSizer">
+                        <orient>wxHORIZONTAL</orient>
+                        <object class="sizeritem">
+                            <flag>wxEXPAND|wxLEFT|wxRIGHT|wxBOTTOM</flag>
+                            <border>20</border>
+                            <object class="wxPanel" name="sidebar_content">
+                                <object class="wxBoxSizer">
+                                    <orient>wxVERTICAL</orient>
+                                    <object class="spacer">
+                                        <size>0,40</size>
+                                    </object>
+                                    <!-- Logo -->
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_CENTRE</flag>
+                                        <object class="wxPanel">
+                                            <object class="wxStaticBitmap">
+                                                <pos>0,20</pos>
+                                                <bitmap>logo/logo.png</bitmap>
+                                            </object>
+                                            <object class="wxGenericAnimationCtrl" name="activity_indicator">
+                                                <hidden>1</hidden>
+                                                <animation>logo/bitmapList.txt</animation>
+                                            </object>
+                                            <object class="wxStaticBitmap" name="image_led">
+                                                <pos>35,47</pos>
+                                                <hidden>1</hidden>
+                                                <bitmap>logo/led.png</bitmap>
+                                            </object>
+                                            <object class="wxStaticBitmap">
+                                                <pos>70,0</pos>
+                                                <bitmap default_size="150,100">logo/opalkelly.svg</bitmap>
+                                            </object>
+                                        </object>
+                                    </object>
+                                    <object class="spacer">
+                                        <size>0,20</size>
+                                    </object>
+                                    <!-- Realm -->
+                                    <object class="sizeritem">
+                                        <flag>wxEXPAND</flag>
+                                        <object class="wxStaticText" name="text_realm"/>
+                                    </object>
+                                    <object class="spacer">
+                                        <size>0,10</size>
+                                    </object>
+                                    <!-- FPOIP -->
+                                    <object class="sizeritem">
+                                        <flag>wxEXPAND</flag>
+                                        <object class="wxButton" name="btn_fpoip"/>
+                                    </object>
+                                    <object class="spacer">
+                                        <size>0,10</size>
+                                    </object>
+                                    <!-- Devices -->
+                                    <object class="sizeritem">
+                                        <object class="wxStaticText">
+                                            <label>Device</label>
+                                        </object>
+                                    </object>
+                                    <object class="spacer">
+                                        <size>0,5</size>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxEXPAND</flag>
+                                        <object class="wxChoice" name="choice_devices"/>
+                                    </object>
+                                    <object class="spacer">
+                                        <size>0,20</size>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxEXPAND</flag>
+                                        <object class="wxStaticLine"/>
+                                    </object>
+                                    <object class="spacer">
+                                        <size>0,20</size>
+                                    </object>
+                                    <!-- Status -->
+                                    <object class="sizeritem">
+                                        <flag>wxEXPAND</flag>
+                                        <object class="wxStaticText" name="text_status">
+                                            <label>Waiting for camera...</label>
+                                            <label>\n\n\n\n</label>
+                                        </object>
+                                    </object>
+                                    <!-- Camera controls -->
+                                    <object class="sizeritem">
+                                        <flag>wxEXPAND</flag>
+                                        <object class="wxPanel" name="panel_camera">
+                                            <hidden>1</hidden>
+                                            <object class="wxBoxSizer">
+                                                <orient>wxVERTICAL</orient>
+                                                <object class="spacer">
+                                                    <size>0,20</size>
+                                                </object>
+                                                <!-- FPS and Missed frames -->
+                                                <object class="sizeritem">
+                                                    <flag>wxEXPAND</flag>
+                                                    <object class="wxBoxSizer">
+                                                        <orient>wxHORIZONTAL</orient>
+                                                        <object class="sizeritem">
+                                                            <object class="wxStaticText" name="text_fps">
+                                                                <label>FPS: -</label>
+                                                            </object>
+                                                        </object>
+                                                        <object class="spacer">
+                                                            <option>1</option>
+                                                        </object>
+                                                        <object class="sizeritem">
+                                                            <object class="wxStaticText" name="text_missed">
+                                                                <label>Missed frames: -</label>
+                                                            </object>
+                                                        </object>
+                                                    </object>
+                                                </object>
+                                                <object class="spacer">
+                                                    <size>0,20</size>
+                                                </object>
+                                                <object class="sizeritem">
+                                                    <flag>wxEXPAND</flag>
+                                                    <object class="wxStaticLine"/>
+                                                </object>
+                                                <object class="spacer">
+                                                    <size>0,20</size>
+                                                </object>
+                                                <!-- Pipeline Reset -->
+                                                <object class="sizeritem">
+                                                    <flag>wxEXPAND</flag>
+                                                    <object class="wxGridSizer">
+                                                        <cols>2</cols>
+                                                        <hgap>20</hgap>
+                                                        <object class="sizeritem">
+                                                            <flag>wxEXPAND</flag>
+                                                            <object class="wxButton" name="btn_pipeline_reset">
+                                                                <label>Pipeline Reset</label>
+                                                            </object>
+                                                        </object>
+                                                    </object>
+                                                </object>
+                                                <object class="spacer">
+                                                    <size>0,10</size>
+                                                </object>
+                                                <!-- Capture and Continuous -->
+                                                <object class="sizeritem">
+                                                    <flag>wxEXPAND</flag>
+                                                    <object class="wxGridSizer">
+                                                        <cols>2</cols>
+                                                        <hgap>20</hgap>
+                                                        <!-- Capture -->
+                                                        <object class="sizeritem">
+                                                            <flag>wxEXPAND</flag>
+                                                            <object class="wxButton" name="btn_capture">
+                                                                <label>Capture</label>
+                                                            </object>
+                                                        </object>
+                                                        <!-- Continuous -->
+                                                        <object class="sizeritem">
+                                                            <flag>wxALIGN_CENTRE</flag>
+                                                            <object class="wxCheckBox" name="chk_continuous">
+                                                                <label>Continuous</label>
+                                                            </object>
+                                                        </object>
+                                                    </object>
+                                                </object>
+                                                <object class="spacer">
+                                                    <size>0,20</size>
+                                                </object>
+                                                <object class="sizeritem">
+                                                    <flag>wxEXPAND</flag>
+                                                    <object class="wxStaticLine"/>
+                                                </object>
+                                                <object class="spacer">
+                                                    <size>0,20</size>
+                                                </object>
+                                                <!-- Exposure and Display Mode -->
+                                                <object class="sizeritem">
+                                                    <flag>wxEXPAND</flag>
+                                                    <object class="wxGridSizer">
+                                                        <cols>2</cols>
+                                                        <hgap>20</hgap>
+                                                        <!-- Exposure -->
+                                                        <object class="sizeritem">
+                                                            <flag>wxEXPAND</flag>
+                                                            <object class="wxBoxSizer">
+                                                                <orient>wxVERTICAL</orient>
+                                                                <object class="sizeritem">
+                                                                    <object class="wxStaticText">
+                                                                        <label>Exposure</label>
+                                                                    </object>
+                                                                </object>
+                                                                <object class="spacer">
+                                                                    <size>0,5</size>
+                                                                </object>
+                                                                <object class="sizeritem">
+                                                                    <flag>wxEXPAND</flag>
+                                                                    <object class="wxSpinCtrl" name="spin_exposure">
+                                                                    </object>
+                                                                </object>
+                                                            </object>
+                                                        </object>
+                                                        <!-- Display Mode -->
+                                                        <object class="sizeritem">
+                                                            <flag>wxEXPAND</flag>
+                                                            <object class="wxBoxSizer">
+                                                                <orient>wxVERTICAL</orient>
+                                                                <object class="sizeritem">
+                                                                    <object class="wxStaticText">
+                                                                        <label>Display Mode</label>
+                                                                    </object>
+                                                                </object>
+                                                                <object class="spacer">
+                                                                    <size>0,5</size>
+                                                                </object>
+                                                                <object class="sizeritem">
+                                                                    <flag>wxEXPAND</flag>
+                                                                    <object class="wxChoice" name="choice_display_mode">
+                                                                        <selection>2</selection>
+                                                                        <content>
+                                                                            <item>Raw Bayer</item>
+                                                                            <item>Nearest</item>
+                                                                            <item>Raw Mono</item>
+                                                                        </content>
+                                                                    </object>
+                                                                </object>
+                                                            </object>
+                                                        </object>
+                                                    </object>
+                                                </object>
+                                                <object class="spacer">
+                                                    <size>0,20</size>
+                                                </object>
+                                                <!-- Capture Size and Zoom Mode -->
+                                                <object class="sizeritem">
+                                                    <flag>wxEXPAND</flag>
+                                                    <object class="wxGridSizer">
+                                                        <cols>2</cols>
+                                                        <hgap>20</hgap>
+                                                        <!-- Capture Size -->
+                                                        <object class="sizeritem">
+                                                            <flag>wxEXPAND</flag>
+                                                            <object class="wxBoxSizer">
+                                                                <orient>wxVERTICAL</orient>
+                                                                <object class="sizeritem">
+                                                                    <object class="wxStaticText">
+                                                                        <label>Capture Size</label>
+                                                                    </object>
+                                                                </object>
+                                                                <object class="spacer">
+                                                                    <size>0,5</size>
+                                                                </object>
+                                                                <object class="sizeritem">
+                                                                    <flag>wxEXPAND</flag>
+                                                                    <object class="wxChoice" name="choice_capture_size"/>
+                                                                </object>
+                                                            </object>
+                                                        </object>
+                                                        <!-- Zoom Mode -->
+                                                        <object class="sizeritem">
+                                                            <flag>wxEXPAND</flag>
+                                                            <object class="wxBoxSizer">
+                                                                <orient>wxVERTICAL</orient>
+                                                                <object class="sizeritem">
+                                                                    <object class="wxStaticText">
+                                                                        <label>Zoom Mode</label>
+                                                                    </object>
+                                                                </object>
+                                                                <object class="spacer">
+                                                                    <size>0,5</size>
+                                                                </object>
+                                                                <object class="sizeritem">
+                                                                    <flag>wxEXPAND</flag>
+                                                                    <object class="wxChoice" name="choice_zoom_mode">
+                                                                        <selection>0</selection>
+                                                                        <content>
+                                                                            <item>Fit</item>
+                                                                            <item>Stretch</item>
+                                                                        </content>
+                                                                    </object>
+                                                                </object>
+                                                            </object>
+                                                        </object>
+                                                    </object>
+                                                </object>
+                                                <object class="spacer">
+                                                    <size>0,20</size>
+                                                </object>
+                                                <!-- Capture Mode -->
+                                                <object class="sizeritem">
+                                                    <object class="wxStaticText">
+                                                        <label>Capture Mode</label>
+                                                    </object>
+                                                </object>
+                                                <object class="spacer">
+                                                    <size>0,5</size>
+                                                </object>
+                                                <object class="sizeritem">
+                                                    <flag>wxEXPAND</flag>
+                                                    <object class="wxChoice" name="choice_capture_mode"/>
+                                                </object>
+                                                <object class="spacer">
+                                                    <size>0,20</size>
+                                                </object>
+                                                <object class="sizeritem">
+                                                    <flag>wxEXPAND</flag>
+                                                    <object class="wxStaticLine"/>
+                                                </object>
+                                                <object class="spacer">
+                                                    <size>0,20</size>
+                                                </object>
+                                                <!-- Buffer Depth -->
+                                                <object class="sizeritem">
+                                                    <object class="wxStaticText">
+                                                        <label>Buffer Depth</label>
+                                                    </object>
+                                                </object>
+                                                <object class="spacer">
+                                                    <size>0,5</size>
+                                                </object>
+                                                <object class="sizeritem">
+                                                    <object class="wxCheckBox" name="chk_auto_depth">
+                                                        <label>Choose automatically</label>
+                                                        <checked>1</checked>
+                                                    </object>
+                                                </object>
+                                                <object class="spacer">
+                                                    <size>0,20</size>
+                                                </object>
+                                                <!-- Manual Depth -->
+                                                <object class="sizeritem">
+                                                    <flag>wxEXPAND</flag>
+                                                    <object class="wxPanel" name="panel_manual_depth">
+                                                        <object class="wxBoxSizer">
+                                                            <orient>wxVERTICAL</orient>
+                                                            <object class="sizeritem">
+                                                                <object class="wxStaticText">
+                                                                    <label>Set Manual</label>
+                                                                </object>
+                                                            </object>
+                                                            <object class="spacer">
+                                                                <size>0,5</size>
+                                                            </object>
+                                                            <object class="sizeritem">
+                                                                <flag>wxEXPAND</flag>
+                                                                <option>1</option>
+                                                                <object class="okCSlider" name="slider_depth">
+                                                                    <style>wxSL_MIN_MAX_LABELS</style>
+                                                                    <enabled>1</enabled>
+                                                                </object>
+                                                            </object>
+                                                        </object>
+                                                    </object>
+                                                </object>
+                                                <object class="spacer">
+                                                    <size>0,20</size>
+                                                </object>
+                                                <!-- Current Depth -->
+                                                <object class="sizeritem">
+                                                    <flag>wxEXPAND</flag>
+                                                    <object class="wxStaticText">
+                                                        <label>Current</label>
+                                                    </object>
+                                                </object>
+                                                <object class="spacer">
+                                                    <size>0,5</size>
+                                                </object>
+                                                <object class="sizeritem">
+                                                    <flag>wxEXPAND</flag>
+                                                    <object class="wxBoxSizer">
+                                                        <orient>wxHORIZONTAL</orient>
+                                                        <object class="sizeritem">
+                                                            <flag>wxEXPAND</flag>
+                                                            <object class="wxStaticText">
+                                                                <label>0</label>
+                                                            </object>
+                                                        </object>
+                                                        <object class="sizeritem">
+                                                            <flag>wxEXPAND|wxLEFT|wxRIGHT</flag>
+                                                            <border>5</border>
+                                                            <option>1</option>
+                                                            <object class="wxGauge" name="gauge_current_depth"/>
+                                                        </object>
+                                                        <object class="sizeritem">
+                                                            <flag>wxEXPAND</flag>
+                                                            <object class="wxStaticText" name="text_current_depth_max">
+                                                                <label>n/a</label>
+                                                            </object>
+                                                        </object>
+                                                    </object>
+                                                </object>
+                                            </object>
+                                        </object>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <option>1</option>
+                <flag>wxEXPAND</flag>
+                <object class="okCViewport" name="viewport">
+                    <initialsize>600,450</initialsize>
+                </object>
+            </object>
+        </object>
+    </object>
+    <object class="wxDialog" name="dlg_fpoip_server">
+        <title>Connect to FPOIP Server</title>
+        <style>wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU</style>
+        <centered>1</centered>
+        <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+                <flag>wxGROW</flag>
+                <object class="wxPanel">
+                    <bg>white</bg>
+                    <object class="wxBoxSizer">
+                        <orient>wxVERTICAL</orient>
+                        <object class="sizeritem">
+                            <flag>wxALL</flag>
+                            <border>10</border>
+                            <object class="wxStaticText">
+                                <label>Specify the connection details</label>
+                                <fg>blue</fg>
+                                <font>
+                                    <inherit>1</inherit>
+                                    <relativesize>1.5</relativesize>
+                                </font>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="spacer">
+                <size>5,10</size>
+            </object>
+            <object class="sizeritem">
+                <flag>wxGROW|wxALL</flag>
+                <border>10</border>
+                <object class="wxFlexGridSizer">
+                    <cols>2</cols>
+                    <growablecols>1</growablecols>
+                    <vgap>5</vgap>
+                    <hgap>5</hgap>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                        <object class="wxStaticText">
+                            <label>Remote _host name or IP address</label>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                        <object class="wxTextCtrl" name="text_hostname">
+                            <size>80,-1d</size>
+                            <hint>fpoip.example.com</hint>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                        <object class="wxStaticText">
+                            <label>Remote _port</label>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                        <object class="wxTextCtrl" name="text_port">
+                            <size>30,-1d</size>
+                            <hint>9999</hint>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                        <object class="wxStaticText">
+                            <label>FrontPanel _user name</label>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                        <object class="wxTextCtrl" name="text_username"/>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                        <object class="wxStaticText">
+                            <label>FrontPanel pass_word</label>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                        <object class="wxTextCtrl" name="text_password">
+                            <style>wxTE_PASSWORD</style>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="spacer">
+                <size>5,10</size>
+                <option>1</option>
+            </object>
+            <object class="sizeritem">
+                <flag>wxGROW|wxALL</flag>
+                <border>10</border>
+                <object class="wxStaticText" name="msg_error">
+                    <style>wxALIGN_CENTRE|wxST_NO_AUTORESIZE</style>
+                    <fg>#AA3333</fg>
+                    <font platform="win">
+                        <inherit>1</inherit>
+                        <weight>bold</weight>
+                        <relativesize>1.2</relativesize>
+                    </font>
+                </object>
+            </object>
+            <object class="spacer">
+                <size>5,10</size>
+            </object>
+            <object class="sizeritem">
+                <flag>wxGROW|wxALL</flag>
+                <border>10</border>
+                <object class="wxStdDialogButtonSizer">
+                    <object class="button">
+                        <object class="wxButton" name="wxID_OK">
+                            <label>_Connect</label>
+                        </object>
+                    </object>
+                    <object class="button">
+                        <object class="wxButton" name="wxID_CANCEL"/>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </object>
+    <object class="wxBitmap" name="busy1">logo/busy1.png</object>
+    <object class="wxBitmap" name="busy2">logo/busy2.png</object>
+    <object class="wxBitmap" name="busy3">logo/busy3.png</object>
+    <object class="wxBitmap" name="busy4">logo/busy4.png</object>
+    <object class="wxBitmap" name="busy5">logo/busy5.png</object>
+    <object class="wxBitmap" name="busy6">logo/busy6.png</object>
+    <object class="wxBitmap" name="busy7">logo/busy7.png</object>
+    <object class="wxBitmap" name="busy8">logo/busy8.png</object>
+    <object class="wxBitmap" name="busy9">logo/busy9.png</object>
+    <object class="wxBitmap" name="busy10">logo/busy10.png</object>
+    <object class="wxBitmap" name="busy11">logo/busy12.png</object>
+    <object class="wxBitmap" name="busy12">logo/busy12.png</object>
+    <object class="wxBitmap" name="busy13">logo/busy13.png</object>
+    <object class="wxBitmap" name="busy14">logo/busy14.png</object>
+    <object class="wxBitmap" name="busy15">logo/busy15.png</object>
+    <object class="wxBitmap" name="busy16">logo/busy16.png</object>
+    <object class="wxBitmap" name="busy17">logo/busy17.png</object>
+    <object class="wxBitmap" name="busy18">logo/busy18.png</object>
+    <object class="wxBitmap" name="busy19">logo/busy19.png</object>
+    <object class="wxBitmap" name="busy20">logo/busy20.png</object>
+    <object class="wxBitmap" name="busy21">logo/busy22.png</object>
+    <object class="wxBitmap" name="busy22">logo/busy22.png</object>
+    <object class="wxBitmap" name="busy23">logo/busy23.png</object>
+    <object class="wxBitmap" name="busy24">logo/busy24.png</object>
+    <object class="wxBitmap" name="busy25">logo/busy25.png</object>
+    <object class="wxBitmap" name="busy26">logo/busy26.png</object>
+    <object class="wxBitmap" name="busy27">logo/busy27.png</object>
+    <object class="wxBitmap" name="busy28">logo/busy28.png</object>
+    <object class="wxBitmap" name="busy29">logo/busy29.png</object>
+    <object class="wxBitmap" name="busy30">logo/busy30.png</object>
+    <object class="wxBitmap" name="busy31">logo/busy32.png</object>
+    <object class="wxBitmap" name="busy32">logo/busy32.png</object>
+    <object class="wxBitmap" name="busy33">logo/busy33.png</object>
+    <object class="wxBitmap" name="busy34">logo/busy34.png</object>
+    <object class="wxBitmap" name="busy35">logo/busy35.png</object>
+    <object class="wxBitmap" name="busy36">logo/busy36.png</object>
+    <object class="wxBitmap" name="busy37">logo/busy37.png</object>
+    <object class="wxBitmap" name="busy38">logo/busy38.png</object>
+    <object class="wxBitmap" name="busy39">logo/busy39.png</object>
+</resource>

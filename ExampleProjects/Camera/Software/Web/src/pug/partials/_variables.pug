@@ -1,0 +1,23 @@
+//- META BLOCK
+//- Used for the <head> section of the website.
+//- All variables can be overwritten in any template with `append meta` block
+block meta
+    //- General
+    - var title = "FrontPanel Camera Sample";
+    - var description = "FrontPanel Camera Sample";
+    - var author = "Opal Kelly";
+
+    //- Paths
+    - var assetsPath = "../";
+    - var imagesPath = assetsPath + "images/";
+    - var scssPath = assetsPath + "scss/";
+    - var tsPath = assetsPath + "ts/";
+    - var faviconsPath = imagesPath + "favicons/";
+
+    //- Favicons
+    - var safariPinnedTabColor = "#0075FF";
+    - var msApplicationTileColor = "#da532c";
+    - var themeColor = "#ffffff";
+
+//- Define page title and url extension structure (has to be out of the meta block!)
+- var pageTitle = title;

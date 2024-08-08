@@ -1,0 +1,17 @@
+block add-file
+
+  .container.add-file-dialog#dialogAddFile
+    .col-md-6.col-lg-4.block-center.block-center-md.add-file-content
+      .central-box.box.box-light.box-shadowed
+        img.logo-mark(src=imagesPath + "ok-camera-logomark.png" width="80" height="80" alt="OK Camera")
+        .mt-base.mb-md
+          h1.h4.txtc#titleAddFile
+          h1.h3.txtc.mt-base#hintAddFile
+        form(action="")#formAddFile
+          .form-group#fileGroup
+            input.form-control#file(type="file")
+          .txtc#fileSelected(style="display: none;")
+            img(src=imagesPath + "icon-bitfile.svg" alt="")
+            .mt-base.mb-base#fileName
+          .form-group.mt-md
+            button.button.button-gradient.button-block.button-disabled(type="button" disabled)#buttonAddFile

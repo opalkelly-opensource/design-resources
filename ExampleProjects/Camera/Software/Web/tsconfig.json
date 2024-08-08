@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "newLine": "LF",
+    "outDir": "./lib/",
+    "target": "es5",
+    "sourceMap": true,
+    "declaration": true,
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "esModuleInterop": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": [
+    "src/ts/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

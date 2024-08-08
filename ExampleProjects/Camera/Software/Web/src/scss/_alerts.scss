@@ -1,0 +1,54 @@
+// MUSTRA Alerts
+
+.alert {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  padding: $grid-gutter;
+  background-color: $color-light;
+  border: 5px solid transparent;
+  border-radius: $border-radius-lg;
+  position: relative;
+  box-shadow: 0 10px 42px rgba(0,0,0,.15);
+  max-width: 33vw;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  z-index: 999;
+
+  @media (max-width: $screen-md-max) {
+    max-width: 100vw;
+    width: 90vw;
+  }
+
+  &.active {
+    display: flex;
+  }
+
+}
+
+.alert-content {
+  margin-top: $spacing-md;
+}
+
+.alert-actions {
+  margin-top: $spacing-md;
+}
+
+//
+// Flavors
+//
+
+.alert-warning {
+  border-color: $color-warning;
+}
+
+.alert-success {
+  border-color: $color-success;
+}
+
+.alert-danger {
+  border-color: $color-danger;
+}
+

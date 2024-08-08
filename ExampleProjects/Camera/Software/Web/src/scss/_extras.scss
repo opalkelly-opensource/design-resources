@@ -1,0 +1,378 @@
+// MUSTRA EXTRAS
+//
+// Helper classes and misc. stuff.
+
+
+// ==========
+// Clearfix
+
+.clearfix {
+  @include clearfix;
+}
+
+// ==========
+// Content visibility
+
+.no-show { // position outside of viewport
+  position: absolute !important;
+  top: -9999px       !important;
+  left: -9999px      !important;
+  visibility: none   !important;
+  display: block     !important;
+  height: 0          !important;
+  width: 0           !important;
+  overflow: hidden   !important;
+}
+
+.hidden { // completely hide content
+  display: none !important;
+}
+
+.fade {
+  opacity: 0;
+  transition: opacity .15s ease;
+
+  &.in,
+  &.show {
+    opacity: 1;
+  }
+}
+
+.collapse {
+  display: none;
+
+  &.in,
+  &.show      {
+    display: block;
+  }
+
+  tr &.in,
+  tr &.show    {
+    display: table-row;
+  }
+
+  tbody &.in,
+  tbody &.show {
+    display: table-row-group;
+  }
+}
+
+.collapsing {
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  transition-property: "height, visibility";
+  transition-duration: $transition-duration-base;
+  transition-timing: "ease";
+}
+
+// ==========
+// Display
+
+.block {
+  display: block;
+}
+
+.inline {
+  display: inline;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+// ==========
+// Horizontal alignment
+
+.left { float: left; }
+
+.right { float: right; }
+
+.center { // Assumes element has width
+  float: none !important;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.flex-center {
+  justify-content: center;
+}
+
+// ==========
+// Positioning
+
+.position-relative { position: relative; }
+
+// ==========
+// Vertical alignment
+
+.valign-top { vertical-align: top; }
+.valign-middle { vertical-align: middle; }
+.valign-bottom { vertical-align: bottom; }
+
+.flex-valign-top { align-self: flex-start; }
+.flex-valign-middle { align-self: center; }
+.flex-valign-bottom { align-self: flex-end; }
+
+// ==========
+// Block alignment
+
+.block-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+
+  &.block-center-sm {
+    @media (max-width: $screen-sm-max) {
+      position: static;
+      transform: none;
+    }
+  }
+
+  &.block-center-md {
+    @media (max-width: $screen-md-max) {
+      position: static;
+      transform: none;
+    }
+  }
+
+  &.block-center-lg {
+    @media (max-width: $screen-lg-max) {
+      position: static;
+      transform: none;
+    }
+  }
+
+}
+
+// ==========
+// Responsive images
+
+.img-responsive,
+.contain {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+//
+// Responsive utilities
+//
+.hidden-sm-up {
+  @media (min-width: $screen-sm) {
+    display: none;
+  }
+}
+
+.hidden-sm-down {
+  @media (max-width: $screen-sm-max) {
+    display: none;
+  }
+}
+
+// ==========
+// Margins
+
+.ml-none { margin-left: 0; }
+.ml-xs   { margin-left: $spacing-xs; }
+.ml-sm   { margin-left: $spacing-sm; }
+.ml-base { margin-left: $spacing-base; }
+.ml-md   { margin-left: $spacing-md; }
+.ml-lg   { margin-left: $spacing-lg; }
+.ml-xl   { margin-left: $spacing-xl; }
+.ml-type { margin-left: $spacing-type; }
+
+.mt-none { margin-top: 0; }
+.mt-xs   { margin-top: $spacing-xs; }
+.mt-sm   { margin-top: $spacing-sm; }
+.mt-base { margin-top: $spacing-base; }
+.mt-md   { margin-top: $spacing-md; }
+.mt-lg   { margin-top: $spacing-lg; }
+.mt-xl   { margin-top: $spacing-xl; }
+.mt-type { margin-top: $spacing-type; }
+
+.mr-none { margin-right: 0; }
+.mr-xs   { margin-right: $spacing-xs; }
+.mr-sm   { margin-right: $spacing-sm; }
+.mr-base { margin-right: $spacing-base; }
+.mr-md   { margin-right: $spacing-md; }
+.mr-lg   { margin-right: $spacing-lg; }
+.mr-xl   { margin-right: $spacing-xl; }
+.mr-type { margin-right: $spacing-type; }
+
+.mb-none { margin-bottom: 0; }
+.mb-xs   { margin-bottom: $spacing-xs; }
+.mb-sm   { margin-bottom: $spacing-sm; }
+.mb-base { margin-bottom: $spacing-base; }
+.mb-md   { margin-bottom: $spacing-md; }
+.mb-lg   { margin-bottom: $spacing-lg; }
+.mb-xl   { margin-bottom: $spacing-xl; }
+.mb-type { margin-bottom: $spacing-type; }
+
+// ==========
+// Padding
+
+.p-sm     { padding: $spacing-sm; }
+.p-base   { padding: $spacing-base; }
+.p-gutter { padding: $grid-gutter; }
+.p-lg     { padding: $spacing-lg; }
+.p-none   { padding: 0; }
+
+.p-h-sm {
+  padding-left: $spacing-sm;
+  padding-right: $spacing-sm;
+}
+.p-h-base {
+  padding-left: $spacing-base;
+  padding-right: $spacing-base;
+}
+.p-h-gutter {
+  padding-left: $grid-gutter;
+  padding-right: $grid-gutter;
+}
+.p-h-lg {
+  padding-left: $spacing-lg;
+  padding-right: $spacing-lg;
+}
+
+.p-v-sm {
+  padding-top: $spacing-sm;
+  padding-bottom: $spacing-sm;
+}
+.p-v-base {
+  padding-top: $spacing-base;
+  padding-bottom: $spacing-base;
+}
+.p-v-gutter {
+  padding-top: $grid-gutter;
+  padding-bottom: $grid-gutter;
+}
+.p-v-lg {
+  padding-top: $spacing-lg;
+  padding-bottom: $spacing-lg;
+}
+
+// ==========
+// Text colors
+
+.text-light { color: $color-light; }
+.text-default { color: $color-text; }
+.text-primary { color: $color-primary; }
+.text-success { color: $color-success; }
+.text-danger { color: $color-danger; }
+.text-danger { color: $color-danger; }
+.text-warning { color: $color-warning; }
+.text-shaded { color: $color-shaded; }
+
+// ==========
+// Backgrounds
+
+.bg-light { background-color: $color-light; }
+.bg-text { background-color: $color-text; }
+.bg-primary { background-color: $color-primary; }
+.bg-success { background-color: $color-success; }
+.bg-danger { background-color: $color-danger; }
+.bg-warning { background-color: $color-warning; }
+.bg-shaded { background-color: $color-shaded; }
+.bg-gradient { background: $color-gradient; }
+
+.highlight,
+.bg-highlight { background-color: $color-highlight; }
+
+// ==========
+// Borders
+
+.border-light { border-color: $color-light; }
+.border-text { border-color: $color-text; }
+.border-primary { border-color: $color-primary; }
+.border-success { border-color: $color-success; }
+.border-danger { border-color: $color-danger; }
+.border-warning { border-color: $color-warning; }
+.border-shaded { border-color: $color-shaded; }
+
+.bg-highlight { background-color: $color-highlight; }
+
+// ==========
+// UI elements
+
+// ==========
+// Numerals (lining figures)
+//
+// For use in e.g. tables when you need figures to line up
+
+.num {
+  // if your font doesn't support lining figures, you can use a monospaced font.
+  // font-family: monospace;
+  font-feature-settings: 'tnum';
+  -webkit-font-feature-settings: 'tnum';
+  -moz-font-feature-settings: 'tnum';
+}
+
+//
+// Contain 16:9 aspect ratio for the <iframe> element.
+// For 4:3 aspect ratio padding-botton of .video-aspect-ratio
+// element should be set to 75%.
+.responsive-embed {
+  // square by itself
+  position: relative;
+  padding-bottom: 100%;
+  height: 0;
+  overflow: hidden;
+
+  &.responsive-embed-16-9 {
+    padding-bottom: 56.25%;
+  }
+
+  &.responsive-embed-4-3 {
+    padding-bottom: 75%;
+  }
+
+  video,
+  iframe,
+  object,
+  embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+  }
+}
+
+// Flexbox helpers
+
+.flex {
+  display: flex;
+}
+
+.flex-vertical {
+  flex-direction: column;
+}
+
+.flex-space-between {
+  justify-content: space-between;
+}
+
+.h-100 {
+  height: 100%;
+  min-height: 100%;
+}
+
+.w-50 {
+  width: 50%
+}
+
+// Truncating text
+
+.ellip {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+
+  &.ellip-server {
+    max-width: 180px;
+  }
+}

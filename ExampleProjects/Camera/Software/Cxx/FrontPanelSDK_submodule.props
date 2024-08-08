@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="UserMacros">
+    <okFP_SDK_INCLUDE>$(SolutionDir)FrontPanel\FrontPanelDLL</okFP_SDK_INCLUDE>
+  </PropertyGroup>
+  <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='Win32'">
+    <okFP_SDK_LIBS>$(SolutionDir)FrontPanel\build\Win32\$(Configuration)</okFP_SDK_LIBS>
+  </PropertyGroup>
+  <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='x64'">
+    <okFP_SDK_LIBS>$(SolutionDir)FrontPanel\build\x64\$(Configuration)</okFP_SDK_LIBS>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(okFP_SDK_INCLUDE);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(okFP_SDK_LIBS);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+</Project>

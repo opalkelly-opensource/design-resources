@@ -1,0 +1,64 @@
+{
+  "name": "frontpanel-sample-camera",
+  "version": "0.1.0",
+  "description": "FrontPanel Web API Camera sample",
+  "main": "lib/evb100x.js",
+  "scripts": {
+    "tsc": "tsc",
+    "start": "run-s clean tsc start:*",
+    "start:parcel": "parcel serve --out-dir srv --port 9889 ./src/pug/index.pug",
+    "build-html": "run-s clean tsc build-html:*",
+    "build-html:parcel": "parcel build ./src/pug/index.pug --public-url .",
+    "fix": "run-s fix:*",
+    "fix:prettier": "prettier \"src/ts/**/*.ts\" --write",
+    "fix:tslint": "tslint --fix --project .",
+    "clean": "rimraf .cache dist srv lib"
+  },
+  "author": "",
+  "license": "",
+  "prettier": {
+    "singleQuote": true,
+    "tabWidth": 4
+  },
+  "staticFiles": {
+    "staticPath": [
+      {
+        "staticPath": "../Common",
+        "excludeGlob": "**/!(camera.lua)"
+      }
+    ]
+  },
+  "dependencies": {
+    "@opalkelly/frontpanel-ws": "^0.2.2",
+    "@types/node": "^12.12.22",
+    "bootstrap": "^4.4.1",
+    "jquery": "^3.4.1",
+    "svg4everybody": "^2.1.9"
+  },
+  "devDependencies": {
+    "@types/bootstrap": "^4.3.1",
+    "@types/svg4everybody": "^2.1.1",
+    "@babel/compat-data": "^7.9.0",
+    "npm-run-all": "^4.1.5",
+    "parcel-bundler": "^1.12.4",
+    "parcel-plugin-static-files-copy": "^2.3.1",
+    "posthtml-beautify": "^0.3.1",
+    "posthtml-expressions": "^1.1.1",
+    "posthtml-include": "^1.3.2",
+    "prettier": "^1.19.1",
+    "pug": "^2.0.4",
+    "rimraf": "^3.0.2",
+    "sass": "^1.26.5",
+    "tslint": "^5.20.1",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-immutable": "^6.0.1",
+    "typescript": "^3.7.4"
+  },
+  "devDependenciesComments": {
+    "@babel/compat-data": [
+      "Older versions of this package conflict with newer",
+      "versions of NPM, require the first version known to",
+      "be compatible with Node 13.13."
+    ]
+  }
+}

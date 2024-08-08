@@ -1,0 +1,20 @@
+run
+-ifn .\i2cController.prj
+-ofn .\i2cController-s3.ngc
+-top i2cController
+-ifmt mixed
+-opt_mode area
+-opt_level 1
+-p xc3s400-4pq208
+-iobuf no
+
+run
+-ifn .\i2cController.prj
+-ofn .\i2cController-s6.ngc
+-top i2cController
+-ifmt mixed
+-opt_mode area
+-opt_level 1
+-p xc6slx45-2fgg484
+-iobuf no
+

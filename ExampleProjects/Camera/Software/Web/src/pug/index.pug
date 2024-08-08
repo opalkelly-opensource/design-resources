@@ -1,0 +1,143 @@
+extends partials/layout
+
+block content
+
+  .message.message-danger.txtc#error(style="display: none;")
+    .message-content#errorContent
+
+  .alert.alert-danger.fade.in#alert
+    img(src=imagesPath + "alert-danger.svg" alt="" width="40" height="40")
+    .alert-content#alertContent
+    .alert-actions
+      button.button.button-primary#alertButton(type="button") Reload App
+
+  .control-toggle
+    button.button.button-sm#buttonControls(type="button" style="display: none;")
+      img(src=imagesPath + "icon-controls.svg" alt="Controls")
+
+  include partials/connect-to-server
+
+  include partials/add-file
+
+  .content#containerCamera(style="display: none;")
+    .content-primary
+
+      .camera-message
+        .camera-message-content.txtc.message-danger#cameraError(style="display: none;")
+
+      main.output#imageContainer
+        canvas.output-figure#image(width="648" height="486")
+
+    aside.content-secondary#controls
+      .p-h-gutter
+        .server-status
+          a(href="/").page-header-logo
+            img(src=imagesPath + "ok-camera-logo.png", width="197", height="70", alt="OK Camera by Opal Kelly")
+            img.led(src=imagesPath + "led.svg" width="8" height="8" alt="led" style="display: none;")
+            .sk-chase#spinnerCamera(style="display: none;")
+              .sk-chase-dot
+              .sk-chase-dot
+              .sk-chase-dot
+              .sk-chase-dot
+              .sk-chase-dot
+              .sk-chase-dot
+
+        hr
+
+        .flex.flex-space-between
+          .status.mr-base.flex.flex-valign-middle
+            img.mr-sm#imgConnected(src=imagesPath + "status-connected.svg" alt="")
+            img.mr-sm#imgDisconnected(src=imagesPath + "status-disconnected.svg" alt="" style="display: none;")
+            span.text-sm.text-quiet.ellip.ellip-server#connectionStatus
+
+          .action.flex-valign-middle
+            button(type="button" title="disconnect").disconnect#buttonStatus
+
+        .form-horizontal
+          .form-group
+            .row
+              .col-xs-6
+                label.form-control-label Device
+              .col-xs-6
+                select.form-control#devicesList
+
+        form#formCameraControls
+
+          .mr-none.p-none#containerCameraControls(style="display: none;")
+
+            hr
+
+            .mt-base
+              dl.text-monospace
+                .flex.flex-space-between
+                  dt.txtr.w-50 FPS:
+                  dd.w-50#textFPS -
+                .flex.flex-space-between
+                  dt.txtr.w-50 Missed Frames:
+                  dd.w-50#textMissedFrames 0
+
+            .mt-base.flex.flex-center
+              button.button.button-gradient.button-sm#buttonCapture(type="button") Capture
+              button.button.button-gradient.button-sm.ml-base#buttonCMOSReset(type="button") CMOS Reset
+
+            .mt-base.flex.flex-space-between.flex-valign-middle
+              .form-toggle
+                .toggle-bg
+                  input(type="radio" name="toggleCapture" value="single")
+                  input(type="radio" name="toggleCapture" value="continuous")
+                  .switch
+                .toggle-label Continuous
+              .form-toggle
+                .toggle-bg
+                  input(type="radio" name="toggleZoomMode" value="stretch")
+                  input(type="radio" name="toggleZoomMode" value="fit")
+                  .switch
+                .toggle-label 1:1
+
+            hr
+
+            .form-group
+              .row
+                .col-xs-6
+                  label.form-control-label Exposure
+                  input.form-control#inputExposure(type="text" placeholder="Enter value" value="2000")
+                .col-xs-6
+                  label.form-control-label Display Mode
+                  select.form-control#selectDisplayMode
+                    option(value="0") Raw Bayer
+                    option(value="1") Raw Mono
+                    option(value="2" selected) RGB
+
+            .form-group
+              .row
+                .col-xs-6
+                  label.form-control-label Capture Size
+                  select.form-control#selectCaptureSize
+
+                .col-xs-6
+                  label.form-control-label Capture Mode
+                  select.form-control#selectCaptureMode
+
+            hr
+
+            .form-group
+              label.form-control-label#textDepth Frame Buffer Depth (max = - frames)
+              .range-with-values
+                span.range-min Min
+                span.range-slider
+                  input#rangeDepth(type="range" min="0" max="100" value="100")
+                span.range-max 100%
+            .form-group.mt-md
+              label.form-control-label#textCurrentDepth Current Buffer Level (- frames)
+              .progress-bar
+                .progress-bar-min 0
+                .progress-bar-track
+                  .progress-bar-value#progressCurrentDepth(style="width: 0%" title="0%")
+                .progress-bar-max 100%
+
+  .log.log-hidden#log
+    .log-content
+      a.toggle-log(href="#" data-toggle="log")
+        img(src=imagesPath + "icon-log-toggle.svg" alt="toggle log" title="toggle log")
+      h2.log-title Log Output
+      pre.log-content-main

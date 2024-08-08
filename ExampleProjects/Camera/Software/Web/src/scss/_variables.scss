@@ -1,0 +1,232 @@
+// MUSTRA VARIABLES
+
+// ==========
+// Typography
+
+$font-family:                         "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+$font-size-base:                      14px;
+$font-size-xs:                        ceil(($font-size-base * 0.6));
+$font-size-sm:                        ceil(($font-size-base * 0.75));
+$font-size-md:                        ceil(($font-size-base * 1.5));
+$font-size-lg:                        ceil(($font-size-base * 3));
+
+$font-weight-light:                   300;
+$font-weight-bold:                    700;
+$font-weight-ultra:                   900;
+
+$line-height-base:                    1.5;
+$line-height-tight:                   1.25;
+$line-height-heading:                 1.15;
+
+// ==========
+// Colors
+
+$color-text:                          #343434;
+$color-quiet:                         #999;
+$color-light:                         #fff;
+
+$color-primary:                       #479DD1;
+$color-success:                       #5EDA92;
+$color-danger:                        #EB5757;
+$color-warning:                       #F5EDA0;
+$color-shaded:                        #e6e6e6;
+
+$color-highlight:                     #fbfac9;
+
+$color-gradient:                      linear-gradient(135deg, #34A23E 0%, #2763AB 100%);
+
+$color-link:                          $color-primary;
+$color-link-hover:                    lighten($color-primary,10%);
+
+// ==========
+// Grid
+
+$grid-gutter:                         30px;
+
+// ==========
+// Spacing
+
+$spacing-type:                        1em;
+
+$spacing-base:                        $font-size-base;           //  20px
+$spacing-xs:                          ceil($spacing-base * .25); //  5px
+$spacing-sm:                          ceil($spacing-base * .5);  //  10px
+$spacing-md:                          ceil($spacing-base * 2);   //  40px
+$spacing-lg:                          ceil($spacing-base * 3);   //  60px
+$spacing-xl:                          ceil($spacing-base * 4);   //  80px
+$spacing-xxl:                         ceil($spacing-base * 6);   // 120px
+
+$button-spacing-vertical-sm:          $spacing-sm;
+$button-spacing-horizontal-sm:        $spacing-base;
+$button-spacing-vertical:             $spacing-base;
+$button-spacing-horizontal:           $spacing-md;
+
+// ==========
+// Decorators
+
+$border-radius-sm:                    2px;
+$border-radius-base:                  5px;
+$border-radius-lg:                    10px;
+
+$border-color:                        #ccc;
+
+// ==========
+// Media queries
+
+$screen-xs:                           0px;
+$screen-sm:                           576px;
+$screen-md:                           768px;
+$screen-lg:                           1024px;
+$screen-xl:                           1280px;
+
+
+// So media queries don't overlap when required, provide a maximum
+
+$screen-sm-max:                       ($screen-sm - 1);
+$screen-md-max:                       ($screen-md - 1);
+$screen-lg-max:                       ($screen-lg - 1);
+$screen-xl-max:                       ($screen-xl - 1);
+
+// ==========
+// Miscellaneous
+
+$zindex-carousel-arrows:              500;
+$zindex-page-header-fixed:            900;
+$zindex-drawer:                       1000;
+$zindex-drawer-close:                 1010;
+$zindex-overlay:                      1100;
+$zindex-overlay-close:                1110;
+$zindex-dropdown-item:                1060;
+$zindex-dropdown:                     2000;
+
+$transition-duration-fast:            .15s;
+$transition-duration-base:            .25s;
+$transition-easing:                   ease-in-out;
+
+$box-shadow-sm:                       0 .4em $font-size-sm rgba(0,0,0,.15);
+$box-shadow-base:                     0 $font-size-xs $font-size-md rgba(0,0,0,.25);
+$box-shadow-lg:                       0 $font-size-md $font-size-lg rgba(0,0,0,.25);
+$box-shadow-base-right:               $font-size-xs 0 $font-size-md rgba(0,0,0,.25);
+$box-shadow-base-left:                -$font-size-xs 0 $font-size-md rgba(0,0,0,.25);
+
+// ==========
+// Paths
+
+$font-path:                           '../fonts/';
+$images-path:                         '../images/';
+$icons-path:                          '../images/icons/';
+
+// ==========
+// Page header
+
+$page-header-height-small:            10vh;
+$page-header-height:                  32px;
+$page-header-collapse-breakpoint:     390px;
+
+// ==========
+// Overlays
+
+$overlay-close-size:                  46px;
+$overlay-close-padding:               15px;
+
+// ==========
+// Drawers
+
+$drawer-width-sm:                    90vw;
+$drawer-width-md:                    50vw;
+$drawer-width:                       30vw;
+$drawer-close-size:                  46px;
+$drawer-close-padding:               15px;
+
+// ==========
+// Forms
+
+// Form group
+$form-group-margin-top:               $grid-gutter/2;
+$form-group-margin-bottom:            $grid-gutter/2;
+
+// Input
+$input-padding-x:                     8px;
+$input-padding-y:                     8px;
+$input-font-size:                     $font-size-base;
+$input-line-height:                   1;
+
+$input-bg:                            $color-light;
+$input-bg-disabled:                   $color-shaded;
+
+$input-color:                         $color-text;
+$input-border-color:                  $border-color;
+$input-border-width:                  1px;
+$input-btn-border-width:              1px;
+$input-border-radius:                 $border-radius-base;
+
+$input-bg-focus:                      $input-bg;
+$input-border-focus:                  $color-primary;
+$input-color-focus:                   $input-color;
+
+$input-transition:                    border-color $transition-duration-fast $transition-easing;
+
+// Input size variations
+$input-padding-x-sm:                  6px;
+$input-padding-y-sm:                  4px;
+
+$input-padding-x-lg:                  $spacing-sm;
+$input-padding-y-lg:                  $spacing-sm;
+
+// Check (radio or checkbox)
+$form-check-margin-bottom:            $spacing-xs;
+$form-check-input-gutter:             1.25rem;
+
+$form-check-inline-margin-x:          $spacing-base;
+$form-check-disabled-color:           #adadad;
+
+// Placeholder
+$input-color-placeholder:             $color-quiet;
+$input-placeholder-focus-offset:      7.5%;
+$input-placeholder-transition:        transform $transition-duration-fast $transition-easing, opacity $transition-duration-fast $transition-easing;
+
+// Form text (help block)
+$form-text-color:                     $color-quiet;
+$form-text-font-size:                 $font-size-sm;
+$form-text-margin-top:                $spacing-xs;
+
+// Input group
+$input-group-addon-bg:                $color-shaded;
+$input-group-addon-border-color:      $input-border-color;
+
+// Form validation
+$form-feedback-margin-top:            $form-text-margin-top;
+$input-color-success:                 $color-success;
+$input-color-warning:                 $color-warning;
+$input-color-danger:                  $color-danger;
+
+// Buttons
+
+$button-bg-disabled:                  $color-shaded;
+
+// ==========
+// Breadcrumbs
+
+$breadcrumbs-item-spacing-x:          $spacing-sm;
+
+$breadcrumbs-link-color:              $color-quiet;
+$breadcrumbs-link-hover-color:        darken($breadcrumbs-link-color, 10%);
+
+$breadcrumbs-separator: "/";
+$breadcrumbs-separator-color:         $breadcrumbs-link-color;
+
+// ==========
+// Slick
+
+$slick-loader-path:                   $images-path;
+$slick-arrow-box-size:                50px;
+$slick-arrow-size:                    30px;
+
+$slick-dot-size:                      10px;
+$slick-dot-color-default:             $color-quiet;
+$slick-dot-color-active:              $color-text;
+
+$slick-opacity-default:               0.5;
+$slick-opacity-on-hover:              0.8;
+$slick-opacity-not-active:            0.15;

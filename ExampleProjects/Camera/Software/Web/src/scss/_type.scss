@@ -1,0 +1,204 @@
+// MUSTRA TYPOGRAPHY
+//
+// Basic font settings, various typographic elements.
+
+// Set base font size
+
+html {
+  font-size: 10px;
+}
+
+body {
+  font-family: $font-family;
+  font-size: $font-size-sm;
+  line-height: $line-height-base;
+  color: $color-text;
+  font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-kerning: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media (min-width: $screen-sm) {
+    font-size: $font-size-base;
+  }
+}
+
+// Titles
+
+h1,
+.h1,
+.section-title {
+  margin-top: 0;
+  margin-bottom: $spacing-xl;
+  font-size: $font-size-md;
+  font-weight: $font-weight-light;
+  line-height: $line-height-heading;
+
+  @media (min-width: $screen-sm) {
+    font-size: $font-size-lg;
+  }
+
+
+  .pretitle + & {
+    margin-top: $spacing-base;
+  }
+}
+
+h2,
+.h2,
+.title {
+  margin-top: 0;
+  margin-bottom: $spacing-base;
+  font-size: $font-size-base;
+  font-weight: $font-weight-light;
+  line-height: $line-height-heading;
+
+  @media (min-width: $screen-sm) {
+    font-size: $font-size-md;
+  }
+}
+
+h3,
+.h3 {
+  margin-top: 0;
+  margin-bottom: $spacing-base;
+  font-size: $font-size-base;
+  font-weight: $font-weight-bold;
+}
+
+h4,
+.h4 {
+  margin-top: 0;
+  margin-bottom: $spacing-type;
+  font-size: $font-size-base;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+.pretitle {
+  @extend .upcase;
+  margin-top: 0;
+  margin-bottom: $spacing-base;
+  font-size: $font-size-base;
+  font-weight: $font-weight-bold;
+}
+
+//
+// Text
+//
+
+hr {
+  border-color: $color-shaded;
+  border-top-width: 2px;
+  margin-top: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+p {
+  margin-top: 0;
+}
+
+.lead {
+  font-size: 1.25em;
+  font-weight: $font-weight-light;
+  line-height: $line-height-tight;
+}
+
+.text-monospace {
+  font-family: monospace;
+}
+
+// Sizes
+
+.text-xs { font-size: $font-size-xs !important; }
+.text-sm { font-size: $font-size-sm !important; }
+.text-base { font-size: $font-size-base !important; }
+.text-md { font-size: $font-size-md !important; }
+.text-lg { font-size: $font-size-lg !important; }
+
+// Flavors
+
+.text-light { color: $color-light; }
+.text-text { color: $color-text; }
+.text-primary { color: $color-primary; }
+.text-success { color: $color-success; }
+.text-danger { color: $color-danger; }
+.text-warning { color: $color-warning; }
+.text-shaded { color: $color-shaded; }
+.text-quiet { color: $color-quiet; }
+
+// Alignment
+
+.txtl { text-align: left !important; }
+
+.txtr { text-align: right !important; }
+
+// only on screens larger than $screen-sm
+.txtr-sm {
+  @media (min-width: $screen-sm) {
+    text-align: right !important;
+  }
+}
+
+// only on screens larger than $screen-md
+.txtr-md {
+  @media (min-width: $screen-md) {
+    text-align: right !important;
+  }
+}
+
+.txtc { text-align: center !important; }
+
+// Text overflow
+.text-overflow {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+// Misc
+
+figcaption {
+  margin-top: $spacing-base;
+  color: $color-quiet;
+  font-size: $font-size-sm;
+}
+
+.upcase {
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.strong,
+strong {
+  font-weight: $font-weight-bold;
+}
+
+.ultra {
+  font-weight: $font-weight-ultra;
+}
+
+.small,
+small {
+  color: $color-quiet;
+  font-style: normal !important;
+}
+
+//
+// Links
+//
+
+.link-quiet {
+  @include link-variant($color-quiet, darken($color-quiet,7%));
+}
+
+.link-ui {
+  @include link-variant($color-text, $color-primary);
+}

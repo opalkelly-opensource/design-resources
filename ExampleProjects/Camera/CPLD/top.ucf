@@ -1,0 +1,42 @@
+# Bank 1 ###################################################
+# XAPP785 p4 : LVCMOS25/33 use the same input/output buffers
+#  LVCMOS25 (2.3 - 2.7V) : LVCMOS33 (3.0 - 3.6V)
+#  Buffers scale linearly so using LVCMOS25 to differentiate
+#  2.8V I/O for Aptina MT9P031 Image Sensor 
+############################################################   
+NET "img_pixclk"    LOC="P1"   |  IOSTANDARD="LVCMOS25";
+NET "img_strobe"    LOC="P16"  |  IOSTANDARD="LVCMOS25";
+NET "img_fv"        LOC="P13"  |  IOSTANDARD="LVCMOS25";
+NET "img_lv"        LOC="P14"  |  IOSTANDARD="LVCMOS25";
+
+NET "img_pix<0>"    LOC="P12"  |  IOSTANDARD="LVCMOS25";
+NET "img_pix<1>"    LOC="P8"   |  IOSTANDARD="LVCMOS25";
+NET "img_pix<2>"    LOC="P6"   |  IOSTANDARD="LVCMOS25";
+NET "img_pix<3>"    LOC="P5"   |  IOSTANDARD="LVCMOS25";
+NET "img_pix<4>"    LOC="P3"   |  IOSTANDARD="LVCMOS25";
+NET "img_pix<5>"    LOC="P2"   |  IOSTANDARD="LVCMOS25";
+NET "img_pix<6>"    LOC="P40"  |  IOSTANDARD="LVCMOS25";
+NET "img_pix<7>"    LOC="P41"  |  IOSTANDARD="LVCMOS25";
+NET "img_pix<8>"    LOC="P42"  |  IOSTANDARD="LVCMOS25";
+NET "img_pix<9>"    LOC="P44"  |  IOSTANDARD="LVCMOS25";
+NET "img_pix<10>"   LOC="P43"  |  IOSTANDARD="LVCMOS25";
+NET "img_pix<11>"   LOC="P39"  |  IOSTANDARD="LVCMOS25";
+
+# Bank 2 ################################################
+NET "fpga_pixclk"   LOC="P19"  |  IOSTANDARD="LVCMOS33";
+NET "fpga_strobe"   LOC="P36"  |  IOSTANDARD="LVCMOS33";
+NET "fpga_fv"       LOC="P37"  |  IOSTANDARD="LVCMOS33";
+NET "fpga_lv"       LOC="P38"  |  IOSTANDARD="LVCMOS33";
+
+NET "fpga_pix<0>"   LOC="P20"  |  IOSTANDARD="LVCMOS33";
+NET "fpga_pix<1>"   LOC="P21"  |  IOSTANDARD="LVCMOS33";
+NET "fpga_pix<2>"   LOC="P22"  |  IOSTANDARD="LVCMOS33";
+NET "fpga_pix<3>"   LOC="P23"  |  IOSTANDARD="LVCMOS33";
+NET "fpga_pix<4>"   LOC="P27"  |  IOSTANDARD="LVCMOS33";
+NET "fpga_pix<5>"   LOC="P28"  |  IOSTANDARD="LVCMOS33";
+NET "fpga_pix<6>"   LOC="P29"  |  IOSTANDARD="LVCMOS33";
+NET "fpga_pix<7>"   LOC="P30"  |  IOSTANDARD="LVCMOS33";
+NET "fpga_pix<8>"   LOC="P31"  |  IOSTANDARD="LVCMOS33";
+NET "fpga_pix<9>"   LOC="P32"  |  IOSTANDARD="LVCMOS33";
+NET "fpga_pix<10>"  LOC="P33"  |  IOSTANDARD="LVCMOS33";
+NET "fpga_pix<11>"  LOC="P34"  |  IOSTANDARD="LVCMOS33";

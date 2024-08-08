@@ -1,0 +1,24 @@
+block connect-to-server
+
+  .container#containerConnect
+    .col-md-6.col-lg-4.block-center.block-center-md
+      .central-box.box.bg-light.box-shadowed
+        img.logo-mark(src=imagesPath + "ok-camera-logomark.png" width="80" height="80" alt="OK Camera")
+        h1.h4.txtc.mt-base.mb-md Connect to FPoIP Server
+        form#formConnect
+          .box.box-sm.box-bordered.bg-light.border-danger.text-danger.mb-md#contextualError(style="display: none;")
+            h2.h4.mb-sm Error
+            p.mb-none#contextualErrorText This is a contextual error message.
+          .form-group#inputServerGroup
+            input.form-control#inputServer(type="text" placeholder="IP address")
+          .form-group#inputUsernameGroup
+            input.form-control#inputUsername(type="text" placeholder="Username")
+          .form-group#inputPasswordGroup
+            input.form-control#inputPassword(type="password" placeholder="******")
+          .form-group
+            button.button.button-gradient.button-block#buttonConnect(type="submit") Connect
+      .mt-base.txtc
+        a(href="https://opalkelly.com/")
+          img(src=imagesPath + "ok-camera-logo-attribution.svg" alt="By Opal Kelly")
+
+    button.log-switch.button.button-default.button-sm#logSwitch(type="button" data-toggle="log-switch") See log

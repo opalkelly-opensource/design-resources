@@ -1,0 +1,181 @@
+// ==========
+//  MUSTRA BUTTONS
+//
+// Basic button styles in various flavors and sizes.
+
+.button {
+  display: inline-block;
+  padding: $button-spacing-vertical $button-spacing-horizontal;
+  margin: 0;
+  font-family: inherit;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
+  text-decoration: none !important;
+  line-height: 1;
+  border: none;
+  border-radius: 50px;
+  white-space: nowrap;
+  transition: all .15s ease;
+  @include user-select(none);
+}
+
+//
+// Flavors
+//
+
+.button-default {
+  @include button-flavor($color-text, $color-shaded);
+}
+
+.button-primary {
+  @include button-flavor(#fff, $color-primary);
+}
+
+.button-gradient {
+  color: $color-light;
+  background: $color-gradient;
+
+  &:focus,
+  &:hover {
+    opacity: .9;
+    color: $color-light;
+  }
+
+  &:active {
+    opacity: .9;
+  }
+}
+
+.button-secondary {
+  @include button-flavor($color-text, #fff);
+
+  &:focus,
+  &:hover {
+    background-color: #fff;
+    color: $color-link;
+  }
+
+}
+
+.button-success {
+  @include button-flavor(#fff, $color-success);
+}
+
+.button-danger {
+  @include button-flavor(#fff, $color-danger);
+}
+
+.button-warning {
+  @include button-flavor($color-text, $color-warning);
+}
+
+.button-invert {
+  @include button-flavor($color-link, #fff);
+
+  &:focus,
+  &:hover {
+    background-color: #fff;
+    color: $color-text;
+  }
+}
+
+
+// Disabled buttons
+
+.button-disabled,
+.button-disabled:focus,
+.button-disabled:hover {
+  background: $button-bg-disabled;
+  color: $color-quiet;
+  cursor: default;
+}
+
+//
+// Sizes
+//
+
+.button-xs {
+  font-size: 11.1px;
+  text-transform: uppercase;
+  padding: .35em .75em;
+
+  @media (min-width: $screen-sm) {
+    font-size: $font-size-xs;
+  }
+}
+
+.button-sm {
+  padding: $button-spacing-vertical-sm $button-spacing-horizontal-sm;
+  font-size: $font-size-sm;
+}
+
+.button-lg {
+  font-size: $font-size-md;
+  padding: .5em 1.5em;
+}
+
+.button-block {
+  display: block;
+  width: 100%;
+}
+
+// Disconnect button
+
+.disconnect {
+  width: 20px;
+  height: 20px;
+  background-color: $color-shaded;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all .15s ease;
+  position: relative;
+  @include user-select(none);
+
+  &::before {
+    content: "";
+    display: block;
+    width: 2px;
+    height: 10px;
+    background-color: rgba(0,0,0,.25);
+    border-radius: 1px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -5px;
+    margin-left: -1px;
+    transform: rotate(45deg);
+  }
+
+  &::after {
+    content: "";
+    display: block;
+    width: 2px;
+    height: 10px;
+    background-color: rgba(0,0,0,.25);
+    border-radius: 1px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -5px;
+    margin-left: -1px;
+    transform: rotate(145deg);
+  }
+
+  &:focus,
+  &:hover {
+    background-color: $color-danger;
+
+    &::before,
+    &::after {
+      background-color: #fff;
+    }
+
+  }
+}
