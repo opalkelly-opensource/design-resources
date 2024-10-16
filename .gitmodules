@@ -1,0 +1,3 @@
+[submodule "ExampleProjects/Camera/HDL/XEM8320/SZG-Camera-HLS/HLS/Vitis_Libraries"]
+	path = ExampleProjects/Camera/HDL/XEM8320/SZG-Camera-HLS/HLS/Vitis_Libraries
+	url = https://github.com/Xilinx/Vitis_Libraries.git
