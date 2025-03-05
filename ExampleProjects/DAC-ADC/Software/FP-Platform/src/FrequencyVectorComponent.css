@@ -1,0 +1,16 @@
+/**
+ * Copyright (c) 2024-2025 Opal Kelly Incorporated
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+.FrequencyVectorPanel {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    height: 100%;
+}
