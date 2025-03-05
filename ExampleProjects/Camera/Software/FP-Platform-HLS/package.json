@@ -1,0 +1,66 @@
+{
+  "name": "frontpanel-camera-reactapp",
+  "version": "0.4.0",
+  "private": true,
+  "description": "FrontPanel Platform Camera-HLS Application",
+  "author": "Opal Kelly Inc.",
+  "license": "SEE LICENSE IN LICENSE",
+  "main": "index.js",
+  "scripts": {
+    "pack:dev": "webpack --config webpack.dev.js && asar pack ./dist ./output/app-dev.asar",
+    "pack": "webpack --config webpack.prod.js && asar pack ./dist ./output/app.asar",
+    "build:dev": "webpack --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js",
+    "start": "webpack serve --open --config webpack.dev.js",
+    "format-check": "prettier --check ./src/**",
+    "lint": "eslint ./src/**/*.{ts,tsx}",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@electron/asar": "^3.2.17",
+    "@types/node": "^22.9.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@typescript-eslint/eslint-plugin": "^8.14.0",
+    "copy-webpack-plugin": "^12.0.2",
+    "css-loader": "^7.1.2",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.1",
+    "html-webpack-plugin": "^5.6.3",
+    "prettier": "^3.2.5",
+    "style-loader": "^4.0.0",
+    "ts-loader": "^9.5.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.1.0",
+    "webpack-merge": "^6.0.1"
+  },
+  "dependencies": {
+    "@opalkelly/frontpanel-react-components": "^0.4.0",
+    "@radix-ui/react-progress": "^1.0.3",
+    "react": "^18.3.1",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18.3.1",
+    "sub-events": "^1.9.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
