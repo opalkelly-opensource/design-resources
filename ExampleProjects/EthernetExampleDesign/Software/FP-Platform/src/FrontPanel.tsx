@@ -1,13 +1,17 @@
 /**
- * Copyright (c) 2024 Opal Kelly Incorporated
+ * Copyright (c) 2024-2025 Opal Kelly Incorporated
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
 
-import React, { Component } from "react";
+import { Component } from "react";
 
-import { IFrontPanel, FrontPanelPeriodicUpdateTimer } from "@opalkelly/frontpanel-alloy-core";
+import {
+    IFrontPanel,
+    FrontPanelPeriodicUpdateTimer,
+    WorkQueue
+} from "@opalkelly/frontpanel-platform-api";
 
 import { FrontPanel as FrontPanelContext } from "@opalkelly/frontpanel-react-components";
 
@@ -19,10 +23,11 @@ import EthernetPortC from "./EthernetPortC";
 
 export interface FrontPanelProps {
     name: string;
+    frontpanel: IFrontPanel;
+    workQueue: WorkQueue;
 }
 
 export interface FrontPanelState {
-    device: IFrontPanel;
     updateTimer: FrontPanelPeriodicUpdateTimer;
 }
 
@@ -34,23 +39,25 @@ class FrontPanel extends Component<FrontPanelProps, FrontPanelState> {
         super(props);
 
         this.state = {
-            device: window.FrontPanel,
-            updateTimer: new FrontPanelPeriodicUpdateTimer(window.FrontPanel, 10)
+            updateTimer: new FrontPanelPeriodicUpdateTimer(this.props.frontpanel, 10)
         };
     }
 
     componentDidMount() {
-        this.state.updateTimer.Start();
+        this.state.updateTimer.start();
     }
 
     componentWillUnmount() {
-        this.state.updateTimer.Stop();
+        this.state.updateTimer.stop();
     }
 
     render() {
         return (
             <div className="okFrontPanel">
-                <FrontPanelContext device={this.state.device} eventSource={this.state.updateTimer}>
+                <FrontPanelContext
+                    device={this.props.frontpanel}
+                    workQueue={this.props.workQueue}
+                    eventSource={this.state.updateTimer}>
                     <div className="okControlPanel">
                         <EthernetPortView label="MAC EX Port A" configuration={EthernetPortA} />
                     </div>
