@@ -1,6 +1,6 @@
 {
-  "short_name": "Ethernet FP-Alloy App",
-  "name": "FrontPanel Alloy Ethernet Example",
+  "short_name": "FrontPanel Ethernet Example",
+  "name": "FrontPanel Ethernet Example App",
   "icons": [
     {
       "src": "favicon.ico",

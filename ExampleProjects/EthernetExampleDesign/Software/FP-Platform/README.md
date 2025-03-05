@@ -1,4 +1,4 @@
-# FrontPanel Alloy Ethernet Application
+# FrontPanel Platform Ethernet Example
 
 ## Overview
 
