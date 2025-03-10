@@ -1,0 +1,17 @@
+/**
+ * Copyright (c) 2024-2025 Opal Kelly Incorporated
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+.okListItemComponent {
+    display: flex;
+    flex-direction: row;
+    align-self: stretch;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+
+    border: 1px solid rgb(199, 199, 199);
+}

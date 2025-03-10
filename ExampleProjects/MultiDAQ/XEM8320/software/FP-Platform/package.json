@@ -1,0 +1,41 @@
+{
+  "name": "frontpanel-multidaq-reactapp",
+  "version": "0.4.0",
+  "private": true,
+  "description": "FrontPanel Platform Multi-DAQ Application",
+  "author": "Opal Kelly Inc.",
+  "license": "SEE LICENSE IN LICENSE",
+  "main": "index.js",
+  "scripts": {
+    "pack:dev": "webpack --config webpack.dev.js && asar pack ./dist ./output/app-dev.asar",
+    "pack": "webpack --config webpack.prod.js && asar pack ./dist ./output/app.asar",
+    "build:dev": "webpack --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js",
+    "start": "webpack serve --open --config webpack.dev.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@electron/asar": "^3.3.1",
+    "@types/node": "^22.13.2",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "copy-webpack-plugin": "^12.0.2",
+    "css-loader": "^7.1.2",
+    "html-webpack-plugin": "^5.6.3",
+    "style-loader": "^4.0.0",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.0",
+    "webpack-merge": "^6.0.1"
+  },
+  "dependencies": {
+    "@opalkelly/frontpanel-react-components": "^0.4.0",
+    "chart.js": "^4.4.7",
+    "react": "^18.3.1",
+    "react-chartjs-2": "^5.3.0",
+    "react-dom": "^18.3.1"
+  }
+}
