@@ -1,6 +1,7 @@
 const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: './src/index.tsx',
@@ -8,6 +9,13 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'FrontPanel Application',
       template: path.resolve(__dirname, 'src/index.html'),
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'frontpanel-app.json', to: 'frontpanel-app.json' },
+        // TODO: Specify the file to bundle as the app icon
+        { from: 'assets/frontpanel-app-icon.svg', to: 'assets/images' }
+      ],
     }),
   ],
   module: {
@@ -45,8 +53,11 @@ module.exports = {
       {
         test: /\.(bit)$/i,
         type: 'asset/resource',
-        generator: { 
-          filename: 'assets/bitfiles/[name][ext]'
+        generator: {
+          filename: (sourcePath) => {
+            const productName = path.dirname(sourcePath.filename).split('/').pop();
+            return `assets/bitfiles/${productName}/[name][ext]`;
+          }
         }
       },
     ],

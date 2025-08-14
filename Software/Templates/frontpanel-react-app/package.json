@@ -1,9 +1,9 @@
 {
   "name": "frontpanel-react-app",
-  "version": "0.4.0",
-  "private": true,
+  "version": "0.5.0",
   "description": "FrontPanel Application Template (Webpack+Typescript+React)",
-  "author": "Opalkelly Inc.",
+  "private": true,
+  "author": "Opal Kelly Inc.",
   "main": "index.js",
   "scripts": {
     "pack:dev": "webpack --config webpack.dev.js && asar pack ./dist ./output/app-dev.asar",
@@ -16,7 +16,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "@electron/asar": "^3.2.17",
+    "@electron/asar": "^3.4.1",
     "@types/node": "^22.9.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
@@ -37,7 +37,8 @@
     "webpack-merge": "^6.0.1"
   },
   "dependencies": {
-    "@opalkelly/frontpanel-react-components": "^0.4.0",
+    "@opalkelly/frontpanel-platform-api": "^0.5.0",
+    "@radix-ui/themes": "^3.2.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

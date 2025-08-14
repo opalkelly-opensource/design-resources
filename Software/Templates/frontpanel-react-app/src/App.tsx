@@ -1,131 +1,192 @@
 import React from "react";
 
-import "./App.css";
-
-import FrontPanel from "./FrontPanel";
-
 import {
     IDevice,
-    IFrontPanel,
+    IDeviceInfo,
+    IFPGAConfiguration,
+    IFPGADataPortClassic,
     WorkQueue,
     DataProgressCallback,
     ByteCount
 } from "@opalkelly/frontpanel-platform-api";
 
-import { Application } from "@opalkelly/frontpanel-react-components";
+import { AlertDialog, Text, Button, Flex, Separator } from "@radix-ui/themes";
 
-import FrontPanelLogo from "../assets/logo512.png";
+import "./App.css";
 
-//TODO: Necessary to allow opening a device on Ubuntu
-window.FrontPanelAPI.deviceManager.startMonitoring();
+import "./FPGAConfigurationFiles";
 
-/**
- * Loads the specified configuration file into the FPGA on the specified device.
- * @param filename The name of the configuration file to load.
- * @param device The device to load the configuration file into.
- */
-const loadConfiguration = async (filename: string, device: IDevice): Promise<void> => {
-    console.log("Loading Configuration File:", filename);
-    try {
-        const response = await fetch("frontpanel://localhost/assets/bitfiles/" + filename);
+import FrontPanelLogo from "../assets/logo192.png";
 
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
-
-        const arrayBuffer = await response.arrayBuffer();
-
-        const reportProgress: DataProgressCallback = (total: ByteCount, completed: ByteCount) => {
-            console.log("Configuration Progress: ", completed, " of ", total);
-        };
-
-        await device
-            .getFPGA()
-            .loadConfiguration(arrayBuffer, arrayBuffer.byteLength, reportProgress);
-
-        console.log("Load Configuration Complete");
-    } catch (error) {
-        console.error("Failed to load configuration file:", filename, "\n", error);
-    }
-};
-
-/**
- * Initializes the application by opening the specified device and
- * configuring the device with specified configuration file.
- * @param serialNumber The serial number of the device to open.
- * @param configurationFilename The name of the configuration file to load.
- * @returns {Promise<IDevice>} A promise that resolves to the opened device.
- */
-const initializeDevice = async (
-    serialNumber: string,
-    configurationFilename: string
-): Promise<IDevice> => {
-    console.log("Opening Device...");
-
-    const device = await window.FrontPanelAPI.deviceManager.openDevice(serialNumber);
-
-    const deviceInfo = await device.getInfo();
-
-    console.log("Opened Device:", deviceInfo.productName, " SerialNumber:", deviceInfo.serialNumber);
-
-    await loadConfiguration(configurationFilename, device);
-
-    return device;
-};
+import FrontPanel from "./FrontPanel";
 
 const DeviceWorkQueue = new WorkQueue();
 
+interface ErrorProperties { title: string, description: string, details: string, solution: string };
+
 function App() {
-    const [frontpanel, setFrontPanel] = React.useState<IFrontPanel>();
+    const [fpgaDataPort, setFPGADataPort] = React.useState<IFPGADataPortClassic>();
+    const [error, setError] = React.useState<ErrorProperties>();
 
     React.useEffect(() => {
-        let device: IDevice;
+        /**
+         * Loads the specified configuration file using the FPGA configuration interface of a device.
+         * @param filename - The name of the configuration file to load.
+         * @param fpgaConfiguration - The FPGA configuration interface of the device.
+         */
+        const loadFPGAConfiguration = async (filename: string, fpgaConfiguration: IFPGAConfiguration): Promise<void> => {
+            let response;
 
-        DeviceWorkQueue.post(async () => {
+            // Retrieve the contents of the bitfile from the bundled assets using the 'frontpanel://' protocol
             try {
-                //TODO: Replace 'frontpanel.bit' with the name of the configuration file to load.
-                device = await initializeDevice("", "frontpanel.bit");
-
-                const frontpanel = await device.getFPGA().getFrontPanel();
-
-                setFrontPanel(frontpanel);
+                response = await fetch("frontpanel://localhost/assets/bitfiles/" + filename);
             }
             catch (error) {
-                device?.close();
-                console.error(error);
+                throw new Error(`Failed to retrieve ${filename}`);
+            }
+
+            if (!response.ok) {
+                console.error(`Fetch response error status: ${response.ok}`);
+            }
+
+            const arrayBuffer = await response.arrayBuffer();
+
+            // Specify a function to use as a callback to report FPGA configuration progress
+            const reportProgress: DataProgressCallback = (total: ByteCount, completed: ByteCount) => {
+                console.log(`FPGA Configuration Progress: ${completed} of ${total} bytes`);
+            };
+
+            // Start the FPGA configuration operation
+            await fpgaConfiguration.loadConfigurationFromMemory(arrayBuffer, arrayBuffer.byteLength, reportProgress);
+        };
+
+        /**
+         * Initializes the device by configuring the FPGA on the device with the file 
+         * corresponding to the product name of the device.
+         * @param device - The device to initialize.
+         * @returns {Promise<IDevice>} A promise that resolves to the opened device.
+         */
+        const initializeDevice = async (device: IDevice): Promise<void> => {
+            const deviceInfo = await device.getDeviceInfo();
+
+            console.log(`Initializing Device Product: ${deviceInfo.productName} SerialNumber: '${deviceInfo.serialNumber}'`);
+
+            const fpgaConfiguration = device.getFPGAConfiguration();
+
+            //Choose the configuration file based on the product name of the device.
+            const configurationFilename = deviceInfo.productName + "/counters.bit";
+
+            await loadFPGAConfiguration(configurationFilename, fpgaConfiguration);
+        };
+
+        const targetDeviceSerialNumber = (window.FrontPanelEnv.targetDeviceSerialNumbers.length > 0) ? window.FrontPanelEnv.targetDeviceSerialNumbers[0] : "";
+        const deviceManager = window.FrontPanelAPI.deviceManager;
+
+        let device: IDevice;
+        let deviceInfo: IDeviceInfo;
+
+        DeviceWorkQueue.post(async () => {
+            console.log(`Opening Device SerialNumber='${targetDeviceSerialNumber}'...`);
+
+            await deviceManager.startMonitoring();
+
+            // Step 1: Open the Device
+            try {
+                device = await window.FrontPanelAPI.deviceManager.openDevice(targetDeviceSerialNumber);
+
+                deviceInfo = await device.getDeviceInfo();
+
+                console.log(`Opened Device Product: '${deviceInfo.productName}' SerialNumber: '${deviceInfo.serialNumber}'`);
+            }
+            catch(error) {
+                console.error(`Failed to open Device '${targetDeviceSerialNumber}': \n${error}`);
+
+                setFPGADataPort(undefined);
+                setError({
+                    title: "Failed to Open Target Device", 
+                    description: `Unable to open device with serial number ${targetDeviceSerialNumber}`,
+                    details: `${error}`,
+                    solution: "Verify that the device is properly connected and restart the application."
+                });
+            }
+
+            if(device) {
+                // Step 2: Initialize the Device and retrieve the FPGA dataport
+                console.log(`Initializing Device '${deviceInfo.serialNumber}'...`);
+
+                try {
+                    await initializeDevice(device);
+
+                    const fpgaDataPort = await device.getFPGADataPortClassic();
+
+                    setFPGADataPort(fpgaDataPort);
+                }
+                catch(error) {
+                    console.error(`Failed to initialize Device '${deviceInfo.serialNumber}': \n${error}`);
+
+                    setFPGADataPort(undefined);
+                    setError({
+                        title: "Failed to Initialize Device", 
+                        description: `Unable to initialize ${deviceInfo.productName} with serial number ${deviceInfo.serialNumber}`,
+                        details: `${error}`,
+                        solution: "Verify that the device is properly connected and restart the application."
+                    });
+                }
             }
         });
 
         return () => {
-            DeviceWorkQueue.post(() => {
-                return new Promise((resolve) => {
-                    console.log("Closing Device...");
-                    device?.close();
-                    resolve();
-                });
+            console.log(`Perform Cleanup`)
+
+            setFPGADataPort(undefined);
+
+            // Close the Device
+            DeviceWorkQueue.post(async () => {
+                await deviceManager.stopMonitoring();
+
+                console.log(`Closing Device...`);
+                device?.close();
             });
         };
     }, []);
 
-    if (frontpanel !== undefined) {
-        return (
-            <div className="App">
-                <Application>
-                    <FrontPanel
-                        name="FrontPanel"
-                        frontpanel={frontpanel}
-                        workQueue={DeviceWorkQueue}
-                    />
-                </Application>
-            </div>
-        );
-    } else {
-        return (
-            <div className="App">
-                <img src={FrontPanelLogo} />
-            </div>
-        );
+    // Event Handlers
+    const onExitButtonClick = () => {
+        window.close();
     }
+
+    return (
+        <div className="App">
+            {(fpgaDataPort) ? 
+                <FrontPanel
+                    name="Counter"
+                    fpgaDataPort={fpgaDataPort}
+                    workQueue={DeviceWorkQueue}/>
+                :
+                <>
+                    <img src={FrontPanelLogo} />
+                    <AlertDialog.Root open={(error !== undefined)}>
+                        <AlertDialog.Content maxWidth="450px">
+                            <AlertDialog.Title>{error?.title}</AlertDialog.Title>
+                            <Separator my="3" size="4"/>
+                            <AlertDialog.Description size="2">{error?.description}</AlertDialog.Description>
+                            <Flex direction="column" gap="4" p="2">
+                                <Text size="2" weight="regular">{error?.details}</Text>
+                                <Text size="2" weight="regular">Solution: {error?.solution}</Text>
+                            </Flex>
+                            <Flex gap="3" mt="4" justify="end">
+                                <AlertDialog.Action>
+                                    <Button onClick={onExitButtonClick} variant="solid" color="red">
+                                        Exit
+                                    </Button>
+                                </AlertDialog.Action>
+                            </Flex>
+                        </AlertDialog.Content>
+                    </AlertDialog.Root>
+                </>
+            }
+        </div>
+    );
 }
 
 export default App;

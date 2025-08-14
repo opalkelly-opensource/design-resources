@@ -1,0 +1,16 @@
+{
+    "id": "frontpanel-react-app",
+    "name": "TemplateApp",
+    "version": "1.0.0",
+    "author": "Opal Kelly Incorporated",
+    "summary": "FrontPanel Application (Webpack+Typescript+React)",
+    "description": "FrontPanel Application (Webpack+Typescript+React)",
+    "icon": { "source": "assets/images/frontpanel-app-icon.svg" },
+    "deviceBindings": [
+        { "name": "Target Device", "description": "Target Device" }
+    ],
+    "initialContentSize": {
+        "width": 300,
+        "height": 420
+    }
+}

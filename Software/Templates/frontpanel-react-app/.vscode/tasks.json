@@ -1,0 +1,85 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Launch FrontPanel App (production)",
+      "type": "process",
+      "command": "C:\\Program Files\\Opal Kelly\\FrontPanel-Platform\\Platform\\FrontPanel-Platform.exe",
+      "args": [
+        "--remote-debugging-port=9222",
+        "--app-package=${workspaceFolder}\\output\\app.asar"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "osx": {
+        "command": "/Applications/FrontPanel Platform.app/Contents/MacOS/FrontPanel-Platform",
+        "args": [
+          "--remote-debugging-port=9222",
+          "--app-package=${workspaceFolder}/output/app.asar"
+        ]
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Launch FrontPanel App (development)",
+      "type": "process",
+      "command": "C:\\Program Files\\Opal Kelly\\FrontPanel-Platform\\Platform\\FrontPanel-Platform.exe",
+      "args": [
+        "--remote-debugging-port=9222",
+        "--app-package=${workspaceFolder}\\output\\app-dev.asar"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "osx": {
+        "command": "/Applications/FrontPanel Platform.app/Contents/MacOS/FrontPanel-Platform",
+        "args": [
+          "--remote-debugging-port=9222",
+          "--app-package=${workspaceFolder}/output/app-dev.asar"
+        ]
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Package FrontPanel App (production)",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "pack"],
+      "group": "build",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Package FrontPanel App (development)",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "pack:dev"],
+      "group": "build",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Package and Launch FrontPanel App (production)",
+      "dependsOn": [
+        "Package FrontPanel App (production)",
+        "Launch FrontPanel App (production)"
+      ],
+      "dependsOrder": "sequence",
+      "group": "build"
+    },
+    {
+      "label": "Package and Launch FrontPanel App (development)",
+      "dependsOn": [
+        "Package FrontPanel App (development)",
+        "Launch FrontPanel App (development)"
+      ],
+      "dependsOrder": "sequence",
+      "group": "build"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+
+import '../assets/XEM7001-A15/counters.bit';
+import '../assets/XEM7010-A200/counters.bit';
+import '../assets/XEM7010-A50/counters.bit';
+import '../assets/XEM7305/counters.bit';
+import '../assets/XEM7310-A200/counters.bit';
+import '../assets/XEM7310-A75/counters.bit';
+import '../assets/XEM7310MT-A200/counters.bit';
+import '../assets/XEM7310MT-A75/counters.bit';
+import '../assets/XEM7320-A200T/counters.bit';
+import '../assets/XEM7320-A75T/counters.bit';
+import '../assets/XEM7350-K160T/counters.bit';
+import '../assets/XEM7350-K410T/counters.bit';
+import '../assets/XEM7350-K70T/counters.bit';
+import '../assets/XEM7360-K160T/counters.bit';
+import '../assets/XEM7360-K410T/counters.bit';
+import '../assets/XEM8305-AU15P/counters.bit';
+import '../assets/XEM8310-AU25P/counters.bit';
+import '../assets/XEM8320-AU25P/counters.bit';
+import '../assets/XEM8350-KU060/counters.bit';
+import '../assets/XEM8350-KU115/counters.bit';
+import '../assets/XEM8370-KU11P/counters.bit';

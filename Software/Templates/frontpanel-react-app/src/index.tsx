@@ -4,15 +4,18 @@ import ReactDOM from "react-dom/client";
 
 import "./index.css";
 
-//TODO: Replace 'frontpanel.bit' with the name of the configuration file.
-//import "../assets/frontpanel.bit";
-
 import App from "./App";
+
+import "@radix-ui/themes/styles.css";
+
+import { Theme } from "@radix-ui/themes";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 
 root.render(
-    <React.StrictMode>
-        <App />
-    </React.StrictMode>
+    <Theme appearance="dark">
+        <React.StrictMode>
+            <App />
+        </React.StrictMode>
+    </Theme>
 );
