@@ -1,0 +1,16 @@
+{
+    "id": "camera-example-app",
+    "name": "Camera",
+    "version": "0.5.0",
+    "author": "Opal Kelly Incorporated",
+    "summary": "Machine vision image capture",
+    "description": "Machine vision image capture",
+    "icon": { "source": "assets/images/camera-app-logo.svg" },
+    "deviceBindings": [
+        { "name": "Camera Device", "description": "Camera Device" }
+    ],
+    "initialContentSize": {
+        "width": 988,
+        "height": 531
+    }
+}

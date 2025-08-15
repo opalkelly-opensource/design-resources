@@ -1,11 +1,11 @@
 {
   /* Visit https://aka.ms/tsconfig to read more about this file */
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext"
+      "es2023"
     ],
     "allowJs": true,
     "skipLibCheck": true,
@@ -21,7 +21,8 @@
     "noImplicitAny": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "sourceMap": true,
   },
   "include": [
     "src"

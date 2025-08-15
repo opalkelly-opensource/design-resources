@@ -1,13 +1,15 @@
 {
   "name": "frontpanel-ethernet-reactapp",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "private": true,
   "description": "FrontPanel Platform Ethernet Application",
   "author": "Opal Kelly Inc.",
   "license": "SEE LICENSE IN LICENSE",
   "main": "index.js",
   "scripts": {
+    "pack:dev": "webpack --config webpack.dev.js && asar pack ./dist ./output/app-dev.asar",
     "pack": "webpack --config webpack.prod.js && asar pack ./dist ./output/app.asar",
+    "build:dev": "webpack --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
     "start": "webpack serve --open --config webpack.dev.js",
     "format-check": "prettier --check ./src/**",
@@ -36,7 +38,7 @@
     "webpack-merge": "^6.0.1"
   },
   "dependencies": {
-    "@opalkelly/frontpanel-react-components": "^0.4.0",
+    "@opalkelly/frontpanel-react-components": "^0.5.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -44,18 +46,6 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
     ]
   }
 }

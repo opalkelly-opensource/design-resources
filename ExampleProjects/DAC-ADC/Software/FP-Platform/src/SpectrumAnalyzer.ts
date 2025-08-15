@@ -5,13 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { IFrontPanel, ByteCount } from "@opalkelly/frontpanel-platform-api";
+import { IFPGADataPortClassic, ByteCount } from "@opalkelly/frontpanel-platform-api";
 
 /**
  * Spectrum Analyzer
  */
 export class SpectrumAnalyzer {
-    private readonly _FrontPanel: IFrontPanel;
+    private readonly _FPGADataPort: IFPGADataPortClassic;
     private readonly _SampleSize: ByteCount;
     private readonly _SampleCount: number;
 
@@ -25,12 +25,12 @@ export class SpectrumAnalyzer {
 
     /**
      * Creates a new instance of the Spectrum Analyzer
-     * @param frontpanel - Object that implements the IFrontPanel interface used to communicate with device.
+     * @param fpgaDataPort - Object that implements the IFPGADataPortClassic interface used to communicate with device.
      * @param sampleSize - Sample size
      * @param sampleCount - Sample count
      */
-    constructor(frontpanel: IFrontPanel, sampleSize: ByteCount, sampleCount: number) {
-        this._FrontPanel = frontpanel;
+    constructor(fpgaDataPort: IFPGADataPortClassic, sampleSize: ByteCount, sampleCount: number) {
+        this._FPGADataPort = fpgaDataPort;
         this._SampleSize = sampleSize;
         this._SampleCount = sampleCount;
     }
@@ -46,34 +46,34 @@ export class SpectrumAnalyzer {
         outputSamples: Float64Array
     ): Promise<boolean> {
         // Write Samples
-        await this._FrontPanel.writeToPipeIn(
+        await this._FPGADataPort.writeToPipeIn(
             0x80,
             sourceSamples.byteLength,
             sourceSamples.buffer as ArrayBuffer
         );
 
         // Check for program empty
-        await this._FrontPanel.updateWireOuts();
+        await this._FPGADataPort.updateWireOuts();
 
         let isProgramEmpty: boolean =
-            ((this._FrontPanel.getWireOutValue(0x20)) & 0x10) === 0x10;
+            ((this._FPGADataPort.getWireOutValue(0x20)) & 0x10) === 0x10;
 
         while (isProgramEmpty) {
-            await this._FrontPanel.updateWireOuts();
+            await this._FPGADataPort.updateWireOuts();
 
-            isProgramEmpty = ((this._FrontPanel.getWireOutValue(0x20)) & 0x10) === 0x10;
+            isProgramEmpty = ((this._FPGADataPort.getWireOutValue(0x20)) & 0x10) === 0x10;
         }
 
         // Start FFT Calculation
-        await this._FrontPanel.activateTriggerIn(0x40, 2);
+        await this._FPGADataPort.activateTriggerIn(0x40, 2);
 
         // Wait for program full
-        let isProgramFull: boolean = ((this._FrontPanel.getWireOutValue(0x20)) & 0x8) === 0x8;
+        let isProgramFull: boolean = ((this._FPGADataPort.getWireOutValue(0x20)) & 0x8) === 0x8;
 
         while (!isProgramFull) {
-            await this._FrontPanel.updateWireOuts();
+            await this._FPGADataPort.updateWireOuts();
 
-            isProgramFull = ((this._FrontPanel.getWireOutValue(0x20)) & 0x8) === 0x8;
+            isProgramFull = ((this._FPGADataPort.getWireOutValue(0x20)) & 0x8) === 0x8;
         }
 
         // Read via pipe poa1
@@ -81,7 +81,7 @@ export class SpectrumAnalyzer {
 
         const outputData: ArrayBuffer = new ArrayBuffer(outputDataSize);
 
-        await this._FrontPanel.readFromPipeOut(0xa1, outputDataSize, outputData);
+        await this._FPGADataPort.readFromPipeOut(0xa1, outputDataSize, outputData);
 
         const output: DataView = new DataView(outputData);
 

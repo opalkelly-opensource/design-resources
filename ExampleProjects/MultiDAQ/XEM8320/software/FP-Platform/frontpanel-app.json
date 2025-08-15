@@ -1,0 +1,16 @@
+{
+    "id": "multidaq-example-app",
+    "name": "Multi-DAQ",
+    "version": "0.5.0",
+    "author": "Opal Kelly Incorporated",
+    "summary": "FrontPanel Multi-DAQ Example App",
+    "description": "FrontPanel Multi-DAQ Example App",
+    "icon": { "source": "assets/images/multidaq-app-logo.svg" },
+    "deviceBindings": [
+        { "name": "Multi-DAQ Device", "description": "Multi-DAQ Device" }
+    ],
+    "initialContentSize": {
+        "width": 1086,
+        "height": 750
+    }
+}

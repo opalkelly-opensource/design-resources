@@ -13,7 +13,7 @@ import CameraView from "./CameraView";
 
 import {
     IDevice,
-    IFrontPanel,
+    IFPGADataPortClassic,
     WorkQueue,
     DataProgressCallback,
     ByteCount
@@ -45,8 +45,8 @@ const loadConfiguration = async (filename: string, device: IDevice): Promise<voi
         };
 
         await device
-            .getFPGA()
-            .loadConfiguration(arrayBuffer, arrayBuffer.byteLength, reportProgress);
+            .getFPGAConfiguration()
+            .loadConfigurationFromMemory(arrayBuffer, arrayBuffer.byteLength, reportProgress);
 
         console.log("Load Configuration Complete");
     } catch (error) {
@@ -69,7 +69,7 @@ const initializeDevice = async (
 
     const device = await window.FrontPanelAPI.deviceManager.openDevice(serialNumber);
 
-    const deviceInfo = await device.getInfo();
+    const deviceInfo = await device.getDeviceInfo();
 
     console.log("Opened Device:", deviceInfo.productName, " SerialNumber:", deviceInfo.serialNumber);
 
@@ -81,18 +81,20 @@ const initializeDevice = async (
 const DeviceWorkQueue = new WorkQueue();
 
 function App() {
-    const [frontpanel, setFrontPanel] = React.useState<IFrontPanel>();
+    const [fpgaDataPort, setFPGADataPort] = React.useState<IFPGADataPortClassic>();
 
     React.useEffect(() => {
         let device: IDevice;
 
+        const targetDeviceSerialNumber = (window.FrontPanelEnv.targetDeviceSerialNumbers.length > 0) ? window.FrontPanelEnv.targetDeviceSerialNumbers[0] : "";
+
         DeviceWorkQueue.post(async () => {
             try {
-            	device = await initializeDevice("", "szg-camera-xem8320-hls.bit");
+            	device = await initializeDevice(targetDeviceSerialNumber, "szg-camera-xem8320-hls.bit");
 
-                const frontpanel = await device.getFPGA().getFrontPanel();
+                const fpgaDataPort = await device.getFPGADataPortClassic();
 
-                setFrontPanel(frontpanel);
+                setFPGADataPort(fpgaDataPort);
             }
             catch (error) {
                 device?.close();
@@ -111,10 +113,10 @@ function App() {
         };
     }, []);
 
-    if (frontpanel !== undefined) {
+    if (fpgaDataPort !== undefined) {
         return (
             <div className="App">
-                <CameraView name="Camera-HLS" frontpanel={frontpanel} workQueue={DeviceWorkQueue} />
+                <CameraView name="Camera" fpgaDataPort={fpgaDataPort} workQueue={DeviceWorkQueue} />
             </div>
         );
     } else {

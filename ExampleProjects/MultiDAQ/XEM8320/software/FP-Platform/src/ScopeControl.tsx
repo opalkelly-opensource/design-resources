@@ -7,12 +7,12 @@
 
 import { Component, ReactNode } from "react";
 import "./ScopeControl.css";
-import { IFrontPanel, WorkQueue } from "@opalkelly/frontpanel-platform-api";
+import { IFPGADataPortClassic, WorkQueue } from "@opalkelly/frontpanel-platform-api";
 import { NumberEntry } from "@opalkelly/frontpanel-react-components";
 
 interface ScopeControlProps {
     label: string;
-    frontpanel: IFrontPanel;
+    fpgaDataPort: IFPGADataPortClassic;
     workQueue: WorkQueue;
 }
 
@@ -58,8 +58,8 @@ class ScopeControl extends Component<ScopeControlProps, ScopeControlState> {
         console.log("Enable Count changed: " + value);
         const channels = value << BigInt(4);
         this.WorkQueue.post(async () => {
-            this.props.frontpanel.setWireInValue(0x00, Number(channels), 0x000000f0);
-            await this.props.frontpanel.updateWireIns();
+            this.props.fpgaDataPort.setWireInValue(0x00, Number(channels), 0x000000f0);
+            await this.props.fpgaDataPort.updateWireIns();
         });
         this.setState({ enableCount: Number(value) });
     };

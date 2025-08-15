@@ -23,7 +23,7 @@ import { Line } from "react-chartjs-2";
 
 import { SpectrumAnalyzer } from "./SpectrumAnalyzer";
 
-import { IFrontPanel, WorkQueue, ByteCount } from "@opalkelly/frontpanel-platform-api";
+import { IFPGADataPortClassic, WorkQueue, ByteCount } from "@opalkelly/frontpanel-platform-api";
 
 import FFTConfiguration, { Hertz } from "./FFTConfiguration";
 
@@ -39,7 +39,7 @@ export type UpdateChartDataEventHandler = (data: Vector2D[]) => void;
  */
 interface SpectrumAnalyzerViewProps {
     label: string;
-    frontpanel: IFrontPanel;
+    fpgaDataPort: IFPGADataPortClassic;
     workQueue: WorkQueue;
 }
 
@@ -76,7 +76,7 @@ class SpectrumAnalyzerView extends Component<SpectrumAnalyzerViewProps> {
         const sampleSize: ByteCount = 8;
         const sampleCount: number = this._FFTConfiguration.FFTLength;
 
-        this._SpectrumAnalyzer = new SpectrumAnalyzer(props.frontpanel, sampleSize, sampleCount);
+        this._SpectrumAnalyzer = new SpectrumAnalyzer(props.fpgaDataPort, sampleSize, sampleCount);
 
         // Creates an array of two Float64Array objects one for each of the two channels available.
         this._SampleChannels = new Array(2);

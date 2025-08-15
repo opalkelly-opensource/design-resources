@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { IFrontPanel, ByteCount } from "@opalkelly/frontpanel-platform-api";
+import { IFPGADataPortClassic, ByteCount } from "@opalkelly/frontpanel-platform-api";
 
 import { SubEvent } from "sub-events";
 
@@ -35,7 +35,7 @@ export interface DigitalSignalSamplerStateChangeEventArgs {
  * Class representing a Digital Signal Sampler.
  */
 export class DigitalSignalSampler {
-    private readonly _FrontPanel: IFrontPanel;
+    private readonly _FPGADataPort: IFPGADataPortClassic;
     private readonly _SampleSize: ByteCount;
     private readonly _SampleCount: number;
 
@@ -74,12 +74,12 @@ export class DigitalSignalSampler {
 
     /**
      * Create a new instance of the Digital Signal Sampler.
-     * @param frontpanel - Object that implements the IFrontPanel interface used to communicate with device.
+     * @param fpgaDataPort - Object that implements the IFPGADataPortClassic interface used to communicate with device.
      * @param sampleSize - Size of each sample in bytes.
      * @param sampleCount - Number of samples to read from the ADC.
      */
-    constructor(frontpanel: IFrontPanel, sampleSize: ByteCount, sampleCount: number) {
-        this._FrontPanel = frontpanel;
+    constructor(fpgaDataPort: IFPGADataPortClassic, sampleSize: ByteCount, sampleCount: number) {
+        this._FPGADataPort = fpgaDataPort;
         this._SampleSize = sampleSize;
         this._SampleCount = sampleCount;
 
@@ -103,21 +103,21 @@ export class DigitalSignalSampler {
             this.UpdateState(DigitalSignalSamplerState.ResetPending);
 
             // Wait for Clocks to Lock
-            await this._FrontPanel.updateWireOuts();
+            await this._FPGADataPort.updateWireOuts();
 
-            let isLocked: boolean = ((this._FrontPanel.getWireOutValue(0x20)) & 0x1) === 0x1;
+            let isLocked: boolean = ((this._FPGADataPort.getWireOutValue(0x20)) & 0x1) === 0x1;
 
             for (let retryIndex = 1; retryIndex < 100 && !isLocked; retryIndex++) {
-                await this._FrontPanel.updateWireOuts();
+                await this._FPGADataPort.updateWireOuts();
 
-                isLocked = ((this._FrontPanel.getWireOutValue(0x20)) & 0x1) === 0x1;
+                isLocked = ((this._FPGADataPort.getWireOutValue(0x20)) & 0x1) === 0x1;
             }
 
             if (isLocked) {
-                this._FrontPanel.setWireInValue(0x01, 0x00000001, 0xffffffff);
-                await this._FrontPanel.updateWireIns();
-                this._FrontPanel.setWireInValue(0x01, 0x00000000, 0xffffffff);
-                await this._FrontPanel.updateWireIns();
+                this._FPGADataPort.setWireInValue(0x01, 0x00000001, 0xffffffff);
+                await this._FPGADataPort.updateWireIns();
+                this._FPGADataPort.setWireInValue(0x01, 0x00000000, 0xffffffff);
+                await this._FPGADataPort.updateWireIns();
 
                 this.UpdateState(DigitalSignalSamplerState.ResetComplete);
 
@@ -145,25 +145,25 @@ export class DigitalSignalSampler {
         let retval: boolean;
 
         if (this._State === DigitalSignalSamplerState.ResetComplete) {
-            await this._FrontPanel.activateTriggerIn(0x42, 0); // Fill the ADC FIFO
+            await this._FPGADataPort.activateTriggerIn(0x42, 0); // Fill the ADC FIFO
 
             // Wait for FIFO to fill.
-            await this._FrontPanel.updateWireOuts();
+            await this._FPGADataPort.updateWireOuts();
 
             let isFull: boolean =
-                ((this._FrontPanel.getWireOutValue(0x20)) & 0x00000004) === 0x00000004;
+                ((this._FPGADataPort.getWireOutValue(0x20)) & 0x00000004) === 0x00000004;
 
             while (!isFull) {
-                await this._FrontPanel.updateWireOuts();
+                await this._FPGADataPort.updateWireOuts();
 
                 isFull =
-                    ((this._FrontPanel.getWireOutValue(0x20)) & 0x00000004) === 0x00000004;
+                    ((this._FPGADataPort.getWireOutValue(0x20)) & 0x00000004) === 0x00000004;
             }
 
             //  Read Data
             const sampleData: ArrayBuffer = new ArrayBuffer(this._SampleSize * this._SampleCount);
 
-            await this._FrontPanel.readFromPipeOut(
+            await this._FPGADataPort.readFromPipeOut(
                 0xa0,
                 this._SampleSize * this._SampleCount,
                 sampleData

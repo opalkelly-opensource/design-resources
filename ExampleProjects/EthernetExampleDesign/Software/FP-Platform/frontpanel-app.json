@@ -1,0 +1,16 @@
+{
+    "id": "ethernet-example-app",
+    "name": "Ethernet",
+    "version": "0.5.0",
+    "author": "Opal Kelly Incorporated",
+    "summary": "FrontPanel Ethernet Example App",
+    "description": "FrontPanel Ethernet Example App",
+    "icon": { "source": "" },
+    "deviceBindings": [
+        { "name": "Ethernet Device", "description": "Ethernet Device" }
+    ],
+    "initialContentSize": {
+        "width": 1086,
+        "height": 750
+    }
+}

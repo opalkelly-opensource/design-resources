@@ -39,7 +39,7 @@ import {
 
 import { SZYGYCamera } from "./SYZYGYCamera";
 
-import { IFrontPanel, WorkQueue } from "@opalkelly/frontpanel-platform-api";
+import { IFPGADataPortClassic, WorkQueue } from "@opalkelly/frontpanel-platform-api";
 
 import CameraEvent from "./CameraEvent";
 
@@ -69,7 +69,7 @@ type FrameCaptureMode = TestMode | undefined;
  */
 interface CameraViewProps {
     name: string;
-    frontpanel: IFrontPanel;
+    fpgaDataPort: IFPGADataPortClassic;
     workQueue: WorkQueue;
 }
 
@@ -117,11 +117,11 @@ class CameraView extends Component<CameraViewProps, CameraViewState> {
         super(props);
 
         const deviceI2C: FrontPanelDeviceI2C = new FrontPanelDeviceI2C(
-            props.frontpanel,
+            props.fpgaDataPort,
             DEVICE_ADDRESS_AR0330
         );
 
-        this._Camera = new SZYGYCamera(props.frontpanel, deviceI2C);
+        this._Camera = new SZYGYCamera(props.fpgaDataPort, deviceI2C);
 
         this._CanvasViewRef = React.createRef();
 
@@ -297,8 +297,8 @@ class CameraView extends Component<CameraViewProps, CameraViewState> {
             // Turn off the programmable empty setting in hardware, this is not used in
             // this implementation.
 
-            this.props.frontpanel.setWireInValue(0x04, 0, 0xfff);
-            await this.props.frontpanel.updateWireIns();
+            this.props.fpgaDataPort.setWireInValue(0x04, 0, 0xfff);
+            await this.props.fpgaDataPort.updateWireIns();
         });
 
         // Initialize the Camera state.

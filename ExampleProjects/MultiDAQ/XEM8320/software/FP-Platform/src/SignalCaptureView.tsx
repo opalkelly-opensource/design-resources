@@ -23,7 +23,7 @@ import { Line } from "react-chartjs-2";
 
 import { SignalCapture, ADCChannelData } from "./SignalCapture";
 
-import { IFrontPanel, WorkQueue } from "@opalkelly/frontpanel-platform-api";
+import { IFPGADataPortClassic, WorkQueue } from "@opalkelly/frontpanel-platform-api";
 
 export type Vector2D = {
     x: number;
@@ -32,7 +32,7 @@ export type Vector2D = {
 
 interface SignalCaptureViewProps {
     label: string;
-    frontpanel: IFrontPanel;
+    fpgaDataPort: IFPGADataPortClassic;
     workQueue: WorkQueue;
 }
 
@@ -66,7 +66,7 @@ class SignalCaptureView extends Component<SignalCaptureViewProps, SignalCaptureV
         this.state = { text: "" };
         this.updatePeriodMilliseconds = 100;
 
-        this._SignalCapture = new SignalCapture(props.frontpanel, this._FrameSize);
+        this._SignalCapture = new SignalCapture(props.fpgaDataPort, this._FrameSize);
 
         ChartJS.register(LinearScale, PointElement, LineElement, Title, Legend);
 

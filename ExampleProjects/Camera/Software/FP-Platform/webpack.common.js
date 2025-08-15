@@ -1,6 +1,7 @@
 const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: './src/index.tsx',
@@ -8,6 +9,12 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'FrontPanel Camera Application',
       template: path.resolve(__dirname, 'src/index.html'),
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'frontpanel-app.json', to: 'frontpanel-app.json' },
+        { from: 'assets/camera-app-logo.svg', to: 'assets/images' }
+      ],
     }),
   ],
   module: {

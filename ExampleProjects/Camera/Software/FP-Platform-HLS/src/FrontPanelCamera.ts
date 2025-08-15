@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { IFrontPanel, ByteCount } from "@opalkelly/frontpanel-platform-api";
+import { IFPGADataPortClassic, ByteCount } from "@opalkelly/frontpanel-platform-api";
 
 import ICamera, {
     FrameConfiguration,
@@ -32,7 +32,7 @@ export const IMAGE_BUFFER_DEPTH_AUTO = -1;
  * Class representing the base for a FrontPanel camera device.
  */
 export abstract class FrontPanelCamera implements ICamera {
-    private readonly _FrontPanel: IFrontPanel;
+    private readonly _FPGADataPort: IFPGADataPortClassic;
 
     //
     // The HDL Version is pulled as a single Wire Output from the HDL.
@@ -45,8 +45,8 @@ export abstract class FrontPanelCamera implements ICamera {
     private _Skips: IMatrixDimensions;
     private _FrameDimensions: IMatrixDimensions;
 
-    constructor(frontpanel: IFrontPanel, size: IMatrixDimensions) {
-        this._FrontPanel = frontpanel;
+    constructor(fpgaDataPort: IFPGADataPortClassic, size: IMatrixDimensions) {
+        this._FPGADataPort = fpgaDataPort;
         this._HDLVersion = 0;
         this._MemorySize = 1024 * ONE_MEBIBYTE;
         this._ImageBufferDepth = IMAGE_BUFFER_DEPTH_AUTO;
@@ -57,8 +57,8 @@ export abstract class FrontPanelCamera implements ICamera {
     }
 
     // Accessor Methods
-    protected get FrontPanel() {
-        return this._FrontPanel;
+    protected get FPGADataPort() {
+        return this._FPGADataPort;
     }
 
     public get HDLVersion() {
@@ -119,9 +119,9 @@ export abstract class FrontPanelCamera implements ICamera {
     // Operations
     public async Initialize(): Promise<number> {
         // Determine which version of HDL is in use
-        await this._FrontPanel.updateWireOuts();
+        await this._FPGADataPort.updateWireOuts();
 
-        this._HDLVersion = this._FrontPanel.getWireOutValue(0x3f);
+        this._HDLVersion = this._FPGADataPort.getWireOutValue(0x3f);
 
         console.log("FrontPanelCamera::Initialize() Complete");
 
@@ -144,7 +144,7 @@ export abstract class FrontPanelCamera implements ICamera {
 
         // Set the bit #11 to switch to programmable mode and put the number of
         // frames to use in the lower 10 bits.
-        this._FrontPanel.setWireInValue(0x05, 0x400 | frameCount, 0x7ff);
+        this._FPGADataPort.setWireInValue(0x05, 0x400 | frameCount, 0x7ff);
 
         // Notice that we don't need to call UpdateWireIns() before calling
         // LogicReset() as it will do it internally anyhow.
@@ -154,50 +154,50 @@ export abstract class FrontPanelCamera implements ICamera {
     }
 
     public GetCapabilities(): number {
-        return this._FrontPanel.getWireOutValue(0x3e);
+        return this._FPGADataPort.getWireOutValue(0x3e);
     }
 
     public async GetMissedFrameCount(): Promise<FrameCount> {
-        await this._FrontPanel.updateWireOuts();
+        await this._FPGADataPort.updateWireOuts();
 
-        return (this._FrontPanel.getWireOutValue(0x23)) & 0xff;
+        return (this._FPGADataPort.getWireOutValue(0x23)) & 0xff;
     }
 
     public async GetBufferedFrameCount(): Promise<FrameCount> {
-        await this._FrontPanel.updateWireOuts();
+        await this._FPGADataPort.updateWireOuts();
 
-        return this._FrontPanel.getWireOutValue(0x24);
+        return this._FPGADataPort.getWireOutValue(0x24);
     }
 
     public async LogicReset(): Promise<void> {
-        this._FrontPanel.setWireInValue(0x00, 0x0008, 0x0008);
-        await this._FrontPanel.updateWireIns();
+        this._FPGADataPort.setWireInValue(0x00, 0x0008, 0x0008);
+        await this._FPGADataPort.updateWireIns();
 
         // Add a delay of 50 milliseconds
         await new Promise((resolve) => setTimeout(resolve, 50));
 
-        this._FrontPanel.setWireInValue(0x00, 0x0000, 0x0008);
-        await this._FrontPanel.updateWireIns();
+        this._FPGADataPort.setWireInValue(0x00, 0x0000, 0x0008);
+        await this._FPGADataPort.updateWireIns();
     }
 
     public async EnablePingPong(enable: boolean): Promise<void> {
         if (enable) {
-            this._FrontPanel.setWireInValue(0x00, 1 << 4, 1 << 4);
-            await this._FrontPanel.updateWireIns();
+            this._FPGADataPort.setWireInValue(0x00, 1 << 4, 1 << 4);
+            await this._FPGADataPort.updateWireIns();
         } else {
-            this._FrontPanel.setWireInValue(0x00, 0 << 4, 1 << 4);
-            await this._FrontPanel.updateWireIns();
+            this._FPGADataPort.setWireInValue(0x00, 0 << 4, 1 << 4);
+            await this._FPGADataPort.updateWireIns();
         }
 
         // Reset things
-        this._FrontPanel.setWireInValue(0x00, 1 << 3, 1 << 3);
-        await this._FrontPanel.updateWireIns();
+        this._FPGADataPort.setWireInValue(0x00, 1 << 3, 1 << 3);
+        await this._FPGADataPort.updateWireIns();
 
         // Add a delay of 50 milliseconds
         await new Promise((resolve) => setTimeout(resolve, 50));
 
-        this._FrontPanel.setWireInValue(0x00, 0 << 3, 1 << 3);
-        await this._FrontPanel.updateWireIns();
+        this._FPGADataPort.setWireInValue(0x00, 0 << 3, 1 << 3);
+        await this._FPGADataPort.updateWireIns();
     }
 
     //
@@ -229,14 +229,14 @@ export abstract class FrontPanelCamera implements ICamera {
 
     //
     public async BufferedCaptureV1(ulLen: number): Promise<FrameCaptureResult> {
-        await this._FrontPanel.updateWireOuts();
-        let done: boolean = ((this._FrontPanel.getWireOutValue(0x23)) & 0x0300) > 0;
+        await this._FPGADataPort.updateWireOuts();
+        let done: boolean = ((this._FPGADataPort.getWireOutValue(0x23)) & 0x0300) > 0;
 
         for (let i = 1; i < 100 && !done; i++) {
             await sleep(2);
-            await this._FrontPanel.updateWireOuts();
+            await this._FPGADataPort.updateWireOuts();
 
-            done = ((this._FrontPanel.getWireOutValue(0x23)) & 0x0300) > 0;
+            done = ((this._FPGADataPort.getWireOutValue(0x23)) & 0x0300) > 0;
         }
 
         if (!done) {
@@ -245,19 +245,19 @@ export abstract class FrontPanelCamera implements ICamera {
 
         let retval: FrameCaptureResult;
 
-        const frameBufferId: number = this._FrontPanel.getWireOutValue(0x23);
+        const frameBufferId: number = this._FPGADataPort.getWireOutValue(0x23);
 
         if ((frameBufferId & 0x0100) > 0) {
             // Frame ready(buffer A)
-            this._FrontPanel.setWireInValue(0x04, 0x0000, 0xffffffff);
-            this._FrontPanel.setWireInValue(0x05, 0x0000, 0xffffffff);
-            await this._FrontPanel.updateWireIns();
-            await this._FrontPanel.activateTriggerIn(0x40, 1);
+            this._FPGADataPort.setWireInValue(0x04, 0x0000, 0xffffffff);
+            this._FPGADataPort.setWireInValue(0x05, 0x0000, 0xffffffff);
+            await this._FPGADataPort.updateWireIns();
+            await this._FPGADataPort.activateTriggerIn(0x40, 1);
 
             // Readout start trigger
             const data: ArrayBuffer = new ArrayBuffer(ulLen);
 
-            await this._FrontPanel.readFromPipeOut(0xa0, ulLen, data);
+            await this._FPGADataPort.readFromPipeOut(0xa0, ulLen, data);
 
             //     const hist: ArrayBuffer = await this._FrontPanel.readFromPipeOut(0xa1, 256*4);
             // const uint32Array = new Uint32Array(hist);
@@ -269,7 +269,7 @@ export abstract class FrontPanelCamera implements ICamera {
                 return { result: FrameCaptureResultCode.ImageReadoutShort, data: null };
             }
 
-            await this._FrontPanel.activateTriggerIn(0x40, 2); // Readout done(buffer A)
+            await this._FPGADataPort.activateTriggerIn(0x40, 2); // Readout done(buffer A)
 
             const matrix: MatrixData = new MatrixData(data);
 
@@ -278,15 +278,15 @@ export abstract class FrontPanelCamera implements ICamera {
             retval = { result: FrameCaptureResultCode.Success, data: matrix };
         } else if ((frameBufferId & 0x0200) > 0) {
             // Frame ready(buffer B)
-            this._FrontPanel.setWireInValue(0x04, 0x0000, 0xffffffff);
-            this._FrontPanel.setWireInValue(0x05, 0x0080, 0xffffffff);
-            await this._FrontPanel.updateWireIns();
-            await this._FrontPanel.activateTriggerIn(0x40, 1);
+            this._FPGADataPort.setWireInValue(0x04, 0x0000, 0xffffffff);
+            this._FPGADataPort.setWireInValue(0x05, 0x0080, 0xffffffff);
+            await this._FPGADataPort.updateWireIns();
+            await this._FPGADataPort.activateTriggerIn(0x40, 1);
 
             //Readout start trigger
             const data: ArrayBuffer = new ArrayBuffer(ulLen);
 
-            await this._FrontPanel.readFromPipeOut(0xa0, ulLen, data);
+            await this._FPGADataPort.readFromPipeOut(0xa0, ulLen, data);
 
             //     const hist: ArrayBuffer = await this._FrontPanel.readFromPipeOut(0xa1, 256*4);
             // const uint32Array = new Uint32Array(hist);
@@ -298,7 +298,7 @@ export abstract class FrontPanelCamera implements ICamera {
                 return { result: FrameCaptureResultCode.ImageReadoutShort, data: null };
             }
 
-            await this._FrontPanel.activateTriggerIn(0x40, 3); // Readout done(buffer B)
+            await this._FPGADataPort.activateTriggerIn(0x40, 3); // Readout done(buffer B)
 
             const matrix: MatrixData = new MatrixData(data);
 
@@ -313,38 +313,38 @@ export abstract class FrontPanelCamera implements ICamera {
     }
     public async SingleCaptureV1(ulLen: number): Promise<FrameCaptureResult> {
         //--PINGPONG = 0
-        this._FrontPanel.setWireInValue(0x00, 0 << 4, 1 << 4);
+        this._FPGADataPort.setWireInValue(0x00, 0 << 4, 1 << 4);
         //--Set data length
-        this._FrontPanel.setWireInValue(0x02, ulLen & 0xffff, DEFAULT_MASK);
-        this._FrontPanel.setWireInValue(0x03, ulLen >> 16, DEFAULT_MASK);
+        this._FPGADataPort.setWireInValue(0x02, ulLen & 0xffff, DEFAULT_MASK);
+        this._FPGADataPort.setWireInValue(0x03, ulLen >> 16, DEFAULT_MASK);
         //--Readout address = 0x00000000
-        this._FrontPanel.setWireInValue(0x04, 0x0000, DEFAULT_MASK);
-        this._FrontPanel.setWireInValue(0x05, 0x0000, DEFAULT_MASK);
-        await this._FrontPanel.updateWireIns();
+        this._FPGADataPort.setWireInValue(0x04, 0x0000, DEFAULT_MASK);
+        this._FPGADataPort.setWireInValue(0x05, 0x0000, DEFAULT_MASK);
+        await this._FPGADataPort.updateWireIns();
 
-        await this._FrontPanel.updateTriggerOuts();
-        await this._FrontPanel.activateTriggerIn(0x40, 0); // Capture trigger
+        await this._FPGADataPort.updateTriggerOuts();
+        await this._FPGADataPort.activateTriggerIn(0x40, 0); // Capture trigger
 
         //
-        await this._FrontPanel.updateTriggerOuts();
-        let done: boolean = this._FrontPanel.isTriggered(0x60, 1 << 0); // Frame done trigger
+        await this._FPGADataPort.updateTriggerOuts();
+        let done: boolean = this._FPGADataPort.isTriggered(0x60, 1 << 0); // Frame done trigger
 
         for (let index = 1; index < 500 && !done; index++) {
             await sleep(1);
-            await this._FrontPanel.updateTriggerOuts();
+            await this._FPGADataPort.updateTriggerOuts();
 
-            done = this._FrontPanel.isTriggered(0x60, 1 << 0); // Frame done trigger
+            done = this._FPGADataPort.isTriggered(0x60, 1 << 0); // Frame done trigger
         }
 
         if (!done) {
             return { result: FrameCaptureResultCode.Timeout, data: null };
         }
 
-        await this._FrontPanel.activateTriggerIn(0x40, 1); // Readout start trigger
+        await this._FPGADataPort.activateTriggerIn(0x40, 1); // Readout start trigger
 
         const data: ArrayBuffer = new ArrayBuffer(ulLen);
 
-        await this._FrontPanel.readFromPipeOut(0xa0, ulLen, data);
+        await this._FPGADataPort.readFromPipeOut(0xa0, ulLen, data);
 
         if (data.byteLength < 0) {
             return { result: FrameCaptureResultCode.ImageReadoutError, data: null };
@@ -352,7 +352,7 @@ export abstract class FrontPanelCamera implements ICamera {
             return { result: FrameCaptureResultCode.ImageReadoutShort, data: null };
         }
 
-        await this._FrontPanel.activateTriggerIn(0x40, 2); // Readout done trigger
+        await this._FPGADataPort.activateTriggerIn(0x40, 2); // Readout done trigger
 
         const matrix: MatrixData = new MatrixData(data);
 
@@ -363,25 +363,25 @@ export abstract class FrontPanelCamera implements ICamera {
 
     //
     public async BufferedCaptureV2(ulLen: number): Promise<FrameCaptureResult> {
-        await this._FrontPanel.updateWireOuts();
-        let done: boolean = ((this._FrontPanel.getWireOutValue(0x23)) & 0x0100) !== 0; // Frame avail ?
+        await this._FPGADataPort.updateWireOuts();
+        let done: boolean = ((this._FPGADataPort.getWireOutValue(0x23)) & 0x0100) !== 0; // Frame avail ?
 
         for (let index = 0; index < 100 && !done; index++) {
             await sleep(2);
-            await this._FrontPanel.updateWireOuts();
+            await this._FPGADataPort.updateWireOuts();
 
-            done = ((this._FrontPanel.getWireOutValue(0x23)) & 0x0100) !== 0; // Frame avail ?
+            done = ((this._FPGADataPort.getWireOutValue(0x23)) & 0x0100) !== 0; // Frame avail ?
         }
 
         if (!done) {
             return { result: FrameCaptureResultCode.Timeout, data: null };
         }
 
-        await this._FrontPanel.activateTriggerIn(0x40, 0);
+        await this._FPGADataPort.activateTriggerIn(0x40, 0);
 
         const data: ArrayBuffer = new ArrayBuffer(ulLen);
 
-        await this._FrontPanel.readFromPipeOut(0xa0, ulLen, data);
+        await this._FPGADataPort.readFromPipeOut(0xa0, ulLen, data);
 
         if (data.byteLength < 0) {
             return { result: FrameCaptureResultCode.ImageReadoutError, data: null };
@@ -389,7 +389,7 @@ export abstract class FrontPanelCamera implements ICamera {
             return { result: FrameCaptureResultCode.ImageReadoutShort, data: null };
         }
 
-        await this._FrontPanel.activateTriggerIn(0x40, 1);
+        await this._FPGADataPort.activateTriggerIn(0x40, 1);
 
         //console.log('Read ' + data.byteLength + ' bytes.')
         //console.log('Size: columnCount=' + this.Size.columnCount + ' rowCount=' + this.Size.rowCount);
@@ -404,7 +404,7 @@ export abstract class FrontPanelCamera implements ICamera {
     public async readFromBuffer(length: number): Promise<ArrayBuffer> {
         try {
             const hist = new ArrayBuffer(length);
-            await this._FrontPanel.readFromPipeOut(0xa1, length, hist);
+            await this._FPGADataPort.readFromPipeOut(0xa1, length, hist);
             console.log("Data read from FPGA:", hist);
             return hist;
         } catch (error) {
@@ -427,17 +427,17 @@ export abstract class FrontPanelCamera implements ICamera {
         // + Image Sensor
         // + Pixel Clock DCM
         // + Logic
-        this._FrontPanel.setWireInValue(0x00, 0x000f, 0x000f);
-        await this._FrontPanel.updateWireIns();
+        this._FPGADataPort.setWireInValue(0x00, 0x000f, 0x000f);
+        await this._FPGADataPort.updateWireIns();
         await sleep(1);
-        this._FrontPanel.setWireInValue(0x00, 0x0000, 0x0001); // Release system PLL RESET
-        await this._FrontPanel.updateWireIns();
+        this._FPGADataPort.setWireInValue(0x00, 0x0000, 0x0001); // Release system PLL RESET
+        await this._FPGADataPort.updateWireIns();
         await sleep(1);
-        this._FrontPanel.setWireInValue(0x00, 0x0000, 0x0002); // Release image sensor RESET
-        await this._FrontPanel.updateWireIns();
+        this._FPGADataPort.setWireInValue(0x00, 0x0000, 0x0002); // Release image sensor RESET
+        await this._FPGADataPort.updateWireIns();
         await sleep(1);
-        this._FrontPanel.setWireInValue(0x00, 0x0000, 0x0008); // Release logic RESET
-        await this._FrontPanel.updateWireIns();
+        this._FPGADataPort.setWireInValue(0x00, 0x0000, 0x0008); // Release logic RESET
+        await this._FPGADataPort.updateWireIns();
         await sleep(10);
     }
 
@@ -445,9 +445,9 @@ export abstract class FrontPanelCamera implements ICamera {
     protected async ReleaseResets(): Promise<void> {
         //Release PIXCLK DCM RESET
         await sleep(10);
-        this._FrontPanel.setWireInValue(0x00, 0x0000, 0x0004);
-        this._FrontPanel.setWireInValue(0x00, 0x0010, 0x0010);
-        await this._FrontPanel.updateWireIns();
+        this._FPGADataPort.setWireInValue(0x00, 0x0000, 0x0004);
+        this._FPGADataPort.setWireInValue(0x00, 0x0010, 0x0010);
+        await this._FPGADataPort.updateWireIns();
     }
 
     /**

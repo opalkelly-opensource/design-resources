@@ -31,7 +31,7 @@ import {
 
 import { Vector2D } from "./Vector";
 
-import { WorkQueue, ByteCount, IFrontPanel } from "@opalkelly/frontpanel-platform-api";
+import { WorkQueue, ByteCount, IFPGADataPortClassic } from "@opalkelly/frontpanel-platform-api";
 
 import { Button, ToggleSwitch, ToggleState } from "@opalkelly/frontpanel-react-components";
 
@@ -45,7 +45,7 @@ export type SampleChannelsUpdateEventHandler = (sampleChannels: Int16Array[]) =>
  */
 interface DigitalSignalSamplerViewProps {
     label: string;
-    frontpanel: IFrontPanel;
+    fpgaDataPort: IFPGADataPortClassic;
     workQueue: WorkQueue;
     updatePeriodMilliseconds: number;
     onSampleChannelsUpdate: SampleChannelsUpdateEventHandler;
@@ -87,7 +87,7 @@ class DigitalSignalSamplerView extends Component<
         const sampleSize: ByteCount = 4;
         const sampleCount = 1024;
 
-        this._Sampler = new DigitalSignalSampler(props.frontpanel, sampleSize, sampleCount);
+        this._Sampler = new DigitalSignalSampler(props.fpgaDataPort, sampleSize, sampleCount);
 
         // Creates an array of two Int16Array objects one for each of the two channels available.
         this._SampleChannels = new Array(2);

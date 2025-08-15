@@ -9,7 +9,7 @@ import { Component, ReactNode } from "react";
 
 import "./SignalGeneratorView.css";
 
-import { IFrontPanel, WorkQueue } from "@opalkelly/frontpanel-platform-api";
+import { IFPGADataPortClassic, WorkQueue } from "@opalkelly/frontpanel-platform-api";
 
 import {
     Button,
@@ -23,7 +23,7 @@ export type IsEnabledChangeEventHandler = (id: number, isEnabled: boolean) => vo
 
 interface SignalGeneratorViewProps {
     label: string;
-    frontpanel: IFrontPanel;
+    fpgaDataPort: IFPGADataPortClassic;
     workQueue: WorkQueue;
 }
 
@@ -59,7 +59,7 @@ class FFTSignalGeneratorView extends Component<SignalGeneratorViewProps, SignalG
                                 }
                             />
                             <FrontPanelContext
-                                device={this.props.frontpanel}
+                                fpgaDataPort={this.props.fpgaDataPort}
                                 workQueue={this.props.workQueue}>
                                     <FrontPanelNumberEntry
                                         fpEndpoint={{ epAddress: index + 1, bitOffset: 0 }}
@@ -86,12 +86,12 @@ class FFTSignalGeneratorView extends Component<SignalGeneratorViewProps, SignalG
 
         const enableMask = (0x01 << channelIndex) << 8;
         await this.props.workQueue.post(async () => {
-            this.props.frontpanel.setWireInValue(
+            this.props.fpgaDataPort.setWireInValue(
                 0x00,
                 isEnabled ? 0x00 : 0xffffffff,
                 enableMask
             );
-            await this.props.frontpanel.updateWireIns();
+            await this.props.fpgaDataPort.updateWireIns();
         });
     }
 
@@ -99,8 +99,8 @@ class FFTSignalGeneratorView extends Component<SignalGeneratorViewProps, SignalG
         this.setState({ isChannelEnabled: this.state.isChannelEnabled.map(() => true) });
 
         await this.props.workQueue.post(async () => {
-            this.props.frontpanel.setWireInValue(0x00, 0xff00, 0xff00);
-            await this.props.frontpanel.updateWireIns();
+            this.props.fpgaDataPort.setWireInValue(0x00, 0xff00, 0xff00);
+            await this.props.fpgaDataPort.updateWireIns();
         });
     }
 
@@ -108,8 +108,8 @@ class FFTSignalGeneratorView extends Component<SignalGeneratorViewProps, SignalG
         this.setState({ isChannelEnabled: this.state.isChannelEnabled.map(() => false) });
 
         await this.props.workQueue.post(async () => {
-            this.props.frontpanel.setWireInValue(0x00, 0x0000, 0xff00);
-            await this.props.frontpanel.updateWireIns();
+            this.props.fpgaDataPort.setWireInValue(0x00, 0x0000, 0xff00);
+            await this.props.fpgaDataPort.updateWireIns();
         });
     }
 }

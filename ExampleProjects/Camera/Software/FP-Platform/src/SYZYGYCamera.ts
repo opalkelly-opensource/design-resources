@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { IFrontPanel, ByteCount } from "@opalkelly/frontpanel-platform-api";
+import { IFPGADataPortClassic, ByteCount } from "@opalkelly/frontpanel-platform-api";
 
 import { FrontPanelDeviceI2C } from "./FrontPanelDeviceI2C";
 import { FrontPanelCamera } from "./FrontPanelCamera";
@@ -16,8 +16,8 @@ import * as AR0330Device from "./AR0330Device";
 export class SZYGYCamera extends FrontPanelCamera {
     private readonly _DeviceI2C: FrontPanelDeviceI2C;
 
-    constructor(frontpanel: IFrontPanel, deviceI2C: FrontPanelDeviceI2C) {
-        super(frontpanel, AR0330Device.AR0330_DEFAULT_SIZE);
+    constructor(fpgaDataPort: IFPGADataPortClassic, deviceI2C: FrontPanelDeviceI2C) {
+        super(fpgaDataPort, AR0330Device.AR0330_DEFAULT_SIZE);
 
         this._DeviceI2C = deviceI2C;
     }
@@ -139,8 +139,8 @@ export class SZYGYCamera extends FrontPanelCamera {
         //
         const frameBufferSize: ByteCount = this.FrameBufferSize;
 
-        this.FrontPanel.setWireInValue(0x02, frameBufferSize & 0xffff, 0xffffffff);
-        this.FrontPanel.setWireInValue(0x03, frameBufferSize >> 16, 0xffffffff);
+        this.FPGADataPort.setWireInValue(0x02, frameBufferSize & 0xffff, 0xffffffff);
+        this.FPGADataPort.setWireInValue(0x03, frameBufferSize >> 16, 0xffffffff);
 
         //
         await this.LogicReset();

@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { IFrontPanel } from "@opalkelly/frontpanel-platform-api";
+import { IFPGADataPortClassic } from "@opalkelly/frontpanel-platform-api";
 
 import { SubEvent } from "sub-events/dist/src/event";
 
@@ -45,7 +45,7 @@ export interface FFTSignalGeneratorStateChangeEventArgs {
  * Signal Generator
  */
 export class FFTSignalGenerator {
-    private readonly _FrontPanel: IFrontPanel;
+    private readonly _FPGADataPort: IFPGADataPortClassic;
 
     // Important: the IFFT bins are implemented as:
     // bin n real component = n * 2
@@ -83,12 +83,12 @@ export class FFTSignalGenerator {
 
     /**
      * Creates a new instance of the FFTSignalGenerator class.
-     * @param frontpanel - Object that implements the IFrontPanel interface used to communicate with device.
+     * @param fpgaDataPort - Object that implements the IFPGADataPortClassic interface used to communicate with device.
      * @param fftConfiguration - Configuration of the FFT.
      * @param retryCount - Number of times to retry an operation.
      */
-    constructor(frontpanel: IFrontPanel, fftConfiguration: FFTConfiguration, retryCount: number) {
-        this._FrontPanel = frontpanel;
+    constructor(fpgaDataPort: IFPGADataPortClassic, fftConfiguration: FFTConfiguration, retryCount: number) {
+        this._FPGADataPort = fpgaDataPort;
         this._FFTConfiguration = fftConfiguration;
         this._RetryCount = retryCount;
     }
@@ -109,14 +109,14 @@ export class FFTSignalGenerator {
             this.UpdateState(FFTSignalGeneratorState.InitializePending);
 
             // Wait for Clocks to Lock
-            await this._FrontPanel.updateWireOuts();
+            await this._FPGADataPort.updateWireOuts();
 
-            let isLocked: boolean = ((this._FrontPanel.getWireOutValue(0x20)) & 0x1) === 0x1;
+            let isLocked: boolean = ((this._FPGADataPort.getWireOutValue(0x20)) & 0x1) === 0x1;
 
             for (let retryIndex = 1; retryIndex < this._RetryCount && !isLocked; retryIndex++) {
-                await this._FrontPanel.updateWireOuts();
+                await this._FPGADataPort.updateWireOuts();
 
-                isLocked = ((this._FrontPanel.getWireOutValue(0x20)) & 0x1) === 0x1;
+                isLocked = ((this._FPGADataPort.getWireOutValue(0x20)) & 0x1) === 0x1;
             }
 
             if (isLocked) {
@@ -158,22 +158,22 @@ export class FFTSignalGenerator {
             await this.SubmitBins();
 
             // Reset DAC
-            this._FrontPanel.setWireInValue(0x00, 0x00000002, 0xffffffff);
-            await this._FrontPanel.updateWireIns();
-            this._FrontPanel.setWireInValue(0x00, 0x00000000, 0xffffffff);
-            await this._FrontPanel.updateWireIns();
+            this._FPGADataPort.setWireInValue(0x00, 0x00000002, 0xffffffff);
+            await this._FPGADataPort.updateWireIns();
+            this._FPGADataPort.setWireInValue(0x00, 0x00000000, 0xffffffff);
+            await this._FPGADataPort.updateWireIns();
 
             // Wait for DAC to be ready
-            await this._FrontPanel.updateWireOuts();
+            await this._FPGADataPort.updateWireOuts();
 
             let isDACReady: boolean =
-                ((this._FrontPanel.getWireOutValue(0x20)) & 0x00000002) === 0x00000002;
+                ((this._FPGADataPort.getWireOutValue(0x20)) & 0x00000002) === 0x00000002;
 
             for (let retryIndex = 0; retryIndex < this._RetryCount && !isDACReady; retryIndex++) {
-                await this._FrontPanel.updateWireOuts();
+                await this._FPGADataPort.updateWireOuts();
 
                 isDACReady =
-                    ((this._FrontPanel.getWireOutValue(0x20)) & 0x00000002) === 0x00000002;
+                    ((this._FPGADataPort.getWireOutValue(0x20)) & 0x00000002) === 0x00000002;
             }
 
             if (isDACReady) {
@@ -285,7 +285,7 @@ export class FFTSignalGenerator {
         const registerWriteOperations: Promise<void>[] = [];
 
         for (let registerIndex = 0; registerIndex < registerCount; registerIndex++) {
-            const operation = this._FrontPanel.writeRegister(registerIndex, 0x00);
+            const operation = this._FPGADataPort.writeRegister(registerIndex, 0x00);
 
             registerWriteOperations.push(operation);
         }
@@ -304,7 +304,7 @@ export class FFTSignalGenerator {
         for (let binIndex = 0; binIndex < binNumbers.length; binIndex++) {
             const address = binNumbers[binIndex] * 2;
 
-            const operation = this._FrontPanel.writeRegister(address, 0x00);
+            const operation = this._FPGADataPort.writeRegister(address, 0x00);
 
             registerWriteOperations.push(operation);
         }
@@ -332,7 +332,7 @@ export class FFTSignalGenerator {
                     amplitudeScaleFactor
             );
 
-            const operation = this._FrontPanel.writeRegister(address, value);
+            const operation = this._FPGADataPort.writeRegister(address, value);
 
             registerWriteOperations.push(operation);
         }
@@ -345,6 +345,6 @@ export class FFTSignalGenerator {
      * @returns Promise that resolves when the bin data has been submitted.
      */
     protected SubmitBins(): Promise<void> {
-        return this._FrontPanel.activateTriggerIn(0x40, 1); // Submits the Bin data to the IFFT
+        return this._FPGADataPort.activateTriggerIn(0x40, 1); // Submits the Bin data to the IFFT
     }
 }

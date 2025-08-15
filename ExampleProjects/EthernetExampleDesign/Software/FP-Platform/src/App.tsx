@@ -13,7 +13,7 @@ import FrontPanel from "./FrontPanel";
 
 import {
     IDevice,
-    IFrontPanel,
+    IFPGADataPortClassic,
     WorkQueue,
     DataProgressCallback,
     ByteCount
@@ -47,8 +47,8 @@ const loadConfiguration = async (filename: string, device: IDevice): Promise<voi
         };
 
         await device
-            .getFPGA()
-            .loadConfiguration(arrayBuffer, arrayBuffer.byteLength, reportProgress);
+            .getFPGAConfiguration()
+            .loadConfigurationFromMemory(arrayBuffer, arrayBuffer.byteLength, reportProgress);
 
         console.log("Load Configuration Complete");
     } catch (error) {
@@ -71,7 +71,7 @@ const initializeDevice = async (
 
     const device = await window.FrontPanelAPI.deviceManager.openDevice(serialNumber);
 
-    const deviceInfo = await device.getInfo();
+    const deviceInfo = await device.getDeviceInfo();
 
     console.log("Opened Device:", deviceInfo.productName, " SerialNumber:", deviceInfo.serialNumber);
 
@@ -83,18 +83,20 @@ const initializeDevice = async (
 const DeviceWorkQueue = new WorkQueue();
 
 function App() {
-    const [frontpanel, setFrontPanel] = React.useState<IFrontPanel>();
+    const [fpgaDataPort, setFPGADataPort] = React.useState<IFPGADataPortClassic>();
 
     React.useEffect(() => {
         let device: IDevice;
 
+        const targetDeviceSerialNumber = (window.FrontPanelEnv.targetDeviceSerialNumbers.length > 0) ? window.FrontPanelEnv.targetDeviceSerialNumbers[0] : "";
+
         DeviceWorkQueue.post(async () => {
             try {
-                device = await initializeDevice("", "EthernetExampleDesign-v2.0.bit");
+                device = await initializeDevice(targetDeviceSerialNumber, "EthernetExampleDesign-v3.0.bit");
 
-                const frontpanel = await device.getFPGA().getFrontPanel();
+                const fpgaDataPort = await device.getFPGADataPortClassic();
 
-                setFrontPanel(frontpanel);
+                setFPGADataPort(fpgaDataPort);
             }
             catch (error) {
                 device?.close();
@@ -113,13 +115,13 @@ function App() {
         };
     }, []);
 
-    if (frontpanel !== undefined) {
+    if (fpgaDataPort !== undefined) {
         return (
             <div className="App">
                 <Application>
                     <FrontPanel
                         name="Ethernet"
-                        frontpanel={frontpanel}
+                        fpgaDataPort={fpgaDataPort}
                         workQueue={DeviceWorkQueue}
                     />
                 </Application>

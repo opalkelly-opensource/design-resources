@@ -8,9 +8,9 @@
 import { Component } from "react";
 
 import {
-    IFrontPanel,
+    IFPGADataPortClassic,
     WorkQueue,
-    FrontPanelPeriodicUpdateTimer
+    FPGADataPortClassicPeriodicUpdateTimer
 } from "@opalkelly/frontpanel-platform-api";
 
 import "./FrontPanel.css";
@@ -23,7 +23,7 @@ import Panel from "./Panel";
 
 export interface FrontPanelProps {
     name: string;
-    frontpanel: IFrontPanel;
+    fpgaDataPort: IFPGADataPortClassic;
     workQueue: WorkQueue;
 }
 
@@ -31,8 +31,8 @@ class FrontPanel extends Component<FrontPanelProps> {
     constructor(props: FrontPanelProps) {
         super(props);
         this.state = {
-            frontpanel: this.props.frontpanel,
-            updateTimer: new FrontPanelPeriodicUpdateTimer(this.props.frontpanel, 10)
+            fpgaDataPort: this.props.fpgaDataPort,
+            updateTimer: new FPGADataPortClassicPeriodicUpdateTimer(this.props.fpgaDataPort, this.props.workQueue, 10)
         };
     }
     public componentDidMount(): void {
@@ -48,7 +48,7 @@ class FrontPanel extends Component<FrontPanelProps> {
                         className="SignalGeneratorViewPanel">
                         <SignalGeneratorView
                             label="OutputView"
-                            frontpanel={this.props.frontpanel}
+                            fpgaDataPort={this.props.fpgaDataPort}
                             workQueue={this.props.workQueue}
                         />
                     </Panel>
@@ -56,12 +56,12 @@ class FrontPanel extends Component<FrontPanelProps> {
                 <Panel title="Scope" description="ADC Input" className="SignalCaptureViewPanel">
                     <ScopeControl
                         label="OutputView"
-                        frontpanel={this.props.frontpanel}
+                        fpgaDataPort={this.props.fpgaDataPort}
                         workQueue={this.props.workQueue}
                     />
                     <SignalCaptureView
                         label="OutputSpectrumView"
-                        frontpanel={this.props.frontpanel}
+                        fpgaDataPort={this.props.fpgaDataPort}
                         workQueue={this.props.workQueue}
                     />
                 </Panel>
@@ -71,10 +71,10 @@ class FrontPanel extends Component<FrontPanelProps> {
 
     private async Initialize(): Promise<void> {
         await this.props.workQueue.post(async () => {
-            this.props.frontpanel.setWireInValue(0x00, 0x4, 0x4); // ADC Auto reset
-            await this.props.frontpanel.updateWireIns();
-            this.props.frontpanel.setWireInValue(0x00, 0x0, 0x4); // Deassert auto reset
-            await this.props.frontpanel.updateWireIns();
+            this.props.fpgaDataPort.setWireInValue(0x00, 0x4, 0x4); // ADC Auto reset
+            await this.props.fpgaDataPort.updateWireIns();
+            this.props.fpgaDataPort.setWireInValue(0x00, 0x0, 0x4); // Deassert auto reset
+            await this.props.fpgaDataPort.updateWireIns();
         });
     }
 }

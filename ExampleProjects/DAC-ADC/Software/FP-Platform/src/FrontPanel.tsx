@@ -7,7 +7,7 @@
 
 import React, { Component } from "react";
 
-import { IFrontPanel, WorkQueue } from "@opalkelly/frontpanel-platform-api";
+import { IFPGADataPortClassic, WorkQueue } from "@opalkelly/frontpanel-platform-api";
 
 import "./FrontPanel.css";
 
@@ -19,7 +19,7 @@ import Panel from "./Panel";
 
 export interface FrontPanelProps {
     name: string;
-    frontpanel: IFrontPanel;
+    fpgaDataPort: IFPGADataPortClassic;
     workQueue: WorkQueue;
 }
 
@@ -39,7 +39,7 @@ class FrontPanel extends Component<FrontPanelProps> {
                     <Panel title="Signal Generator" description="DAC Output">
                         <FFTSignalGeneratorView
                             label="OutputView"
-                            frontpanel={this.props.frontpanel}
+                            fpgaDataPort={this.props.fpgaDataPort}
                             workQueue={this.props.workQueue}
                         />
                     </Panel>
@@ -50,7 +50,7 @@ class FrontPanel extends Component<FrontPanelProps> {
                         <DigitalSignalSamplerView
                             label="OutputView"
                             updatePeriodMilliseconds={35}
-                            frontpanel={this.props.frontpanel}
+                            fpgaDataPort={this.props.fpgaDataPort}
                             workQueue={this.props.workQueue}
                             onSampleChannelsUpdate={this.OnSampleChannelsUpdate.bind(this)}
                         />
@@ -62,7 +62,7 @@ class FrontPanel extends Component<FrontPanelProps> {
                     className="SpectrumAnalyzerChartPanel">
                     <SpectrumAnalyzerView
                         ref={this._SpectrumAnalyzerRef}
-                        frontpanel={this.props.frontpanel}
+                        fpgaDataPort={this.props.fpgaDataPort}
                         label="OutputSpectrumView"
                         workQueue={this.props.workQueue}
                     />

@@ -8,15 +8,15 @@
             "type": "chrome",
             "request": "attach",
             "port": 9222,
-            "name": "Attach FP-App",
+            "name": "Launch & Attach FrontPanel App",
             "webRoot": "${workspaceFolder}",
             "sourceMaps": true,
             "sourceMapPathOverrides":
-            { 
-                "webpack://frontpanel-camera-reactapp/./*": "${webRoot}/*", 
-                "webpack:///*": "*"
+            {
+                "webpack://frontpanel-camera-reactapp/./*": "${webRoot}/*"
             },
-            "trace": true
+            "trace": true,
+            "preLaunchTask": "Launch FrontPanel App (development)"
         }
     ]
 }

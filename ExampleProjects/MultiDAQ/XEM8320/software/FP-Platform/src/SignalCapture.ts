@@ -5,22 +5,22 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { IFrontPanel, ByteCount } from "@opalkelly/frontpanel-platform-api";
+import { IFPGADataPortClassic, ByteCount } from "@opalkelly/frontpanel-platform-api";
 
 export interface ADCChannelData {
     data: number[];
 }
 
 export class SignalCapture {
-    private readonly _FrontPanel: IFrontPanel;
+    private readonly _FPGADataPort: IFPGADataPortClassic;
     private readonly _SampleSize: ByteCount;
 
     public get SampleSize() {
         return this._SampleSize;
     }
 
-    constructor(frontpanel: IFrontPanel, sampleSize: ByteCount) {
-        this._FrontPanel = frontpanel;
+    constructor(fpgaDataPort: IFPGADataPortClassic, sampleSize: ByteCount) {
+        this._FPGADataPort = fpgaDataPort;
         this._SampleSize = sampleSize;
     }
 
@@ -36,14 +36,14 @@ export class SignalCapture {
         const outputDataSize: ByteCount = this._SampleSize * BYTES_PER_WORD;
 
         // Check for program empty
-        await this._FrontPanel.updateWireOuts();
+        await this._FPGADataPort.updateWireOuts();
 
-        let isProgramFull: boolean = ((this._FrontPanel.getWireOutValue(0x28)) & 0x1) === 0x1;
+        let isProgramFull: boolean = ((this._FPGADataPort.getWireOutValue(0x28)) & 0x1) === 0x1;
 
         for (let ii = 0; ii < 200 && !isProgramFull; ii++) {
-            await this._FrontPanel.updateWireOuts();
+            await this._FPGADataPort.updateWireOuts();
 
-            isProgramFull = ((this._FrontPanel.getWireOutValue(0x28)) & 0x1) === 0x1;
+            isProgramFull = ((this._FPGADataPort.getWireOutValue(0x28)) & 0x1) === 0x1;
         }
 
         if (!isProgramFull) {
@@ -53,7 +53,7 @@ export class SignalCapture {
 
         const outputData: ArrayBuffer = new ArrayBuffer(outputDataSize);
         
-        await this._FrontPanel.readFromPipeOut(
+        await this._FPGADataPort.readFromPipeOut(
             0xa0,
             outputDataSize,
             outputData

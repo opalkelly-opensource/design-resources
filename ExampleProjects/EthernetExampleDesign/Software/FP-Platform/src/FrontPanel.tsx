@@ -8,8 +8,8 @@
 import { Component } from "react";
 
 import {
-    IFrontPanel,
-    FrontPanelPeriodicUpdateTimer,
+    IFPGADataPortClassic,
+    FPGADataPortClassicPeriodicUpdateTimer,
     WorkQueue
 } from "@opalkelly/frontpanel-platform-api";
 
@@ -23,12 +23,12 @@ import EthernetPortC from "./EthernetPortC";
 
 export interface FrontPanelProps {
     name: string;
-    frontpanel: IFrontPanel;
+    fpgaDataPort: IFPGADataPortClassic;
     workQueue: WorkQueue;
 }
 
 export interface FrontPanelState {
-    updateTimer: FrontPanelPeriodicUpdateTimer;
+    updateTimer: FPGADataPortClassicPeriodicUpdateTimer;
 }
 
 /**
@@ -39,7 +39,7 @@ class FrontPanel extends Component<FrontPanelProps, FrontPanelState> {
         super(props);
 
         this.state = {
-            updateTimer: new FrontPanelPeriodicUpdateTimer(this.props.frontpanel, 10)
+            updateTimer: new FPGADataPortClassicPeriodicUpdateTimer(this.props.fpgaDataPort, this.props.workQueue, 10)
         };
     }
 
@@ -55,7 +55,7 @@ class FrontPanel extends Component<FrontPanelProps, FrontPanelState> {
         return (
             <div className="okFrontPanel">
                 <FrontPanelContext
-                    device={this.props.frontpanel}
+                    fpgaDataPort={this.props.fpgaDataPort}
                     workQueue={this.props.workQueue}
                     eventSource={this.state.updateTimer}>
                     <div className="okControlPanel">

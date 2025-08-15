@@ -23,7 +23,7 @@ import { FFTSignalGeneratorAdapter, FrequencyVector } from "./FFTSignalGenerator
 
 import ListItemComponent from "./ListItemComponent";
 
-import { IFrontPanel, WorkQueue } from "@opalkelly/frontpanel-platform-api";
+import { IFPGADataPortClassic, WorkQueue } from "@opalkelly/frontpanel-platform-api";
 
 import { Button, ToggleState, ToggleSwitch } from "@opalkelly/frontpanel-react-components";
 
@@ -42,7 +42,7 @@ type FrequencyVectorState = {
  */
 interface FFTSignalGeneratorViewProps {
     label: string;
-    frontpanel: IFrontPanel;
+    fpgaDataPort: IFPGADataPortClassic;
     workQueue: WorkQueue;
 }
 
@@ -84,7 +84,7 @@ class FFTSignalGeneratorView extends Component<
         const retryCount = 100;
 
         this._SignalGenerator = new FFTSignalGenerator(
-            props.frontpanel,
+            props.fpgaDataPort,
             fftConfiguration,
             retryCount
         );

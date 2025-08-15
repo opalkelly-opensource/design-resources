@@ -24,12 +24,12 @@ import { Bar } from "react-chartjs-2";
 
 import { sleep } from "./Utilities";
 
-import { IFrontPanel, WorkQueue } from "@opalkelly/frontpanel-platform-api";
+import { IFPGADataPortClassic, WorkQueue } from "@opalkelly/frontpanel-platform-api";
 
 import { ToggleState } from "@opalkelly/frontpanel-react-components";
 
 interface HistogramViewProps {
-    frontpanel: IFrontPanel;
+    fpgaDataPort: IFPGADataPortClassic;
     workQueue: WorkQueue;
     width: number;
     height: number;
@@ -145,16 +145,16 @@ class HistogramView extends Component<HistogramViewProps, HistogramViewState> {
 
     private async FetchData(buffer: ArrayBuffer): Promise<void> {
         try {
-            await this.props.frontpanel.updateWireOuts();
-            let done: boolean = (await this.props.frontpanel.getWireOutValue(0x25)) !== 0;
+            await this.props.fpgaDataPort.updateWireOuts();
+            let done: boolean = (await this.props.fpgaDataPort.getWireOutValue(0x25)) !== 0;
             for (let i = 0; i < 10 && !done; i++) {
                 await sleep(1);
-                await this.props.frontpanel.updateWireOuts();
-                done = (await this.props.frontpanel.getWireOutValue(0x25)) !== 0;
+                await this.props.fpgaDataPort.updateWireOuts();
+                done = (await this.props.fpgaDataPort.getWireOutValue(0x25)) !== 0;
             }
 
             if (done) {
-                await this.props.frontpanel.readFromPipeOut(0xa1, buffer.byteLength, buffer);
+                await this.props.fpgaDataPort.readFromPipeOut(0xa1, buffer.byteLength, buffer);
                 //const uint32Array = new Uint32Array(arrayBuffer);
                 //setData(Array.from(uint32Array));
             }
