@@ -1,7 +1,7 @@
 {
     "id": "dac+adc-example-app",
     "name": "DAC-ADC",
-    "version": "0.5.0",
+    "version": "3.1.0",
     "author": "Opal Kelly Incorporated",
     "summary": "FFT-based signal generator, oscilloscope, and spectrum analyzer demonstration instruments",
     "description": "FFT-based signal generator, oscilloscope, and spectrum analyzer demonstration instruments",

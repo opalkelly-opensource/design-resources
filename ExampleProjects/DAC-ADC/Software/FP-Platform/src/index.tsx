@@ -10,8 +10,8 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 
 //TODO: Use the correct bitfile for your ADC
-//import "../assets/DAC-ADC-ExampleDesign-ADC-12-v3.0.bit";
-import "../assets/DAC-ADC-ExampleDesign-ADC-14-v3.0.bit";
+//import "../assets/DAC-ADC-ExampleDesign-ADC-12-v3.1.bit";
+import "../assets/DAC-ADC-ExampleDesign-ADC-14-v3.1.bit";
 
 import App from "./App";
 

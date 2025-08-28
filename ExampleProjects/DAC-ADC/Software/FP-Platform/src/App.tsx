@@ -91,8 +91,8 @@ function App() {
         DeviceWorkQueue.post(async () => {
             try {
                 //TODO: Use the correct bitfile for your ADC
-                //const configurationFilename = "DAC-ADC-ExampleDesign-ADC-12-v3.0.bit";
-                const configurationFilename = "DAC-ADC-ExampleDesign-ADC-14-v3.0.bit";
+                //const configurationFilename = "DAC-ADC-ExampleDesign-ADC-12-v3.1.bit";
+                const configurationFilename = "DAC-ADC-ExampleDesign-ADC-14-v3.1.bit";
 
                 device = await initializeDevice(targetDeviceSerialNumber, configurationFilename);
 

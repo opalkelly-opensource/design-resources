@@ -13,6 +13,7 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         { from: 'frontpanel-app.json', to: 'frontpanel-app.json' },
+        { from: 'APP-INFO.md', to: 'assets/text' },
         { from: 'assets/dac+adc-app-logo.svg', to: 'assets/images' }
       ],
     }),
