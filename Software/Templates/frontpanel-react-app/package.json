@@ -1,6 +1,6 @@
 {
   "name": "frontpanel-react-app",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "description": "FrontPanel Application Template (Webpack+Typescript+React)",
   "private": true,
   "author": "Opal Kelly Inc.",
