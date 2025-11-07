@@ -8,3 +8,4 @@ CONFIG_setclk-reboot-init
 CONFIG_set-clock-ecm1900
 CONFIG_syzygy-ecm1900
 CONFIG_device-sensors
+CONFIG_fan-control

@@ -10,4 +10,5 @@ The follow applications are baked into the BRK1900 Linux image:
 - [set-clock-brk1900](project-spec/meta-user/recipes-apps/set-clock-brk1900)
 - [set-clock-ecm1900](project-spec/meta-user/recipes-apps/set-clock-ecm1900)
 - [syzygy-ecm1900](project-spec/meta-user/recipes-apps/syzygy-ecm1900)
+- [fan-control](project-spec/meta-user/recipes-apps/fan-control)
 - [setclk-reboot-init](project-spec/meta-user/recipes-apps/setclk-reboot-init)

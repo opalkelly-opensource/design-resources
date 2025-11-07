@@ -103,11 +103,11 @@ def readSensor(i2cdev):
     print("VCCO_68 CURRENT: %f"      % (LTC2991_CONV_CURRENT(sensorData[3*30 + 0x18], sensorData[3*30 + 0x19], 0.005)))
     print("VCCO_87_88 CURRENT: %f"   % (LTC2991_CONV_CURRENT(sensorData[3*30 + 0x10], sensorData[3*30 + 0x11], 0.005)))
     print("\n\nTEMPERATURES (Celsius):")
-    print("BOARD TEMPERATURE 1: %f"  % (LTC2991_CONV_TEMP(   sensorData[0*30 + 0x1A], sensorData[0*30 + 0x1B])))
-    print("BOARD TEMPERATURE 2: %f"  % (LTC2991_CONV_TEMP(   sensorData[1*30 + 0x1A], sensorData[1*30 + 0x1B])))
-    print("BOARD TEMPERATURE 3: %f"  % (LTC2991_CONV_TEMP(   sensorData[2*30 + 0x1A], sensorData[2*30 + 0x1B])))
-    print("BOARD TEMPERATURE 4: %f"  % (LTC2991_CONV_TEMP(   sensorData[3*30 + 0x1A], sensorData[3*30 + 0x1B])))
-    print("FPGA TEMPERATURE: %f"     % (LTC2991_CONV_TEMP(   sensorData[1*30 + 0x16], sensorData[1*30 + 0x17])))
+    print("BOARD TEMPERATURE 1: %f"  % (LTC2991_CONV_INTERNAL_TEMP(   sensorData[0*30 + 0x1A], sensorData[0*30 + 0x1B])))
+    print("BOARD TEMPERATURE 2: %f"  % (LTC2991_CONV_INTERNAL_TEMP(   sensorData[1*30 + 0x1A], sensorData[1*30 + 0x1B])))
+    print("BOARD TEMPERATURE 3: %f"  % (LTC2991_CONV_INTERNAL_TEMP(   sensorData[2*30 + 0x1A], sensorData[2*30 + 0x1B])))
+    print("BOARD TEMPERATURE 4: %f"  % (LTC2991_CONV_INTERNAL_TEMP(   sensorData[3*30 + 0x1A], sensorData[3*30 + 0x1B])))
+    print("FPGA TEMPERATURE: %f"     % (LTC2991_CONV_EXTERNAL_TEMP(   sensorData[1*30 + 0x16], sensorData[1*30 + 0x17], 1.026)))
 
 
 # The following function gathers the entire register map space of the LTC2991 and returns a 30 byte array. 
@@ -151,11 +151,20 @@ def LTC2991_CONV_VDIFF(msb, lsb):
         return (+1.0 *           ((((msb)&0x3f)<<8) | (lsb))  ) * 0.0000190735
 
 
-def LTC2991_CONV_TEMP(msb, lsb):
-    if (0.0625       * (((msb)&0x10))): # No dedicated sign bit for temperature readings, the MSB of two's complement specifies the sign. 
-        return (-1.0 * (0x2000 - ((((msb)&0x1f)<<8) | (lsb)) )) * 0.0625
+def LTC2991_CONV_INTERNAL_TEMP(msb, lsb):
+    if (((msb)&0x10)): # No dedicated sign bit for temperature readings, the MSB of two's complement specifies the sign. 
+        return ((-1.0 * (0x1000 - ((((msb)&0x1f)<<8) | (lsb)) )) * 0.0625)
     else:
-        return (+1.0 *           ((((msb)&0x1f)<<8) | (lsb))  ) * 0.0625
+        return ((+1.0 *           ((((msb)&0x1f)<<8) | (lsb))  ) * 0.0625)
+
+
+def LTC2991_CONV_EXTERNAL_TEMP(msb, lsb, factor):
+    if (((msb)&0x10)): # No dedicated sign bit for temperature readings, the MSB of two's complement specifies the sign. 
+        temp = ((-1.0 * (0x1000 - ((((msb)&0x1f)<<8) | (lsb)) )) * 0.0625)
+    else:
+        temp = ((+1.0 *           ((((msb)&0x1f)<<8) | (lsb))  ) * 0.0625)
+
+    return (1.004 / factor) * (temp + 273.15) - 273.15
 
 
 def LTC2991_CONV_CURRENT(msb, lsb, r):

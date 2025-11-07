@@ -4174,6 +4174,7 @@ CONFIG_set-clock-brk1900=y
 CONFIG_set-clock-ecm1900=y
 CONFIG_setclk-reboot-init=y
 CONFIG_syzygy-ecm1900=y
+CONFIG_fan-control=y
 
 #
 # user packages 

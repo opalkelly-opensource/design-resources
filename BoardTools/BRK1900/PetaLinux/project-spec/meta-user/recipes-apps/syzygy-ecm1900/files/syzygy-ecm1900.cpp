@@ -38,15 +38,29 @@
 #include <sys/ioctl.h>
 #include <linux/i2c-dev.h>
 
+#define ECM1900_REV_AXX 1
+#define ECM1900_REV_BXX 2
+
 #define SUPPLY_87_88 1
 #define SUPPLY_68 2
 #define SUPPLY_67 3
 #define SUPPLY_28 4
 
-#define PCAL_ADDR 0x20
+#define GPIO_EXPANDER_ADDR 0x20
 
-#define PCAL_OUTPUT_PORT0_REG 0x02
-#define PCAL_CONFIG_PORT0_REG 0x06
+#define GPIO_EXPANDER_OUTPUT_PORT0_REG 0x02
+#define GPIO_EXPANDER_CONFIG_PORT0_REG 0x06
+
+#define MIC24045_ADDR_VCCO_28      0x50
+#define MIC24045_ADDR_VCCO_67      0x54
+#define MIC24045_ADDR_VCCO_68      0x55
+#define MIC24045_ADDR_VCCO_87_88   0x56
+
+#define MIC24045_REG_STATUS       0x00
+#define MIC24045_REG_SETTING1     0x01
+#define MIC24045_REG_SETTING2     0x02
+#define MIC24045_REG_VOUT         0x03
+#define MIC24045_REG_COMMAND      0x04
 
 
 extern "C" {
@@ -57,6 +71,7 @@ using json = nlohmann::json;
 
 #define I2C_CHECK_COUNT 2000
 
+int boardRevision = 0;
 
 
 szgSmartVIOConfig svio = {
@@ -190,6 +205,63 @@ szgSmartVIOConfig svio = {
 	}
 };
 
+
+void ValidateVIO(uint32_t rail, uint32_t voltage)
+{
+    int vmax = 0;
+    int vmin = 9999;
+
+    if (voltage == 0) {
+        // 0 is always valid (turns off the supply)
+        return;
+    }
+
+    // Final bounds check for VIO rails
+	// rail 1: VCCO_87_88 is an HD bank with limits 1.2 to 3.3V
+	// rail 2: VCCO_68 is an HP bank with limits 1.0 to 1.8V
+	// rail 3: VCCO_67 is an HP bank with limits 1.0 to 1.8V
+	// rail 4: VCCO_28 is an HP bank with limits 1.0 to 1.8V
+	switch (rail) {
+		case SUPPLY_87_88:
+			vmax = 330;
+			vmin = 120;
+			break;
+		case SUPPLY_68:
+		case SUPPLY_67:
+		case SUPPLY_28:
+			vmax = 180;
+			vmin = 120;
+			break;
+		default:
+			printf("Error: unrecognized supply rail, options are:\n");
+			printf("   1 (VCCO_87_88)\n");
+			printf("   2 (VCCO_68\n");
+			printf("   3 (VCCO_67\n");
+			printf("   4 (VCCO_28)\n");
+			exit(1);
+	}
+
+    uint32_t validVioOptions[] = {120, 125, 150, 180, 250, 330};
+    bool validOption = false;
+    for (auto option : validVioOptions) {
+        if (voltage == option) {
+            validOption = true;
+            break;
+        }
+    }
+
+    // Voltage set error checks for range and value
+	if (!validOption || (voltage < vmin) || (voltage > vmax)) {
+		printf("Voltage setting not supported, options are (in 10's of mV):\n");
+		printf("   1 (VCCO_87_88): 0, 120,  125,  150,  180,  250, 330 (Limited by HD bank range 1.2V to 3.3V)\n");
+		printf("   2 (VCCO_68):    0, 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
+		printf("   3 (VCCO_67):    0, 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
+		printf("   4 (VCCO_28):    0, 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
+		exit(1);
+	}
+}
+
+
 // Write to I2C with either a 16- or 8-bit address
 int i2cWriteDNA (int i2c_file, int i2c_addr, uint16_t sub_addr,
               int sub_addr_length, int length, uint8_t data[32])
@@ -258,17 +330,13 @@ int i2cReadDNA (int i2c_file, int i2c_addr, uint16_t sub_addr,
 // Detect if a device is on a given I2C address, returns 0 if present
 int i2cDetect (int i2c_file, int i2c_addr)
 {
-	uint8_t data[2];
-
 	// Set I2C address
 	if (ioctl(i2c_file, I2C_SLAVE, i2c_addr) < 0) {
 		return -1;
 	}
-
-	data[0] = 0x00;
-	data[1] = 0x00;
-
-	if (write(i2c_file, data, 2) != 2) {
+    
+    uint8_t reg_data[1];
+	if (read(i2c_file, reg_data, 1) != 1) {
 		return 1; // I2C device not present
 	}
 
@@ -276,11 +344,11 @@ int i2cDetect (int i2c_file, int i2c_addr)
 }
 
 
-int i2c_write (int fd, uint8_t reg_addr, uint8_t reg_data)
+int i2c_write (int fd, uint8_t device_addr, uint8_t reg_addr, uint8_t reg_data)
 {
 	uint8_t buf[34];
 
-	if (ioctl(fd, I2C_SLAVE, PCAL_ADDR) < 0) {
+	if (ioctl(fd, I2C_SLAVE, device_addr) < 0) {
 		printf("Error during I2C address set\n");
 		exit(1);
 	}
@@ -301,11 +369,11 @@ int i2c_write (int fd, uint8_t reg_addr, uint8_t reg_data)
 }
 
 
-int i2c_read (int fd, uint16_t reg_addr, uint8_t* reg_data)
+int i2c_read (int fd, uint8_t device_addr, uint16_t reg_addr, uint8_t* reg_data)
 {
 	uint8_t buf[2];
 
-	if (ioctl(fd, I2C_SLAVE, PCAL_ADDR) < 0) {
+	if (ioctl(fd, I2C_SLAVE, device_addr) < 0) {
 		printf("Error during I2C address set\n");
 		exit(1);
 	}
@@ -327,28 +395,54 @@ int i2c_read (int fd, uint16_t reg_addr, uint8_t* reg_data)
 
 	return 0;
 }
+
 int disable_supply (int fd, int rail_index)
 {
 	uint8_t temp_reg;
-	uint8_t pcal_port = 0;
+	uint8_t gpioexp_port = 0;
 	uint8_t en_offset = 0;
+
+    if (boardRevision == 0) {
+        printf("Board revision not set\n");
+        exit(1);
+    }
 
 	switch(rail_index) {
 		case SUPPLY_28:
-			en_offset = 0;
-			pcal_port = 0;
+            if (boardRevision == ECM1900_REV_AXX) {
+                en_offset = 0;
+			    gpioexp_port = 0;
+            } else if (boardRevision == ECM1900_REV_BXX) {
+                en_offset = 4;
+			    gpioexp_port = 0;
+            }
 			break;
 		case SUPPLY_67:
-			en_offset = 4;
-			pcal_port = 0;
+            if (boardRevision == ECM1900_REV_AXX) {
+                en_offset = 4;
+			    gpioexp_port = 0;
+            } else if (boardRevision == ECM1900_REV_BXX) {
+                en_offset = 5;
+			    gpioexp_port = 0;
+            }
 			break;
 		case SUPPLY_68:
-			en_offset = 0;
-			pcal_port = 1;
+            if (boardRevision == ECM1900_REV_AXX) {
+                en_offset = 0;
+                gpioexp_port = 1;
+            } else if (boardRevision == ECM1900_REV_BXX) {
+                en_offset = 6;
+			    gpioexp_port = 0;
+            }
 			break;
 		case SUPPLY_87_88:
-			en_offset = 4;
-			pcal_port = 1;
+            if (boardRevision == ECM1900_REV_AXX) {
+                en_offset = 4;
+                gpioexp_port = 1;
+            } else if (boardRevision == ECM1900_REV_BXX) {
+                en_offset = 7;
+			    gpioexp_port = 0;
+            }
 			break;
 		default:
 			printf("Internal Error\n");
@@ -356,88 +450,183 @@ int disable_supply (int fd, int rail_index)
 	}
 
 	// Read associated output port status
-	i2c_read(fd, PCAL_OUTPUT_PORT0_REG + pcal_port, &temp_reg);
+	i2c_read(fd, GPIO_EXPANDER_ADDR, GPIO_EXPANDER_OUTPUT_PORT0_REG + gpioexp_port, &temp_reg);
 	
 	// Set associated output port to 0
-	i2c_write(fd, PCAL_OUTPUT_PORT0_REG + pcal_port, temp_reg & ~(0x1 << en_offset));
+	i2c_write(fd, GPIO_EXPANDER_ADDR, GPIO_EXPANDER_OUTPUT_PORT0_REG + gpioexp_port, temp_reg & ~(0x1 << en_offset));
 
 	// Read output port configuration
-	i2c_read(fd, PCAL_CONFIG_PORT0_REG + pcal_port, &temp_reg);
+	i2c_read(fd, GPIO_EXPANDER_ADDR, GPIO_EXPANDER_CONFIG_PORT0_REG + gpioexp_port, &temp_reg);
 	
 	// Configure associated I/O direction to output
-	i2c_write(fd, PCAL_CONFIG_PORT0_REG + pcal_port, temp_reg & ~(0x1 << en_offset));
+	i2c_write(fd, GPIO_EXPANDER_ADDR, GPIO_EXPANDER_CONFIG_PORT0_REG + gpioexp_port, temp_reg & ~(0x1 << en_offset));
 
 	return 0;
 }
 
-int set_supply(int fd, int rail_index, uint8_t vselect)
+int set_supply_gpio_expander(int fd, int rail_index, uint8_t vselect)
 {
 	uint8_t temp_reg;
-	uint8_t pcal_port = 0;
-	uint8_t vs_offset = 0;
+	uint8_t gpioexp_port = 0;
+	uint8_t ctrl_pin_offset = 0;
 
-	switch(rail_index) {
-		case SUPPLY_28:
-			vs_offset = 0;
-			pcal_port = 0;
-			break;
-		case SUPPLY_67:
-			vs_offset = 4;
-			pcal_port = 0;
-			break;
-		case SUPPLY_68:
-			vs_offset = 0;
-			pcal_port = 1;
-			break;
-		case SUPPLY_87_88:
-			vs_offset = 4;
-			pcal_port = 1;
-			break;
-		default:
-			printf("Internal Error\n");
-			exit(1);
-	}
+    if (boardRevision != ECM1900_REV_AXX) {
+        printf("Incorrect board revision\n");
+        exit(1);
+    }
 
-	// Read associated output port status
-	i2c_read(fd, PCAL_OUTPUT_PORT0_REG + pcal_port, &temp_reg);
+    switch(rail_index) {
+        case SUPPLY_28:
+            ctrl_pin_offset = 0;
+            gpioexp_port = 0;
+            break;
+        case SUPPLY_67:
+            ctrl_pin_offset = 4;
+            gpioexp_port = 0;
+            break;
+        case SUPPLY_68:
+            ctrl_pin_offset = 0;
+            gpioexp_port = 1;
+            break;
+        case SUPPLY_87_88:
+            ctrl_pin_offset = 4;
+            gpioexp_port = 1;
+            break;
+        default:
+            printf("Internal Error\n");
+            exit(1);
+    }
+
+    // Read associated output port status
+    i2c_read(fd, GPIO_EXPANDER_ADDR, GPIO_EXPANDER_OUTPUT_PORT0_REG + gpioexp_port, &temp_reg);
+    
+    // Set associated VS pins output to 0
+    temp_reg = temp_reg & ~(0xE << ctrl_pin_offset);
+
+    // Place vselect bits in the VS pins position
+    // Skip the enable bit at postion 0
+    temp_reg = temp_reg | (vselect << (ctrl_pin_offset + 1));
+
+    i2c_write(fd, GPIO_EXPANDER_ADDR, GPIO_EXPANDER_OUTPUT_PORT0_REG + gpioexp_port, temp_reg);
+
+    // Read output port configuration
+	i2c_read(fd, GPIO_EXPANDER_ADDR, GPIO_EXPANDER_CONFIG_PORT0_REG + gpioexp_port, &temp_reg);
 	
-	// Set associated output port to 0
-	if (vs_offset == 0) {
-		temp_reg = (temp_reg & (0xF << 4));
-	} else {
-		temp_reg = (temp_reg & (0xF << 0));
-	}
-	// Place vselect bits in the VS pins positoin
-	// Skip the enable bit at postion 0
-	temp_reg = temp_reg | (vselect << (vs_offset + 1));
-
-	i2c_write(fd, PCAL_OUTPUT_PORT0_REG + pcal_port, temp_reg);
+	// Configure VS control signals I/O direction to output
+	i2c_write(fd, GPIO_EXPANDER_ADDR, GPIO_EXPANDER_CONFIG_PORT0_REG + gpioexp_port, temp_reg & ~(0xE << ctrl_pin_offset));
 	
 	return 0;
+}
+
+// Set the output voltage of the MIC24045 regulator
+// Validate the voltage for the FPGA I/O bank before using this function
+int set_supply_MIC24045(int fd, int rail_index, uint32_t voltage)
+{
+    if (boardRevision != ECM1900_REV_BXX) {
+        printf("Incorrect board revision\n");
+        exit(1);
+    }
+
+    // Bounds check for VIO rails
+    ValidateVIO(rail_index, voltage);
+
+    uint8_t device_addr = 0;
+    switch(rail_index) {
+        case SUPPLY_28:
+            device_addr = MIC24045_ADDR_VCCO_28;
+            break;
+        case SUPPLY_67:
+            device_addr = MIC24045_ADDR_VCCO_67;
+            break;
+        case SUPPLY_68:
+            device_addr = MIC24045_ADDR_VCCO_68;
+            break;
+        case SUPPLY_87_88:
+            device_addr = MIC24045_ADDR_VCCO_87_88;
+            break;
+        default:
+            printf("Internal Error\n");
+            exit(1);
+    }
+
+    uint8_t voutReg = 0;
+
+    // Convert voltage from 10's of mV to mV for MIC24045 register calculation
+    voltage = voltage * 10;
+
+    if (voltage >= 640 && voltage <= 1280) {
+        // 5mV step size for this vout range
+        voutReg = (voltage - 640) / 5;
+    } else if (voltage >= 1290 && voltage <= 1950) {
+        // 10mV step size for this vout range
+        voutReg = ((voltage - 1290) / 10) + 129;
+    } else if (voltage >= 1980 && voltage <= 3420) {
+        // 30mV step size for this vout range
+        voutReg = ((voltage - 1980) / 30) + 196;
+    } else if (voltage >= 4750 && voltage <= 5250) {
+        // 50mV step size for this vout range
+        voutReg = ((voltage - 4750) / 50) + 245;
+    } else {
+        printf("Voltage out of regulator range\n");
+        exit(1);
+    }
+
+    int ret = i2c_write(fd, device_addr, MIC24045_REG_VOUT, voutReg);
+    if (ret != 0) {
+        printf("Error writing VOUT to MIC24045\n");
+        exit(1);
+    }
+
+    return 0;
 }
 
 int enable_supply (int fd, int rail_index)
 {
 	uint8_t temp_reg;
-	uint8_t pcal_port = 0;
+	uint8_t gpioexp_port = 0;
 	uint8_t en_offset = 0;
 
-	switch(rail_index) {
+    if (boardRevision == 0) {
+        printf("Board revision not set\n");
+        exit(1);
+    }
+
+    switch(rail_index) {
 		case SUPPLY_28:
-			en_offset = 0;
-			pcal_port = 0;
+            if (boardRevision == ECM1900_REV_AXX) {
+                en_offset = 0;
+			    gpioexp_port = 0;
+            } else if (boardRevision == ECM1900_REV_BXX) {
+                en_offset = 4;
+			    gpioexp_port = 0;
+            }
 			break;
 		case SUPPLY_67:
-			en_offset = 4;
-			pcal_port = 0;
+            if (boardRevision == ECM1900_REV_AXX) {
+                en_offset = 4;
+			    gpioexp_port = 0;
+            } else if (boardRevision == ECM1900_REV_BXX) {
+                en_offset = 5;
+			    gpioexp_port = 0;
+            }
 			break;
 		case SUPPLY_68:
-			en_offset = 0;
-			pcal_port = 1;
+            if (boardRevision == ECM1900_REV_AXX) {
+                en_offset = 0;
+                gpioexp_port = 1;
+            } else if (boardRevision == ECM1900_REV_BXX) {
+                en_offset = 6;
+			    gpioexp_port = 0;
+            }
 			break;
 		case SUPPLY_87_88:
-			en_offset = 4;
-			pcal_port = 1;
+            if (boardRevision == ECM1900_REV_AXX) {
+                en_offset = 4;
+                gpioexp_port = 1;
+            } else if (boardRevision == ECM1900_REV_BXX) {
+                en_offset = 7;
+			    gpioexp_port = 0;
+            }
 			break;
 		default:
 			printf("Internal Error\n");
@@ -445,19 +634,20 @@ int enable_supply (int fd, int rail_index)
 	}
 
 	// Read associated output port status
-	i2c_read(fd, PCAL_OUTPUT_PORT0_REG + pcal_port, &temp_reg);
+	i2c_read(fd, GPIO_EXPANDER_ADDR, GPIO_EXPANDER_OUTPUT_PORT0_REG + gpioexp_port, &temp_reg);
 	
 	// Set associated output port to 1
-	i2c_write(fd, PCAL_OUTPUT_PORT0_REG + pcal_port, temp_reg | (0x1 << en_offset));
+	i2c_write(fd, GPIO_EXPANDER_ADDR, GPIO_EXPANDER_OUTPUT_PORT0_REG + gpioexp_port, temp_reg | (0x1 << en_offset));
 
 	// Read output port configuration
-	i2c_read(fd, PCAL_CONFIG_PORT0_REG + pcal_port, &temp_reg);
+	i2c_read(fd, GPIO_EXPANDER_ADDR, GPIO_EXPANDER_CONFIG_PORT0_REG + gpioexp_port, &temp_reg);
 	
 	// Configure associated I/O direction to output
-	i2c_write(fd, PCAL_CONFIG_PORT0_REG + pcal_port, temp_reg & ~(0xF << en_offset));
+	i2c_write(fd, GPIO_EXPANDER_ADDR, GPIO_EXPANDER_CONFIG_PORT0_REG + gpioexp_port, temp_reg & ~(0x1 << en_offset));
 
 	return 0;
 }
+
 // Helper function that allows for writes > 32 bytes to a SYZYGY MCU
 int writeMCU (int i2c_file, uint16_t port_addr, int sub_addr, uint8_t *data,
               int length)
@@ -596,32 +786,14 @@ int readDNA (int i2c_file, uint32_t *svio1, uint32_t *svio2, uint32_t *svio3, ui
 int applyVIO(int i2c_fd, uint32_t rail, uint32_t voltage)
 {
 	uint8_t vselect;
-	int vmax, vmin;
 
-	// Final bounds check for VIO rails
-	// rail 1: VCCO_87_88 is an HD bank with limits 1.2 to 3.3V
-	// rail 2: VCCO_68 is an HP bank with limits 1.0 to 1.8V
-	// rail 3: VCCO_67 is an HP bank with limits 1.0 to 1.8V
-	// rail 4: VCCO_28 is an HP bank with limits 1.0 to 1.8V
-	switch (rail) {
-		case SUPPLY_87_88:
-			vmax = 330;
-			vmin = 120;
-			break;
-		case SUPPLY_68:
-		case SUPPLY_67:
-		case SUPPLY_28:
-			vmax = 180;
-			vmin = 120;
-			break;
-		default:
-			printf("Error: unrecognized supply rail, options are:\n");
-			printf("   1 (VCCO_87_88)\n");
-			printf("   2 (VCCO_68\n");
-			printf("   3 (VCCO_67\n");
-			printf("   4 (VCCO_28)\n");
-			return -1;
-	}
+    if (boardRevision == 0) {
+        printf("Board revision not set\n");
+        exit(1);
+    }
+
+    // Bounds check for VIO rails
+    ValidateVIO(rail, voltage);
 
 	// Configure the vselect bits based on the requested voltage
 	switch (voltage) {
@@ -643,25 +815,26 @@ int applyVIO(int i2c_fd, uint32_t rail, uint32_t voltage)
 		case 120:
 			vselect = 0x05;
 			break;
+        case 0:
+            // No setting for supply disable
+            break;
 		default:
 			vselect = 0xFF;
-			break;
+            printf("Internal Error\n");
+			exit(1);
 	}
 
-	// Voltage set error checks for range and value
-	if (vselect == 0xFF || (voltage < vmin) || (voltage > vmax)) {
-		printf("Voltage setting not supported, options are (in 10's of mV):\n");
-		printf("   1 (VCCO_87_88): 120,  125,  150,  180,  250, 330 (Limited by HD bank range 1.2V to 3.3V)\n");
-		printf("   2 (VCCO_68):    120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
-		printf("   3 (VCCO_67):    120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
-		printf("   4 (VCCO_28):    120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
-		return -1;
-	}
-
-	// // Write the vselect bits to the regulators control pins
 	disable_supply(i2c_fd, rail);
-	set_supply(i2c_fd, rail, vselect);
-	enable_supply(i2c_fd, rail);
+    
+    // Leave supply disabled if voltage is 0
+    if (voltage != 0) {
+        if (boardRevision == ECM1900_REV_AXX) {
+            set_supply_gpio_expander(i2c_fd, rail, vselect);
+        } else if (boardRevision == ECM1900_REV_BXX) {
+            set_supply_MIC24045(i2c_fd, rail, voltage);
+        } 
+        enable_supply(i2c_fd, rail); 
+    }
 
 	printf("Set SmartVIO rail %d to %d (10's of mV)\n", rail, voltage);
 	return 0;
@@ -771,6 +944,22 @@ int printVIOStrings (json &json_handler, int i2c_file)
 }
 
 
+int getBoardRevision(int fd)
+{
+    int detectedBoardRevision = ECM1900_REV_AXX;
+
+    // Check to see if the VCCO_28 I2C regulator is present to test for revision BXX
+    if (i2cDetect(fd, MIC24045_ADDR_VCCO_28) == 0) {
+		detectedBoardRevision = ECM1900_REV_BXX;
+        printf("Detected ECM1900 Board Revision BXX\n");
+	} else {
+        printf("Detected ECM1900 Board Revision AXX\n");
+    }
+
+    return detectedBoardRevision;
+}
+
+
 // Help text
 void printHelp (char *progname)
 {
@@ -796,10 +985,10 @@ void printHelp (char *progname)
 	printf("                  *<voltage in mV> must be specified as numbers in 10's of mV\n");
 	printf("                  *You may only set one voltage at a time\n");
 	printf("                  *The valid discrete voltage supplies provided by the power supply on the ECM1900 are:\n");
-	printf("                  VCCO_87_88: 120,  125,  150,  180,  250, 330 (Limited by HD bank range 1.2V to 3.3V)\n");
-	printf("                  VCCO_68:    120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
-	printf("                  VCCO_67:    120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
-	printf("                  VCCO_28:    120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
+	printf("                  VCCO_87_88: 0, 120,  125,  150,  180,  250, 330 (Limited by HD bank range 1.2V to 3.3V)\n");
+	printf("                  VCCO_68:    0, 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
+	printf("                  VCCO_67:    0, 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
+	printf("                  VCCO_28:    0, 120,  125,  150,  180 (Limited by HP bank range 1.0V to 1.8V)\n");
 	printf("    -p <number> - Specifies the peripheral number for the -w or -d options\n");
 	printf("\n");
 	printf("  Examples:\n");
@@ -838,6 +1027,7 @@ int main (int argc, char *argv[])
 	bool takeOne = true;
 	int rail;
 	int voltage;
+
 	// Parse args
 	while ((curr_opt = getopt(argc, argv, "rsj1:2:3:4:w:d:p:h")) != -1) {
 		switch(curr_opt)
@@ -968,6 +1158,9 @@ int main (int argc, char *argv[])
 		printf("Error opening i2c device\n");
 		exit(EXIT_FAILURE);
 	}
+    
+    // Set the board revision
+    boardRevision = getBoardRevision(i2c_file);
 
 	if ((rflag + sflag + jflag + hflag + wflag + dflag) > 1) {
 		printf("Invalid set of options specified.\n");
