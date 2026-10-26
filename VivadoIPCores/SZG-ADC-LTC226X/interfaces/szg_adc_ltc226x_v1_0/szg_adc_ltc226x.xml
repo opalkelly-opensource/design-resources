@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spirit:busDefinition xmlns:xilinx="http://www.xilinx.com"
+                      xmlns:spirit="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1685-2009"
+                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <spirit:vendor>opalkelly.com</spirit:vendor>
+  <spirit:library>interface</spirit:library>
+  <spirit:name>szg_adc_ltc226x</spirit:name>
+  <spirit:version>1.0</spirit:version>
+  <spirit:directConnection>true</spirit:directConnection>
+  <spirit:isAddressable>false</spirit:isAddressable>
+  <spirit:maxMasters>1</spirit:maxMasters>
+  <spirit:maxSlaves>1</spirit:maxSlaves>
+  <spirit:description>SZG-ADC-LTC226X SYZYGY peripheral full pinout: LVDS data (OUT1A/B, OUT2A/B as 2-bit channel buses), frame (FR), data clock (DCO), encode clock (ENC), and 4-wire SPI control (SCLK, SDI, SDO, CS_B). Manager = FPGA side.</spirit:description>
+</spirit:busDefinition>

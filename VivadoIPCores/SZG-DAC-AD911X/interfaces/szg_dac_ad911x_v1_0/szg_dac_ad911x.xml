@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spirit:busDefinition xmlns:xilinx="http://www.xilinx.com"
+                      xmlns:spirit="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1685-2009"
+                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <spirit:vendor>opalkelly.com</spirit:vendor>
+  <spirit:library>interface</spirit:library>
+  <spirit:name>szg_dac_ad911x</spirit:name>
+  <spirit:version>1.0</spirit:version>
+  <spirit:directConnection>true</spirit:directConnection>
+  <spirit:isAddressable>false</spirit:isAddressable>
+  <spirit:maxMasters>1</spirit:maxMasters>
+  <spirit:maxSlaves>1</spirit:maxSlaves>
+  <spirit:description>SZG-DAC-AD911X SYZYGY peripheral pinout as exposed by the syzygy_dac IP: 12-bit parallel data (DB), forwarded sample clock (CLKIN), reset/pin-mode (RESET/PINMD), and 3-wire SPI control (SCLK, CS_B, and a single bidirectional SDIO pad). Manager = FPGA side. NOTE: SDIO is one bidirectional wire here -- the IP's IOBUF is internal, so this bus carries a single 'sdio' leg rather than the i/o/t triple.</spirit:description>
+</spirit:busDefinition>

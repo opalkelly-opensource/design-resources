@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Port description format (matches docs.opalkelly.com pinout columns):
+     CONNECTOR_PIN=<n>  SYZYGY=<name>  SCHEMATIC=<name>  TYPE=<LVDS|SE|BIDIR>  DIR=<P->F|F->P|BIDIR> — <free notes>
+     Logical port -> physical (syzygy_dac) port maps live in the IP component.xml
+     (built by repackage_syzygy_dac_v4.tcl), not here.
+
+     Differs from the FFTScope szg_dac_ad911x_rtl: SDIO is a SINGLE bidirectional
+     'sdio' leg (the syzygy_dac IP buries the IOBUF, exposing one inout dac_sdio
+     pad), not the separate sdio_i/sdio_o/sdio_t triple. dclkio and opamp_enable
+     are omitted; the syzygy_dac IP does not bring those pins out.
+-->
+<spirit:abstractionDefinition xmlns:xilinx="http://www.xilinx.com"
+                              xmlns:spirit="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1685-2009"
+                              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <spirit:vendor>opalkelly.com</spirit:vendor>
+  <spirit:library>interface</spirit:library>
+  <spirit:name>szg_dac_ad911x_rtl</spirit:name>
+  <spirit:version>1.0</spirit:version>
+  <spirit:busType spirit:vendor="opalkelly.com" spirit:library="interface" spirit:name="szg_dac_ad911x" spirit:version="1.0"/>
+  <spirit:ports>
+
+    <spirit:port>
+      <spirit:logicalName>db</spirit:logicalName>
+      <spirit:description>CONNECTOR_PIN=5-16  SYZYGY=S0-S11  SCHEMATIC=DB0-DB11  TYPE=SE  DIR=F->P — 12-bit parallel data bus to DAC</spirit:description>
+      <spirit:wire>
+        <spirit:qualifier><spirit:isData>true</spirit:isData></spirit:qualifier>
+        <spirit:onMaster><spirit:presence>required</spirit:presence><spirit:width>12</spirit:width><spirit:direction>out</spirit:direction></spirit:onMaster>
+        <spirit:onSlave><spirit:presence>required</spirit:presence><spirit:width>12</spirit:width><spirit:direction>in</spirit:direction></spirit:onSlave>
+      </spirit:wire>
+    </spirit:port>
+
+    <spirit:port>
+      <spirit:logicalName>clkin</spirit:logicalName>
+      <spirit:description>CONNECTOR_PIN=34  SYZYGY=C2P_CLKp  SCHEMATIC=CLKIN  TYPE=SE  DIR=F->P — DAC sample clock (forwarded, source-synchronous with DB) from FPGA</spirit:description>
+      <spirit:wire>
+        <spirit:qualifier><spirit:isClock>true</spirit:isClock></spirit:qualifier>
+        <spirit:onMaster><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>out</spirit:direction></spirit:onMaster>
+        <spirit:onSlave><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>in</spirit:direction></spirit:onSlave>
+      </spirit:wire>
+    </spirit:port>
+
+    <spirit:port>
+      <spirit:logicalName>reset_pinmd</spirit:logicalName>
+      <spirit:description>CONNECTOR_PIN=21  SYZYGY=S16  SCHEMATIC=RESET/PINMD  TYPE=SE  DIR=F->P — reset + pin-mode control</spirit:description>
+      <spirit:wire>
+        <spirit:onMaster><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>out</spirit:direction></spirit:onMaster>
+        <spirit:onSlave><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>in</spirit:direction></spirit:onSlave>
+      </spirit:wire>
+    </spirit:port>
+
+    <spirit:port>
+      <spirit:logicalName>sclk</spirit:logicalName>
+      <spirit:description>CONNECTOR_PIN=18  SYZYGY=S13  SCHEMATIC=SCLK/CLKMD  TYPE=SE  DIR=F->P — SPI serial clock / clock-mode select</spirit:description>
+      <spirit:wire>
+        <spirit:onMaster><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>out</spirit:direction></spirit:onMaster>
+        <spirit:onSlave><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>in</spirit:direction></spirit:onSlave>
+      </spirit:wire>
+    </spirit:port>
+
+    <spirit:port>
+      <spirit:logicalName>cs_b</spirit:logicalName>
+      <spirit:description>CONNECTOR_PIN=17  SYZYGY=S12  SCHEMATIC=CS_B/PWRDN  TYPE=SE  DIR=F->P — SPI chip select / power-down, active low</spirit:description>
+      <spirit:wire>
+        <spirit:onMaster><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>out</spirit:direction></spirit:onMaster>
+        <spirit:onSlave><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>in</spirit:direction></spirit:onSlave>
+      </spirit:wire>
+    </spirit:port>
+
+    <spirit:port>
+      <spirit:logicalName>sdio</spirit:logicalName>
+      <spirit:description>CONNECTOR_PIN=19  SYZYGY=S14  SCHEMATIC=SDIO/FORMAT  TYPE=BIDIR  DIR=BIDIR — SPI bidirectional data; single inout pad (IP-internal IOBUF)</spirit:description>
+      <spirit:wire>
+        <spirit:qualifier><spirit:isData>true</spirit:isData></spirit:qualifier>
+        <spirit:onMaster><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>inout</spirit:direction></spirit:onMaster>
+        <spirit:onSlave><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>inout</spirit:direction></spirit:onSlave>
+      </spirit:wire>
+    </spirit:port>
+
+  </spirit:ports>
+</spirit:abstractionDefinition>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Port description format (matches docs.opalkelly.com pinout columns):
+     CONNECTOR_PIN=<n>  SYZYGY=<name>  SCHEMATIC=<name>  TYPE=<LVDS|SE|BIDIR>  DIR=<P->F|F->P|BIDIR> — <free notes>
+     Logical port -> physical (syzygy_adc) port maps live in the IP component.xml
+     (built by repackage_syzygy_adc_v7.tcl), not here.
+-->
+<spirit:abstractionDefinition xmlns:xilinx="http://www.xilinx.com"
+                              xmlns:spirit="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1685-2009"
+                              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <spirit:vendor>opalkelly.com</spirit:vendor>
+  <spirit:library>interface</spirit:library>
+  <spirit:name>szg_adc_ltc226x_rtl</spirit:name>
+  <spirit:version>1.0</spirit:version>
+  <spirit:busType spirit:vendor="opalkelly.com" spirit:library="interface" spirit:name="szg_adc_ltc226x" spirit:version="1.0"/>
+  <spirit:ports>
+
+    <spirit:port>
+      <spirit:logicalName>out1_p</spirit:logicalName>
+      <spirit:description>CONNECTOR_PIN=5,9  SYZYGY=D0P,D2P  SCHEMATIC=OUT1A+,OUT1B+  TYPE=LVDS  DIR=P->F — channel 1 serial lanes, positive legs (bit 0 = A, bit 1 = B)</spirit:description>
+      <spirit:wire>
+        <spirit:qualifier><spirit:isData>true</spirit:isData></spirit:qualifier>
+        <spirit:onMaster><spirit:presence>required</spirit:presence><spirit:width>2</spirit:width><spirit:direction>in</spirit:direction></spirit:onMaster>
+        <spirit:onSlave><spirit:presence>required</spirit:presence><spirit:width>2</spirit:width><spirit:direction>out</spirit:direction></spirit:onSlave>
+      </spirit:wire>
+    </spirit:port>
+
+    <spirit:port>
+      <spirit:logicalName>out1_n</spirit:logicalName>
+      <spirit:description>CONNECTOR_PIN=7,11  SYZYGY=D0N,D2N  SCHEMATIC=OUT1A-,OUT1B-  TYPE=LVDS  DIR=P->F — channel 1 serial lanes, negative legs (bit 0 = A, bit 1 = B)</spirit:description>
+      <spirit:wire>
+        <spirit:qualifier><spirit:isData>true</spirit:isData></spirit:qualifier>
+        <spirit:onMaster><spirit:presence>required</spirit:presence><spirit:width>2</spirit:width><spirit:direction>in</spirit:direction></spirit:onMaster>
+        <spirit:onSlave><spirit:presence>required</spirit:presence><spirit:width>2</spirit:width><spirit:direction>out</spirit:direction></spirit:onSlave>
+      </spirit:wire>
+    </spirit:port>
+
+    <spirit:port>
+      <spirit:logicalName>out2_p</spirit:logicalName>
+      <spirit:description>CONNECTOR_PIN=10,14  SYZYGY=D3P,D5P  SCHEMATIC=OUT2A+,OUT2B+  TYPE=LVDS  DIR=P->F — channel 2 serial lanes, positive legs (bit 0 = A, bit 1 = B)</spirit:description>
+      <spirit:wire>
+        <spirit:qualifier><spirit:isData>true</spirit:isData></spirit:qualifier>
+        <spirit:onMaster><spirit:presence>required</spirit:presence><spirit:width>2</spirit:width><spirit:direction>in</spirit:direction></spirit:onMaster>
+        <spirit:onSlave><spirit:presence>required</spirit:presence><spirit:width>2</spirit:width><spirit:direction>out</spirit:direction></spirit:onSlave>
+      </spirit:wire>
+    </spirit:port>
+
+    <spirit:port>
+      <spirit:logicalName>out2_n</spirit:logicalName>
+      <spirit:description>CONNECTOR_PIN=12,16  SYZYGY=D3N,D5N  SCHEMATIC=OUT2A-,OUT2B-  TYPE=LVDS  DIR=P->F — channel 2 serial lanes, negative legs (bit 0 = A, bit 1 = B)</spirit:description>
+      <spirit:wire>
+        <spirit:qualifier><spirit:isData>true</spirit:isData></spirit:qualifier>
+        <spirit:onMaster><spirit:presence>required</spirit:presence><spirit:width>2</spirit:width><spirit:direction>in</spirit:direction></spirit:onMaster>
+        <spirit:onSlave><spirit:presence>required</spirit:presence><spirit:width>2</spirit:width><spirit:direction>out</spirit:direction></spirit:onSlave>
+      </spirit:wire>
+    </spirit:port>
+
+    <spirit:port>
+      <spirit:logicalName>fr_p</spirit:logicalName>
+      <spirit:description>CONNECTOR_PIN=6  SYZYGY=D1P  SCHEMATIC=FR+  TYPE=LVDS  DIR=P->F — frame marker, positive leg</spirit:description>
+      <spirit:wire>
+        <spirit:onMaster><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>in</spirit:direction></spirit:onMaster>
+        <spirit:onSlave><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>out</spirit:direction></spirit:onSlave>
+      </spirit:wire>
+    </spirit:port>
+
+    <spirit:port>
+      <spirit:logicalName>fr_n</spirit:logicalName>
+      <spirit:description>CONNECTOR_PIN=8  SYZYGY=D1N  SCHEMATIC=FR-  TYPE=LVDS  DIR=P->F — frame marker, negative leg</spirit:description>
+      <spirit:wire>
+        <spirit:onMaster><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>in</spirit:direction></spirit:onMaster>
+        <spirit:onSlave><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>out</spirit:direction></spirit:onSlave>
+      </spirit:wire>
+    </spirit:port>
+
+    <spirit:port>
+      <spirit:logicalName>dco_p</spirit:logicalName>
+      <spirit:description>CONNECTOR_PIN=33  SYZYGY=P2C_CLKp  SCHEMATIC=DCO+  TYPE=LVDS  DIR=P->F — data clock output from ADC, positive leg</spirit:description>
+      <spirit:wire>
+        <spirit:qualifier><spirit:isClock>true</spirit:isClock></spirit:qualifier>
+        <spirit:onMaster><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>in</spirit:direction></spirit:onMaster>
+        <spirit:onSlave><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>out</spirit:direction></spirit:onSlave>
+      </spirit:wire>
+    </spirit:port>
+
+    <spirit:port>
+      <spirit:logicalName>dco_n</spirit:logicalName>
+      <spirit:description>CONNECTOR_PIN=35  SYZYGY=P2C_CLKn  SCHEMATIC=DCO-  TYPE=LVDS  DIR=P->F — data clock output from ADC, negative leg</spirit:description>
+      <spirit:wire>
+        <spirit:qualifier><spirit:isClock>true</spirit:isClock></spirit:qualifier>
+        <spirit:onMaster><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>in</spirit:direction></spirit:onMaster>
+        <spirit:onSlave><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>out</spirit:direction></spirit:onSlave>
+      </spirit:wire>
+    </spirit:port>
+
+    <spirit:port>
+      <spirit:logicalName>enc_p</spirit:logicalName>
+      <spirit:description>CONNECTOR_PIN=34  SYZYGY=C2P_CLKp  SCHEMATIC=ENC+  TYPE=LVDS  DIR=F->P — encode clock input to ADC, positive leg</spirit:description>
+      <spirit:wire>
+        <spirit:qualifier><spirit:isClock>true</spirit:isClock></spirit:qualifier>
+        <spirit:onMaster><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>out</spirit:direction></spirit:onMaster>
+        <spirit:onSlave><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>in</spirit:direction></spirit:onSlave>
+      </spirit:wire>
+    </spirit:port>
+
+    <spirit:port>
+      <spirit:logicalName>enc_n</spirit:logicalName>
+      <spirit:description>CONNECTOR_PIN=36  SYZYGY=C2P_CLKn  SCHEMATIC=ENC-  TYPE=LVDS  DIR=F->P — encode clock input to ADC, negative leg</spirit:description>
+      <spirit:wire>
+        <spirit:qualifier><spirit:isClock>true</spirit:isClock></spirit:qualifier>
+        <spirit:onMaster><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>out</spirit:direction></spirit:onMaster>
+        <spirit:onSlave><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>in</spirit:direction></spirit:onSlave>
+      </spirit:wire>
+    </spirit:port>
+
+    <spirit:port>
+      <spirit:logicalName>sclk</spirit:logicalName>
+      <spirit:description>CONNECTOR_PIN=17  SYZYGY=S12  SCHEMATIC=SCLK  TYPE=SE  DIR=F->P — SPI serial clock</spirit:description>
+      <spirit:wire>
+        <spirit:onMaster><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>out</spirit:direction></spirit:onMaster>
+        <spirit:onSlave><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>in</spirit:direction></spirit:onSlave>
+      </spirit:wire>
+    </spirit:port>
+
+    <spirit:port>
+      <spirit:logicalName>sdi</spirit:logicalName>
+      <spirit:description>CONNECTOR_PIN=19  SYZYGY=S14  SCHEMATIC=SDI  TYPE=SE  DIR=F->P — SPI serial data in to ADC (configuration)</spirit:description>
+      <spirit:wire>
+        <spirit:qualifier><spirit:isData>true</spirit:isData></spirit:qualifier>
+        <spirit:onMaster><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>out</spirit:direction></spirit:onMaster>
+        <spirit:onSlave><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>in</spirit:direction></spirit:onSlave>
+      </spirit:wire>
+    </spirit:port>
+
+    <spirit:port>
+      <spirit:logicalName>sdo</spirit:logicalName>
+      <spirit:description>CONNECTOR_PIN=13  SYZYGY=S8  SCHEMATIC=SDO  TYPE=SE  DIR=P->F — SPI serial data out from ADC (read-back); Rev EXX requires R36 placement</spirit:description>
+      <spirit:wire>
+        <spirit:qualifier><spirit:isData>true</spirit:isData></spirit:qualifier>
+        <spirit:onMaster><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>in</spirit:direction></spirit:onMaster>
+        <spirit:onSlave><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>out</spirit:direction></spirit:onSlave>
+      </spirit:wire>
+    </spirit:port>
+
+    <spirit:port>
+      <spirit:logicalName>cs_b</spirit:logicalName>
+      <spirit:description>CONNECTOR_PIN=15  SYZYGY=S10  SCHEMATIC=CS_B  TYPE=SE  DIR=F->P — SPI chip select, active low</spirit:description>
+      <spirit:wire>
+        <spirit:onMaster><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>out</spirit:direction></spirit:onMaster>
+        <spirit:onSlave><spirit:presence>required</spirit:presence><spirit:width>1</spirit:width><spirit:direction>in</spirit:direction></spirit:onSlave>
+      </spirit:wire>
+    </spirit:port>
+
+  </spirit:ports>
+</spirit:abstractionDefinition>

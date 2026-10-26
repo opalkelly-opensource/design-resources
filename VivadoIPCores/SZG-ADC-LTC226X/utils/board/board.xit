@@ -1,0 +1,27 @@
+package require xilinx::board 1.0
+namespace import ::xilinx::board::*
+set instname [current_inst]
+set f_xdc [add_ipfile -usedIn [list synthesis implementation board] -force ${instname}_board.xdc]
+puts_ipfile $f_xdc "#--------------------Physical Constraints-----------------\n"
+if { [get_project_property BOARD] == "" } {
+    close_ipfile $f_xdc
+    return
+}
+set board_if [get_property PARAM_VALUE.szg_adc_BOARD_INTERFACE]
+if { $board_if ne "Custom" } {
+    board_add_port_constraints $f_xdc $board_if out1_p adc_data_1p
+    board_add_port_constraints $f_xdc $board_if out1_n adc_data_1n
+    board_add_port_constraints $f_xdc $board_if out2_p adc_data_2p
+    board_add_port_constraints $f_xdc $board_if out2_n adc_data_2n
+    board_add_port_constraints $f_xdc $board_if fr_p   adc_fr_p
+    board_add_port_constraints $f_xdc $board_if fr_n   adc_fr_n
+    board_add_port_constraints $f_xdc $board_if dco_p  adc_dco_p
+    board_add_port_constraints $f_xdc $board_if dco_n  adc_dco_n
+    board_add_port_constraints $f_xdc $board_if enc_p  adc_encode_p
+    board_add_port_constraints $f_xdc $board_if enc_n  adc_encode_n
+    board_add_port_constraints $f_xdc $board_if sclk   adc_sclk
+    board_add_port_constraints $f_xdc $board_if sdi    adc_sdi
+    board_add_port_constraints $f_xdc $board_if sdo    adc_sdo
+    board_add_port_constraints $f_xdc $board_if cs_b   adc_cs_n
+}
+close_ipfile $f_xdc
