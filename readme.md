@@ -11,6 +11,9 @@ Component usage examples
 ## [BoardTools](/BoardTools)
 Tools for various Opal Kelly products
 
+## [VivadoIPCores](/VivadoIPCores)
+Opal Kelly Vivado IP Cores
+
 ---
 
 **Notice Regarding Path Length Limitation in Windows with Vivado Builds**
