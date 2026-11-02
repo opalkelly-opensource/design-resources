@@ -1,8 +1,0 @@
-*.jou
-*.log
-*.str
-fft/vitis/
-ifft/vitis/
-vitis/*
-Vivado/*
-!Vivado/*.xpr
